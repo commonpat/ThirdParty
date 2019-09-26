@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp250"
+    android:layout_height="@dimen/dp175"
+    android:orientation="vertical"
+    style="@style/focusAndSetTag"
+    >
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="@dimen/dp240"
+        android:layout_height="@dimen/dp135"
+        android:src="@drawable/place_holder_song"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitXY"
+        />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="@dimen/dp240"
+        android:layout_height="@dimen/dp40"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="名字"
+        android:gravity="center"
+        android:maxLines="1"
+        android:background="@color/twenty_black"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

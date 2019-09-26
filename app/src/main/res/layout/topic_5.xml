@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="239dp"
+        android:layout_height="239dp"
+        android:id="@+id/i1"
+        android:focusable="true"
+        android:layout_marginLeft="718dp"
+        android:layout_marginTop="182dp"/>
+    <ImageView
+        android:layout_width="239dp"
+        android:layout_height="239dp"
+        android:id="@+id/i2"
+        android:focusable="true"
+        android:layout_marginLeft="972dp"
+        android:layout_marginTop="182dp"/>
+    <ImageView
+        android:layout_width="239dp"
+        android:layout_height="239dp"
+        android:id="@+id/i3"
+        android:focusable="true"
+        android:layout_marginLeft="591dp"
+        android:layout_marginTop="308dp"/>
+    <ImageView
+        android:layout_width="239dp"
+        android:layout_height="239dp"
+        android:id="@+id/i4"
+        android:focusable="true"
+        android:layout_marginLeft="847dp"
+        android:layout_marginTop="308dp"/>
+    <ImageView
+        android:layout_width="239dp"
+        android:layout_height="239dp"
+        android:id="@+id/i5"
+        android:focusable="true"
+        android:layout_marginLeft="718dp"
+        android:layout_marginTop="438dp"/>
+    <ImageView
+        android:layout_width="239dp"
+        android:layout_height="239dp"
+        android:id="@+id/i6"
+        android:focusable="true"
+        android:layout_marginLeft="972dp"
+        android:layout_marginTop="438dp"/>
+    <ImageView
+        android:layout_width="239dp"
+        android:layout_marginLeft="847dp"
+        android:layout_marginTop="55dp"
+        android:id="@+id/more_focus"
+        android:focusable="true"
+        android:layout_height="239dp" />
+
+    <ImageView
+        android:layout_width="239dp"
+        android:layout_marginLeft="847dp"
+        android:layout_marginTop="55dp"
+        android:id="@+id/more"
+        android:visibility="gone"
+        android:layout_height="239dp" />
+    <ImageView
+        android:layout_width="121dp"
+        android:layout_marginLeft="1100dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/back_focus"
+        android:focusable="true"
+        android:layout_height="95dp" />
+
+    <ImageView
+        android:layout_width="121dp"
+        android:layout_marginLeft="1100dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/back"
+        android:visibility="gone"
+        android:layout_height="95dp" />
+    <ImageView
+        android:layout_width="376dp"
+        android:layout_height="331dp"
+        android:id="@+id/if1"
+        android:visibility="gone"
+        android:src="@mipmap/listfocus"
+
+        android:layout_marginLeft="659dp"
+        android:layout_marginTop="140dp"/>
+    <ImageView
+        android:layout_width="376dp"
+        android:layout_height="331dp"
+        android:id="@+id/if2"
+        android:visibility="gone"
+        android:src="@mipmap/listfocus"
+        android:layout_marginLeft="913dp"
+        android:layout_marginTop="140dp"/>
+    <ImageView
+        android:layout_width="376dp"
+        android:layout_height="331dp"
+        android:id="@+id/if3"
+        android:visibility="gone"
+        android:src="@mipmap/listfocus"
+        android:layout_marginLeft="532dp"
+        android:layout_marginTop="266dp"/>
+    <ImageView
+        android:layout_width="376dp"
+        android:layout_height="331dp"
+        android:id="@+id/if4"
+        android:layout_marginLeft="788dp"
+        android:visibility="gone"
+        android:src="@mipmap/listfocus"
+        android:layout_marginTop="266dp"/>
+    <ImageView
+        android:layout_width="376dp"
+        android:layout_height="331dp"
+        android:visibility="gone"
+        android:src="@mipmap/listfocus"
+        android:id="@+id/if5"
+        android:layout_marginLeft="659dp"
+        android:layout_marginTop="396dp"/>
+    <ImageView
+        android:layout_width="376dp"
+        android:layout_height="331dp"
+        android:visibility="gone"
+        android:src="@mipmap/listfocus"
+        android:id="@+id/if6"
+        android:layout_marginLeft="915dp"
+        android:layout_marginTop="396dp"/>
+
+</FrameLayout>

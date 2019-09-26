@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_RootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="false">
+
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/bg" />
+
+
+    <include
+        android:id="@+id/topic_default"
+        layout="@layout/topic_default" />
+
+    <include
+        android:id="@+id/topic_1"
+        layout="@layout/topic_1"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/topic_2"
+        layout="@layout/topic_2"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/topic_3"
+        layout="@layout/topic_3"
+        android:visibility="gone" />
+    <include
+        android:id="@+id/topic_5"
+        layout="@layout/topic_5"
+        android:visibility="gone"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/dp80"
+        android:layout_marginLeft="@dimen/dp60"
+        android:textSize="@dimen/dp20"
+        android:textColor="@color/white"
+        android:translationZ="999px"
+        android:id="@+id/page"
+        />
+</FrameLayout>

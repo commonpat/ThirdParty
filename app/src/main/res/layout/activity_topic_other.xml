@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_RootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="false">
+
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/bg" />
+    <FrameLayout
+        android:layout_width="412dp"
+        android:layout_marginLeft="38dp"
+        android:id="@+id/f1"
+        android:layout_marginTop="113dp"
+        android:layout_height="164dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:focusable="true"
+            android:src="@mipmap/topiclist"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:visibility="gone"
+                        android:src="@mipmap/topiclistfocus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_marginLeft="136dp"
+            android:layout_width="wrap_content"
+            android:textSize="26sp"
+            android:textColor="#fff"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="412dp"
+        android:layout_marginLeft="38dp"
+        android:id="@+id/f2"
+        android:layout_marginTop="211dp"
+        android:layout_height="164dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:focusable="true"
+            android:src="@mipmap/topiclist"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:visibility="gone"
+                        android:src="@mipmap/topiclistfocus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_marginLeft="136dp"
+            android:layout_width="wrap_content"
+            android:textSize="26sp"
+            android:textColor="#fff"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="412dp"
+        android:layout_marginLeft="38dp"
+        android:id="@+id/f3"
+        android:layout_marginTop="309dp"
+        android:layout_height="164dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:focusable="true"
+            android:src="@mipmap/topiclist"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:visibility="gone"
+                        android:src="@mipmap/topiclistfocus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_marginLeft="136dp"
+            android:layout_width="wrap_content"
+            android:textSize="26sp"
+            android:textColor="#fff"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="412dp"
+        android:layout_marginLeft="38dp"
+        android:id="@+id/f4"
+        android:layout_marginTop="407dp"
+        android:layout_height="164dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:focusable="true"
+            android:src="@mipmap/topiclist"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:visibility="gone"
+                        android:src="@mipmap/topiclistfocus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_marginLeft="136dp"
+            android:layout_width="wrap_content"
+            android:textSize="26sp"
+            android:textColor="#fff"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="412dp"
+        android:layout_marginLeft="38dp"
+        android:id="@+id/f5"
+        android:layout_marginTop="505dp"
+        android:layout_height="164dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:focusable="true"
+            android:src="@mipmap/topiclist"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:visibility="gone"
+            android:src="@mipmap/topiclistfocus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_marginLeft="136dp"
+            android:layout_width="wrap_content"
+            android:textSize="26sp"
+            android:textColor="#fff"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:layout_width="212dp"
+        android:layout_marginLeft="840dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/more_focus"
+        android:focusable="true"
+        android:src="@mipmap/morebtn"
+        android:layout_height="118dp" />
+
+    <ImageView
+        android:layout_width="212dp"
+        android:layout_marginLeft="840dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/more"
+        android:visibility="gone"
+        android:layout_height="118dp" />
+    <ImageView
+        android:layout_width="101dp"
+        android:layout_marginLeft="1060dp"
+        android:layout_marginTop="38dp"
+        android:src="@mipmap/backbtn"
+        android:id="@+id/back_focus"
+        android:focusable="true"
+        android:layout_height="79dp" />
+
+    <ImageView
+        android:src="@mipmap/backbtnfocus"
+        android:layout_width="101dp"
+
+        android:layout_marginLeft="1060dp"
+        android:layout_marginTop="38dp"
+        android:id="@+id/back"
+        android:visibility="gone"
+        android:layout_height="79dp" />
+    <FrameLayout
+        android:layout_width="479dp"
+        android:layout_marginLeft="696dp"
+        android:layout_marginTop="378dp"
+        android:layout_height="268dp"
+        android:background="#000"
+        >
+        <com.utvgo.huya.views.CustomVideoView
+            android:id="@+id/video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:background="@color/transparent"
+            />
+
+    </FrameLayout>
+    <ImageView
+        android:layout_width="600dp"
+        android:src="@drawable/selector_video"
+        android:layout_marginLeft="631dp"
+        android:id="@+id/vif"
+        android:layout_marginTop="325dp"
+        android:focusable="true"
+        android:layout_height="380dp" />
+</FrameLayout>

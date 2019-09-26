@@ -1,0 +1,82 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="150dp">
+    <!--<ImageView-->
+        <!--android:id="@+id/bits_1"-->
+        <!--style="@style/focusView"-->
+        <!--android:layout_width="552pt"-->
+        <!--android:layout_height="300pt"-->
+        <!--android:layout_marginLeft="680pt"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:src="@drawable/video_bg" />-->
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+    android:paddingTop="25dp">
+
+        <ImageView
+            android:id="@+id/bits_1"
+            style="@style/imgStyle1"
+            android:layout_width="257dp"
+            android:layout_height="221dp"/>
+
+        <ImageView
+            android:id="@+id/bits_2"
+            style="@style/imgStyle1"
+            android:layout_width="257dp"
+            android:layout_height="221dp"
+            android:layout_marginLeft="272dp" />
+
+        <ImageView
+            android:id="@+id/bits_3"
+            style="@style/imgStyle1"
+            android:layout_width="257dp"
+            android:layout_height="221dp"
+            android:layout_marginLeft="544dp" />
+
+        <ImageView
+            android:id="@+id/bits_4"
+            style="@style/imgStyle1"
+            android:layout_width="257dp"
+            android:layout_height="221dp"
+            android:layout_marginLeft="816dp" />
+
+        <ImageView
+            android:id="@+id/bits_5"
+            style="@style/imgStyle1"
+            android:layout_width="257dp"
+            android:layout_height="221dp"
+            android:layout_marginTop="236dp"/>
+
+        <ImageView
+            android:id="@+id/bits_6"
+            style="@style/imgStyle1"
+            android:layout_width="257dp"
+            android:layout_height="221dp"
+            android:layout_marginTop="236dp"
+            android:layout_marginLeft="272dp" />
+
+        <ImageView
+            android:id="@+id/bits_7"
+            style="@style/imgStyle1"
+            android:layout_width="257dp"
+            android:layout_height="221dp"
+            android:layout_marginTop="236dp"
+            android:layout_marginLeft="544dp" />
+
+
+        <ImageView
+            android:id="@+id/bits_8"
+            style="@style/imgStyle1"
+            android:layout_width="257dp"
+            android:layout_height="221dp"
+            android:layout_marginTop="236dp"
+            android:layout_marginLeft="816dp" />
+
+    </FrameLayout>
+</FrameLayout>
+</layout>

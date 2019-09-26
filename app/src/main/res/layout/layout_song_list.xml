@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_songList"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+    <FrameLayout
+        android:id="@+id/fl_song1"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp120"
+        android:layout_marginTop="@dimen/dp70"
+        android:nextFocusUp="@+id/cb_song">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="1" />
+
+        <LinearLayout
+            style="@style/setEnableFocusNO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                style="@style/setEnableFocusNO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song2"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp680"
+        android:layout_marginTop="@dimen/dp70"
+        android:nextFocusUp="@+id/cb_song">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="2" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song3"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp120"
+        android:layout_marginTop="@dimen/dp140">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song4"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp680"
+        android:layout_marginTop="@dimen/dp140">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="2" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song5"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp120"
+        android:layout_marginTop="@dimen/dp210">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="3" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song6"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp680"
+        android:layout_marginTop="@dimen/dp210">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="4" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song7"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp120"
+        android:layout_marginTop="@dimen/dp280">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="5" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song8"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp680"
+        android:layout_marginTop="@dimen/dp280">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="6" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song9"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp120"
+        android:layout_marginTop="@dimen/dp350">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="7" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song10"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp680"
+        android:layout_marginTop="@dimen/dp350">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="8" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song11"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp120"
+        android:layout_marginTop="@dimen/dp420">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="9" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_song12"
+        style="@style/fl_song_list"
+        android:layout_marginLeft="@dimen/dp680"
+        android:layout_marginTop="@dimen/dp420">
+
+        <ImageView style="@style/fl_song_list_play_icon" />
+
+        <TextView
+            style="@style/fl_song_list_index"
+            android:text="10" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/song_list"
+                android:text="I am yong bin" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:src="@drawable/mv_tag" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+</FrameLayout>

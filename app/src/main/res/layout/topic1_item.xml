@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/focusAndSetTag"
+    android:background="@drawable/topic1_item_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/dp10">
+
+    <TextView
+        android:id="@+id/song"
+        style="@style/setEnableFocusNO"
+        android:layout_width="@dimen/dp288"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp20"
+        android:text="成都"/>
+
+    <TextView
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:text="赵雷"
+        android:id="@+id/singer"
+        style="@style/setEnableFocusNO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp20" />
+
+</LinearLayout>

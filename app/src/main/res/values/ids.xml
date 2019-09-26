@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--首页的实体绑到控件-->
+
+    <!--标识button需要保持颜色块-->
+
+    <!--绑定当前第几页面-->
+
+    <!--首页绑定关联View-->
+    <!--键盘绑定tag-->
+    <!--播放器暂停,播放状态-->
+    <!--循环模式-->
+
+
+    <item type="id" name="filterItemTag"></item>
+
+</resources>

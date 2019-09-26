@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/activity_RootView"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@mipmap/bg_second">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_home_logo"
+            android:layout_width="325dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="45dp"
+            android:layout_marginRight="75dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/logo"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        style="@style/setEnableFocusNO"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="184dp">
+
+        <LinearLayout
+            android:id="@+id/item1"
+            style="@style/mv_item"
+            android:layout_marginLeft="74dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"
+            />
+            <TextView
+                style="@style/mv_item_title"
+                android:text=""
+            />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item2"
+            style="@style/mv_item"
+            android:layout_marginLeft="362dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"
+            />
+            <TextView
+                style="@style/mv_item_title"
+                android:text=""
+            />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item3"
+            style="@style/mv_item"
+            android:layout_marginLeft="650dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"
+            />
+            <TextView
+                style="@style/mv_item_title"
+                android:text=""
+            />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item4"
+            style="@style/mv_item"
+            android:layout_marginLeft="938dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"
+            />
+            <TextView
+                style="@style/mv_item_title"
+                android:text=""
+            />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/item5"
+            style="@style/mv_item"
+            android:layout_marginLeft="74dp"
+            android:layout_marginTop="241dp"
+            android:orientation="vertical"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"
+            />
+            <TextView
+                style="@style/mv_item_title"
+                android:text=""
+            />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item6"
+            style="@style/mv_item"
+            android:layout_marginLeft="362dp"
+            android:layout_marginTop="241dp"
+            android:orientation="vertical"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"
+            />
+            <TextView
+                style="@style/mv_item_title"
+                android:text=""
+            />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item7"
+            style="@style/mv_item"
+            android:layout_marginLeft="650dp"
+            android:layout_marginTop="241dp"
+            android:orientation="vertical"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"
+            />
+            <TextView
+                style="@style/mv_item_title"
+                android:text=""
+            />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item8"
+            style="@style/mv_item"
+            android:layout_marginLeft="938dp"
+            android:layout_marginTop="241dp"
+            android:orientation="vertical"
+        >
+
+            <ImageView
+                android:id="@+id/item_ImageBtn1"
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"
+            />
+            <TextView
+                style="@style/mv_item_title"
+                android:text=""
+            />
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_filter"
+        style="@style/setEnableFocusNO"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.utvgo.huya.views.SmoothHorizontalScrollView
+            android:id="@+id/shsv_type"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="55dp"
+        >
+
+            <FrameLayout
+                android:id="@+id/fl_type"
+                style="@style/setEnableFocusNO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp40"
+                android:orientation="horizontal">
+
+            </FrameLayout>
+        </com.utvgo.huya.views.SmoothHorizontalScrollView>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_page"
+        style="@style/setEnableFocusNO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:minWidth="@dimen/dp100"
+        android:text=""
+        android:textColor="#cccccc"
+        android:textSize="30sp"/>
+</FrameLayout>

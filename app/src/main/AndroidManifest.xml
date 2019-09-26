@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.utvgo.huya">
+    <!-- 内置SD卡读写权限4.0以上需要. -->
+    <permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
+    <permission android:name="android.permission.READ_MEDIA_STORAGE" />
+
+    <!-- 外置SD卡读写权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <application
+        android:name=".HuyaApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <!--<meta-data-->
+            <!--android:name="com.google.android.actions"-->
+            <!--android:resource="@xml/actions" />-->
+
+        <activity android:name=".activity.LaunchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.utvgo.huya.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.BaseActivity" />
+        <activity android:name=".activity.BuyActivity" />
+        <activity android:name=".activity.MVAlbumActivity" />
+        <activity android:name=".activity.QWebViewActivity" />
+        <activity android:name=".activity.TopicActivity" />
+        <activity android:name=".activity.MVListActivity" />
+        <activity android:name=".activity.PlayVideoActivity" />
+        <activity android:name=".activity.IntroduceActivity" />
+        <activity android:name=".activity.UserCenterActivity" />
+        <activity android:name=".activity.CollectCenterActivity" />
+        <activity android:name=".activity.ExitActivity" />
+    </application>
+
+</manifest>

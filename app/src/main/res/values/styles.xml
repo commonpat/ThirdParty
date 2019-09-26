@@ -1,0 +1,227 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:actionBarSize">0dp</item>
+        <item name="android:windowBackground">@mipmap/bg</item>
+    </style>
+    <style name="focusView">
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
+    <style name="imgStyle1" parent="focusView">
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:background">#fff</item>
+    </style>
+
+    <style name="navStyle1" parent="focusView">
+        <item name="android:layout_marginLeft">18pt</item>
+        <item name="android:textSize">26pt</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingLeft">10pt</item>
+        <item name="android:paddingRight">10pt</item>
+        <item name="android:paddingBottom">1pt</item>
+        <item name="android:paddingTop">1pt</item>
+        <item name="android:gravity">center</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+    <style name="focusAndSetTag">
+        <item name="android:enabled">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
+    <style name="focusAndSetTag.indexButton">
+        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+    </style>
+    <style name="setEnableFocusNO">
+        <item name="android:enabled">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+    </style>
+    <style name="setEnableFocusYES">
+        <item name="android:enabled">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
+    <!-- 自定义Dialog -->
+    <style name="MyDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <!--<item name="android:backgroundDimAmount">0.4</item>-->
+        <item name="android:windowTitleStyle">@null</item>
+    </style>
+    <style name="keybord_option_style" parent="focusAndSetTag">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">#965150</item>
+        <item name="android:textSize">@dimen/sp20</item>
+        <item name="android:paddingBottom">@dimen/dp15</item>
+        <item name="android:paddingTop">@dimen/dp15</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">@dimen/dp0</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="dialog_Line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp2</item>
+        <item name="android:background">@color/red</item>
+    </style>
+
+    <style name="abc_radio" parent="focusAndSetTag">
+        <item name="android:layout_width">@dimen/dp40</item>
+        <item name="android:layout_height">@dimen/dp40</item>
+        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:textSize">@dimen/sp30</item>
+        <!--<item name="android:background">@drawable/selector_radio</item>-->
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">left|center</item>
+        <item name="android:nextFocusDown">@+id/item1</item>
+    </style>
+
+    <style name="song_list" parent="setEnableFocusNO">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/sp28</item>
+        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:onClick">onClick</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:maxWidth">@dimen/dp480</item>
+        <item name="android:layout_marginLeft">@dimen/dp65</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="singer_item" parent="setEnableFocusNO">
+        <item name="android:layout_width">@dimen/dp210</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="fl_song_list" parent="focusAndSetTag">
+        <item name="android:layout_width">@dimen/dp500</item>
+        <item name="android:layout_height">@dimen/dp60</item>
+        <item name="android:paddingLeft">@dimen/dp20</item>
+        <item name="android:paddingRight">@dimen/dp20</item>
+    </style>
+
+    <style name="fl_song_list_play_icon" parent="setEnableFocusNO">
+        <item name="android:layout_width">@dimen/dp20</item>
+        <item name="android:layout_height">@dimen/dp20</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="fl_song_list_index" parent="setEnableFocusNO">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/dp40</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/sp30</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="title_radio" parent="focusAndSetTag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/dp80</item>
+        <item name="android:layout_marginLeft">@dimen/dp40</item>
+        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:textSize">@dimen/sp28</item>
+        <item name="android:background">@drawable/selector_title_item_bg</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">left|center</item>
+        <item name="android:nextFocusDown">@+id/item1</item>
+    </style>
+
+    <style name="mv_item" parent="focusAndSetTag">
+        <item name="android:layout_width">267dp</item>
+        <item name="android:layout_height">200dp</item>
+    </style>
+
+    <style name="setEnableFocusNO.mv_item_image">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">151dp</item>
+    </style>
+
+    <style name="mv_item_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:background">#2a6293</item>
+    </style>
+
+    <style name="mv_list_item" parent="focusAndSetTag">
+        <item name="android:layout_width">@dimen/dp280</item>
+        <item name="android:layout_height">@dimen/dp160</item>
+    </style>
+
+    <style name="single_type_item_1" parent="focusAndSetTag">
+        <item name="android:layout_width">@dimen/dp220</item>
+        <item name="android:layout_height">@dimen/dp140</item>
+    </style>
+
+    <style name="textViewStyle" parent="setEnableFocusNO">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp100</item>
+        <item name="android:gravity">left|bottom</item>
+        <item name="android:paddingLeft">@dimen/dp15</item>
+        <item name="android:layout_marginTop">@dimen/dp50</item>
+        <item name="android:paddingBottom">@dimen/dp5</item>
+        <item name="android:background">@mipmap/text_bg_color</item>
+        <!--item name="android:textStyle">bold</item-->
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="single_name" parent="setEnableFocusNO">
+        <item name="android:layout_width">@dimen/dp150</item>
+        <item name="android:layout_height">@dimen/dp40</item>
+        <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">@dimen/dp150</item>
+        <item name="android:textSize">@dimen/sp18</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+
+    <style name="search_button">
+        <item name="android:textSize">24sp</item>
+        <item name="android:background">@drawable/shape_search_button</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_margin">1.5dp</item>
+        <item name="android:onClick">onClickEvent</item>
+    </style>
+    <style name="txt_class_title1" parent="setEnableFocusNO">
+        <item name="android:textSize">@dimen/title_class_1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyAppThemeFullscreen" parent="Theme.AppCompat">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:actionBarSize">0dp</item>
+        <item name="android:windowBackground">@drawable/bg_launch</item>
+    </style>
+
+</resources>

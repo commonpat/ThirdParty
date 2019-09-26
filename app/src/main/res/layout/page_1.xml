@@ -1,0 +1,197 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:layout_width="1280dp"
+        android:layout_height="@dimen/dp720">
+
+        <FrameLayout
+            android:id="@+id/fl_content"
+            android:layout_width="1280dp"
+            android:layout_height="1012dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp100"
+            android:paddingTop="@dimen/dp15">
+
+            <RelativeLayout
+                android:id="@+id/vdo_bg"
+                android:layout_width="540dp"
+                android:layout_height="300dp"
+                android:layout_marginLeft="275dp"
+                android:layout_marginTop="62dp"
+                android:background="@color/transparent">
+
+                <com.utvgo.huya.views.CustomVideoView
+                    android:id="@+id/vv_small"
+                    style="@style/setEnableFocusNO"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginRight="0dp" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/bits_1"
+                style="@style/focusAndSetTag"
+                android:layout_width="170dp"
+                android:layout_height="90dp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="62dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall" />
+
+            <ImageView
+                android:id="@+id/bits_2"
+                style="@style/focusAndSetTag"
+                android:layout_width="170dp"
+                android:layout_height="90dp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="167dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall" />
+
+            <ImageView
+                android:id="@+id/bits_3"
+                style="@style/focusAndSetTag"
+                android:layout_width="170dp"
+                android:layout_height="90dp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="272dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall" />
+
+            <ImageView
+                android:id="@+id/bits_4"
+                style="@style/setEnableFocusNO"
+                android:layout_width="430pt"
+                android:layout_height="226pt"
+                android:layout_marginLeft="211dp"
+                android:layout_marginTop="@dimen/dp20"
+                android:scaleType="fitXY" />
+
+
+            <ImageView
+                android:id="@+id/bits_5"
+                style="@style/focusAndSetTag"
+                android:layout_width="360dp"
+                android:layout_height="235dp"
+                android:layout_marginLeft="830dp"
+                android:layout_marginTop="62dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall" />
+
+            <ImageView
+                android:id="@+id/bits_6"
+                style="@style/focusAndSetTag"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="377dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall" />
+
+            <ImageView
+                android:id="@+id/bits_7"
+                style="@style/focusAndSetTag"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="275dp"
+                android:layout_marginTop="377dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall" />
+
+            <ImageView
+                android:id="@+id/bits_8"
+                style="@style/focusAndSetTag"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="460dp"
+                android:layout_marginTop="377dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall" />
+
+            <ImageView
+                android:id="@+id/bits_9"
+                style="@style/focusAndSetTag"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="645dp"
+                android:layout_marginTop="377dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall"/>
+
+            <ImageView
+                android:id="@+id/bits_10"
+                style="@style/focusAndSetTag"
+                android:layout_width="360dp"
+                android:layout_height="235dp"
+                android:layout_marginLeft="830dp"
+                android:layout_marginTop="312dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_musichall" />
+
+
+        </FrameLayout>
+        <!--<FrameLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingTop="18pt"-->
+        <!--android:layout_gravity="center_horizontal">-->
+        <!--<ImageView-->
+        <!--android:layout_width="486pt"-->
+        <!--android:layout_height="288pt"-->
+        <!--android:visibility="gone"-->
+        <!--style="@style/imgStyle1"/>-->
+        <!--<ImageView-->
+        <!--style="@style/focusView"-->
+        <!--android:layout_width="563pt"-->
+        <!--android:layout_height="300pt"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:layout_marginLeft="-18pt"-->
+        <!--android:src="@drawable/video_bg"-->
+        <!--android:id="@+id/bits_1"-->
+        <!--/>-->
+        <!--<ImageView-->
+        <!--android:layout_width="360pt"-->
+        <!--android:layout_height="280pt"-->
+        <!--android:id="@+id/bits_2"-->
+        <!--android:layout_marginLeft="527pt"-->
+        <!--style="@style/imgStyle1"-->
+        <!--/>-->
+        <!--<ImageView-->
+        <!--android:layout_width="212pt"-->
+        <!--android:layout_height="280pt"-->
+        <!--android:id="@+id/bits_3"-->
+        <!--android:layout_marginLeft="918pt"-->
+        <!--style="@style/imgStyle1"/>-->
+        <!--<ImageView-->
+        <!--android:layout_width="262pt"-->
+        <!--android:layout_height="160pt"-->
+        <!--android:id="@+id/bits_4"-->
+        <!--android:layout_marginTop="300pt"-->
+        <!--style="@style/imgStyle1"/>-->
+        <!--<ImageView-->
+        <!--android:layout_width="262pt"-->
+        <!--android:layout_height="160pt"-->
+        <!--android:id="@+id/bits_5"-->
+        <!--android:layout_marginLeft="290pt"-->
+        <!--android:layout_marginTop="300pt"-->
+        <!--style="@style/imgStyle1"/>-->
+        <!--<ImageView-->
+        <!--android:layout_width="262pt"-->
+        <!--android:layout_height="160pt"-->
+        <!--android:id="@+id/bits_6"-->
+        <!--android:layout_marginLeft="580pt"-->
+        <!--android:layout_marginTop="300pt"-->
+        <!--style="@style/imgStyle1"/>-->
+        <!--<ImageView-->
+        <!--android:layout_width="262pt"-->
+        <!--android:layout_height="160pt"-->
+        <!--android:id="@+id/bits_7"-->
+        <!--android:layout_marginLeft="874pt"-->
+        <!--android:layout_marginTop="300pt"-->
+        <!--style="@style/imgStyle1"/>-->
+        <!--</FrameLayout>-->
+    </FrameLayout>
+</layout>

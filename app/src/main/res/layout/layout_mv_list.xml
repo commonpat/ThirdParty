@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_mvList"
+    style="@style/setEnableFocusNO"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:nextFocusUp="@+id/cb_mv"
+        android:id="@+id/item1"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp55"
+        android:layout_marginTop="@dimen/dp20"
+        android:nextFocusDown="@+id/item5">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn1"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:nextFocusUp="@+id/cb_mv"
+        android:id="@+id/item2"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp350"
+        android:layout_marginTop="@dimen/dp20"
+        android:nextFocusDown="@+id/item6">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn2"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:nextFocusUp="@+id/cb_mv"
+        android:id="@+id/item3"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp645"
+        android:layout_marginTop="@dimen/dp20"
+        android:nextFocusDown="@+id/item7">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn3"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:nextFocusUp="@+id/cb_mv"
+        android:id="@+id/item4"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp940"
+        android:layout_marginTop="@dimen/dp20"
+        android:nextFocusDown="@+id/item8">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn4"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item5"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp55"
+        android:layout_marginTop="@dimen/dp198"
+        android:nextFocusDown="@+id/item9">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn5"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item6"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp350"
+        android:layout_marginTop="@dimen/dp198"
+        android:nextFocusDown="@+id/item10">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn6"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item7"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp645"
+        android:layout_marginTop="@dimen/dp198"
+        android:nextFocusUp="@id/item3">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn7"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item8"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp940"
+        android:layout_marginTop="@dimen/dp198"
+        android:nextFocusUp="@id/item4">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn8"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item9"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp55"
+        android:layout_marginTop="@dimen/dp375"
+        android:nextFocusUp="@id/item5">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn9"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item10"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp350"
+        android:layout_marginTop="@dimen/dp375"
+        android:nextFocusUp="@id/item6">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn10"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item11"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp645"
+        android:layout_marginTop="@dimen/dp375"
+        android:nextFocusUp="@id/item7">
+
+        <ImageView
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item12"
+        style="@style/mv_list_item"
+        android:layout_marginLeft="@dimen/dp940"
+        android:layout_marginTop="@dimen/dp375"
+        android:nextFocusUp="@id/item8">
+
+        <ImageView
+            android:id="@+id/item_ImageBtn12"
+            style="@style/setEnableFocusNO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_small" />
+
+        <TextView
+            style="@style/textViewStyle"
+            android:text="歌手名字" />
+
+    </RelativeLayout>
+
+</FrameLayout>

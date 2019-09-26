@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/bg"
+        style="@style/setEnableFocusYES"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right">
+        <TextView
+            style="@style/setEnableFocusNO"
+            android:layout_marginTop="@dimen/sp25"
+            android:layout_marginRight="@dimen/dp20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="按【返回】键可退出推荐页"
+            android:textSize="@dimen/dp30"
+            android:textColor="@color/white"
+            android:background="@color/eighty_black"/>
+    </LinearLayout>
+
+    <!--<Button-->
+        <!--android:id="@+id/btn_play_enter"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|right"-->
+        <!--android:layout_marginBottom="@dimen/dp20"-->
+        <!--android:layout_marginRight="@dimen/dp80"-->
+        <!--android:background="@drawable/btn_play_now" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/btn_play_exit"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:background="@drawable/btn_play_now"-->
+        <!--android:layout_marginTop="@dimen/dp180"-->
+        <!--android:visibility="gone"-->
+        <!--/>-->
+
+
+</FrameLayout>
