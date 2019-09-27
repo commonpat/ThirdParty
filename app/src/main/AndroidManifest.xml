@@ -48,6 +48,9 @@
         <activity android:name=".activity.UserCenterActivity" />
         <activity android:name=".activity.CollectCenterActivity" />
         <activity android:name=".activity.ExitActivity" />
+        <activity android:name=".activity.SongListActivity" />
+        <activity android:name=".activity.PlayRecordActivity" />
+
     </application>
 
 </manifest>

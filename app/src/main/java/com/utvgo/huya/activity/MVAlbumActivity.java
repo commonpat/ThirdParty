@@ -41,6 +41,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.utvgo.huya.Constants.BASE_URL_VIDEO;
+
 /**
  * Created by haha on 2018/6/8.
  */
@@ -108,7 +111,7 @@ public class MVAlbumActivity extends BuyActivity {
         borderView.setBorderBitmapResId(R.drawable.singer_list_f, (int) getResources().getDimension(R.dimen.dp50),
                 (int) getResources().getDimension(R.dimen.dp40));
 
-
+        getData();
 
         itemList.add((RelativeLayout) findViewById(R.id.rl_item1));
         itemList.add((RelativeLayout) findViewById(R.id.rl_item2));
@@ -125,7 +128,6 @@ public class MVAlbumActivity extends BuyActivity {
         tvNameList.add((TextView) findViewById(R.id.tv_name3));
         tvNameList.add((TextView) findViewById(R.id.tv_name4));
 
-        getData();
     }
 
     public void getData() {
@@ -150,7 +152,7 @@ public class MVAlbumActivity extends BuyActivity {
 //            });
             asyncHttpRequest.getWLAblumDataSingle(this, albumMid, this, this);
         } else {
-             asyncHttpRequest.getWLAblumData(this, albumMid, this, this);
+            asyncHttpRequest.getWLAblumData(this, albumMid, this, this);
         }
     }
 
@@ -305,7 +307,7 @@ public class MVAlbumActivity extends BuyActivity {
             BeanBasic beanBasic = (BeanBasic) object;
             if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
                 ivCollect.setImageResource(R.drawable.sheet_collect_1);
-               // beanWLAblumData.getData().setIfCollection(1);
+                // beanWLAblumData.getData().setIfCollection(1);
             } else {
                 HiFiDialogTools.getInstance().showtips(this, "收藏失败，请稍后重试", null);
             }
@@ -327,7 +329,8 @@ public class MVAlbumActivity extends BuyActivity {
         for (int i = 0; i < albumData.size(); i++) {
             BeanWLAblumData.DataBean.VideoBean mvDataBean = albumData.get(i);
             BeanTopic.DataBean.UtvgoSubjectRecordListBean subjectBean = new BeanTopic.DataBean.UtvgoSubjectRecordListBean();
-          //  subjectBean.setImgUrl(mvDataBean.getMvPoster());
+            //  subjectBean.setImgUrl(mvDataBean.getMvPoster());
+            subjectBean.setHref(mvDataBean.getVideoUrlFluency());
             subjectBean.setImgUrl(mvDataBean.getImageSmall());
             subjectBean.setName(mvDataBean.getName());
             subjectBean.setMvMid(String.valueOf(mvDataBean.getVideoId()));
@@ -356,9 +359,9 @@ public class MVAlbumActivity extends BuyActivity {
             BeanTopic.DataBean.UtvgoSubjectRecordListBean bean = subjectRecordListBeen.get(index);
             if (!TextUtils.isEmpty(albumMid)) {
                 hahaPlayUrl( beanWLAblumData.getData().getVideos().get(index).getVideoUrlHigh());
-              // asyncHttpRequest.getMVDetail(this, bean.getMvMid(), this, this);
+                // asyncHttpRequest.getMVDetail(this, bean.getMvMid(), this, this);
             } else {
-                asyncHttpRequest.getMVDetail(this, StrTool.getValueByName(bean.getHref(), "mvMid"), this, this);
+                asyncHttpRequest.getMVDetail(this, StrTool.getValueByName(bean.getHref(), "mvMid"),0,0, this, this);
             }
         }
     }
@@ -473,6 +476,10 @@ public class MVAlbumActivity extends BuyActivity {
                     !TextUtils.isEmpty(StrTool.getValueByName(bean.getHref(), "mvMid")))
                     || !TextUtils.isEmpty(bean.getMvMid())) {
                 BeanUserPlayList.DataBean playBean = new BeanUserPlayList.DataBean();
+                if (!bean.getHref().contains("http")&&bean.getHref().contains("mp4")){
+                    playBean.setSingerMids(BASE_URL_VIDEO+bean.getHref());
+                }else {
+                    playBean.setSingerMids(bean.getHref());}
                 playBean.setBigPic(bean.getImgUrl());
                 playBean.setSmallPic(bean.getImgUrl());
                 if (!TextUtils.isEmpty(bean.getMvMid())) {

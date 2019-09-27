@@ -184,7 +184,7 @@ public class UserCenterActivity extends BuyActivity {
 //
 //        } else
         if (i == R.id.btn_playRecord) {
-            Intent intent = new Intent(this, CollectCenterActivity.class);
+            Intent intent = new Intent(this, PlayRecordActivity.class);
             intent.putExtra("type", 0);
             startActivity(intent);
 

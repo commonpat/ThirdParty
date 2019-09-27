@@ -10,16 +10,20 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanArryPage;
 import com.utvgo.huya.beans.BeanBasic;
+import com.utvgo.huya.beans.BeanCollectPageList;
 import com.utvgo.huya.beans.BeanExitPage;
 import com.utvgo.huya.beans.BeanMvListByGenreId;
 import com.utvgo.huya.beans.BeanMVDetail;
+import com.utvgo.huya.beans.BeanPlayHistoryPageList;
 import com.utvgo.huya.beans.BeanSongDetail;
 import com.utvgo.huya.beans.BeanStatistics;
 import com.utvgo.huya.beans.BeanTopic;
 import com.utvgo.huya.beans.BeanTypeGenre2;
 import com.utvgo.huya.beans.BeanUserBindingInfo;
+import com.utvgo.huya.beans.BeanVideoDetailZero;
 import com.utvgo.huya.beans.BeanWLAblumData;
 import com.utvgo.huya.utils.Appconfig;
 import com.utvgo.huya.utils.LoadingDialogTools;
@@ -72,9 +76,9 @@ public class AsyncHttpRequest {
                     }
                     return;
                 }
-      //        Gson gson = new Gson();
-      //       object = gson.fromJson(object.toString(), className);
-               object = JSON.parseObject(object.toString(), className);
+                //        Gson gson = new Gson();
+                //       object = gson.fromJson(object.toString(), className);
+                object = JSON.parseObject(object.toString(), className);
                 if (volleyRequestSuccess != null) {
                     try {
                         volleyRequestSuccess.onSucceeded(method, key, object);
@@ -165,23 +169,36 @@ public class AsyncHttpRequest {
      * @param fail
      * /utvgo-tv-mvc/tv/pageCenter/program_content.utvgo?multiSetType=4&channelId=36&pkId=57652&pageNo=1&pageSize=10000&keyNo=8002004093892878&platform=linux
      */
-    public void getMVDetail(Context context, String songMid, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL + "/utvgo-tv-mvc/tv/pageCenter/program_content.utvgo?multiSetType=4&channelId=36&pkId=57652&pageNo=1" +
-                "&pageSize=10000&platform=linuxkeyNo=" + Appconfig.getKeyNo(context) + "&mvMid=" + songMid + "&sourceType=1";
-        getJavaBean(url, BeanMVDetail.class, context, null, success, fail);
+    public void getMVDetail(Context context, String multiSetType, int pkgId,int channelId,IVolleyRequestSuccess success, IVolleyRequestfail fail) {
+        String url = BASE_URL + "/utvgo-tv-mvc/tv/pageCenter/program_content.utvgo?multiSetType="+multiSetType+"&channelId="+channelId+"&pkId="+pkgId+"&pageNo=1" +
+                "&pageSize=10000&platform=linuxkeyNo=" + Appconfig.getKeyNo(context) ;
+        if ("0".equals(multiSetType)){
+            getJavaBean(url, BeanVideoDetailZero.class, context, null, success, fail);
+        }
+        else if("1".equals(multiSetType)){
+            getJavaBean(url, BeanMVDetail.class, context, null, success, fail);
+        } else if("2".equals(multiSetType)) {
+
+        }
+        else if("3".equals(multiSetType)){
+
+        }else if("4".equals(multiSetType)){
+            getJavaBean(url, BeanMVDetail.class, context, null, success, fail);
+        }
     }
     /**
      * 删除收藏(歌曲\mv\专辑)接口
-     *
+     *http://172.16.146.6/utvgo-user/collect/savecollect.utvgo
      * @param collectionType 0音频，1MV，2专辑
      * @param success
      * @param fail
      */
-    public void deleteCollection(Context context, String collectionType, String contentMid, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL + "/uuMusic/uuMusicDataController/deleteCollection.utvgo?keyNo=" + Appconfig.getKeyNo(context)
-                + "&collectionType=" + collectionType + "&contentMid=" + contentMid;
+    public void addCollection(Context context, String collectionType, int pkgId,int channelId, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
+        String url = BASE_URL_HOST + "/utvgo-user/collect/savecollect.utvgo?keyNo=" + Appconfig.getKeyNo(context)
+                + "&programId=" + pkgId + "&channelId=" + channelId;
         getJavaBean(url, BeanBasic.class, context, null, success, fail);
     }
+
     /**
      * 添加收藏(歌曲\mv\专辑)接口
      *
@@ -189,10 +206,10 @@ public class AsyncHttpRequest {
      * @param success
      * @param fail
      */
-    public void addCollection(Context context, String collectionType, String contentMid, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL + "/uuMusic/uuMusicDataController/addCollection.utvgo?keyNo=" +Appconfig.getKeyNo(context)
-                + "&collectionType=" + collectionType + "&contentMid=" + contentMid;
-        getJavaBean(url, BeanBasic.class, context, null, success, fail);
+    public void deleteCollection(Context context, String collectionType, String idStr, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
+        String url = BASE_URL + "/utvgo-user/collect/delcollect.utvgo?keyNo=" +Appconfig.getKeyNo(context)
+                + "&idStr=" +idStr;
+        getJavaBean(url, BaseResponse.class, context, null, success, fail);
     }
     /**
      * 1.1.	根据风格类型获取MV列表信息接口：
@@ -279,5 +296,19 @@ public class AsyncHttpRequest {
     public  void getExitPage(Context context,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
         String url=BASE_URL+"/utvgo-tv-mvc/ui/vip/index/page.utvgo?typeId=72&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
         getJavaBean(url, BeanExitPage.class,context,success,fail,null);
+    }
+    /**
+     * http://172.16.146.66/utvgo-user/collect/collectPageList.utvgo?pageNo=1&pageSize=9&keyNo=8002004093892878&platform=linux
+     * */
+    public  void getCollectPageList(Context context,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
+        String url=BASE_URL+"/utvgo-user/collect/collectPageList.utvgo?pageNo=1&pageSize=8&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
+        getJavaBean(url, BeanCollectPageList.class,context,success,fail,null);
+    }
+    /**
+     * http://172.16.146.6/utvgo-user/video/playhistoryPageList.utvgo
+     * */
+    public  void getPlayHistoryPageList(Context context,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
+        String url=BASE_URL_HOST+"/utvgo-user/video/playhistoryPageList.utvgo?pageNo=1&pageSize=8&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
+        getJavaBean(url, BeanPlayHistoryPageList.class,context,success,fail,null);
     }
 }

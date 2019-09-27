@@ -184,7 +184,7 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
 
     @Override//下个方法是onfocusChange
     public void onGlobalFocusChanged(View oldFocus, View newFocus) {
-        if (newFocus.getId() == R.id.btn_main_introduction  || newFocus.getId() == R.id.btn_main_order
+      try{  if (newFocus.getId() == R.id.btn_main_introduction  || newFocus.getId() == R.id.btn_main_order
                 || newFocus.getId() == R.id.btn_main_user_center || newFocus.getId() == R.id.btn_main_user_favor ||
                 newFocus.getId() == R.id.main_tab_1  || newFocus.getId() == R.id.main_tab_2
                 || newFocus.getId() == R.id.main_tab_4 || newFocus.getId() == R.id.main_tab_3) {
@@ -212,6 +212,8 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
                 //    binding.focusView.setVisibility(View.VISIBLE);
             }
         }
+      }catch(Exception e){
+      }
     }
 
     @SuppressLint("ResourceType")
@@ -263,6 +265,7 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
                 });
                 break;
             case R.id.btn_main_user_favor: {
+                startActivity(new Intent(this,  SongListActivity.class));
                 break;
             }
             case R.id.btn_main_introduction: {

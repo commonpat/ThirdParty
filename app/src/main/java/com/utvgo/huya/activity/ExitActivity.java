@@ -82,14 +82,12 @@ public class ExitActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_ok:
-                setResult(RESULT_OK);
                 finish();
                 onBackPressed();
                 break;
             case R.id.btn_cancel:
+                setResult(RESULT_OK);
                 finish();
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
                 break;
             case R.id.iv_img0:
                clickRecItem(0);

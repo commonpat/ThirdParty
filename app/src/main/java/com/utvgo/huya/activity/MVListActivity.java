@@ -226,6 +226,7 @@ public class MVListActivity extends PageActivity {
     }
 
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (focusView != null && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -400,9 +401,13 @@ public class MVListActivity extends PageActivity {
                 for (int i = 0; i < mvListByGenreIdData.size(); i++) {
                     BeanMvListByGenreId.dataBean.programBean mvBean = mvListByGenreIdData.get(i);
                     BeanUserPlayList.DataBean playBean = new BeanUserPlayList.DataBean();
+                    playBean.setSingerMids("0");
                     playBean.setBigPic(mvBean.getImageBig());
                     playBean.setSmallPic(mvBean.getImageSmall());
                     playBean.setContentMid(String.valueOf(mvBean.getSupplierId()));
+                    playBean.setContentType(mvBean.getMultiSetType());//单集多集
+                    playBean.setContentId(mvBean.getPkId());//pkgId
+                    playBean.setMediaType(mvBean.getChannelId());//channelId
                     playBean.setContentName(mvBean.getName());
                     playBean.setSingerNames(mvBean.getSupplierName());
                     playBean.setIsFree(Integer.valueOf(mvBean.getIsFree()));

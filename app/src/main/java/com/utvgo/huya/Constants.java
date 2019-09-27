@@ -14,4 +14,5 @@ public interface Constants {
     String Base_AUTH="http://172.16.146.6/uusports-order-web/";
     String IMG_URL="http://172.16.146.40/cms/uploadFile/image/";
     String  USERAPIPREFIX = "http://172.16.146.66/utvgo-user";
+    String BASE_URL_VIDEO="http://172.16.146.69:17553/EG/huya/";
 }

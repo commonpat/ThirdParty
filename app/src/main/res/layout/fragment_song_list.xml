@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_RootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg">
+    <TextView
+        android:id="@+id/tv_singer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp55"
+        android:text="HAha"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp40" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp60"
+        android:layout_marginTop="@dimen/dp160"
+        android:layout_marginRight="@dimen/dp60"
+        android:layout_marginBottom="@dimen/dp100"
+        android:background="@drawable/songlistbg" />
+
+    <FrameLayout
+        android:id="@+id/fl_songList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/fl_song1"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp110"
+            android:layout_marginTop="@dimen/dp200">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/singerName"
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song2"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp680"
+            android:layout_marginTop="@dimen/dp200">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="2" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song3"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp110"
+            android:layout_marginTop="@dimen/dp275">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="3" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:src="@drawable/mv_tag"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song4"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp680"
+            android:layout_marginTop="@dimen/dp275">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="4" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song5"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp110"
+            android:layout_marginTop="@dimen/dp350">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="5" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song6"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp680"
+            android:layout_marginTop="@dimen/dp350">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="6" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song7"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp110"
+            android:layout_marginTop="@dimen/dp425">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="7" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song8"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp680"
+            android:layout_marginTop="@dimen/dp425">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="8" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song9"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp110"
+            android:layout_marginTop="@dimen/dp500">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="9" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_song10"
+            style="@style/fl_song_list"
+            android:layout_marginLeft="@dimen/dp680"
+            android:layout_marginTop="@dimen/dp500">
+
+            <ImageView style="@style/fl_song_list_play_icon" />
+
+            <TextView
+                style="@style/fl_song_list_index"
+                android:text="10" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/song_list"
+                    android:text="I am yong bin" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:visibility="gone"
+                    android:src="@drawable/mv_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dp8"
+                    android:background="@drawable/shape_bg_free"
+                    android:padding="@dimen/dp4"
+                    android:text="免费"
+                    android:textSize="@dimen/sp14" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/song_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="歌手名称"
+                android:visibility="gone" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_page"
+        style="@style/setEnableFocusNO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="@dimen/dp50"
+        android:drawableLeft="@mipmap/page_arrow_left"
+        android:drawableRight="@mipmap/page_arrow_right"
+        android:text=" 0/0 "
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp25" />
+
+</FrameLayout>

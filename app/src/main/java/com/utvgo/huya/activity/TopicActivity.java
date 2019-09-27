@@ -282,7 +282,7 @@ public class TopicActivity extends BuyActivity {
         super.onClick(view);
         int playIndex = view.getId();
         BeanTopic.DataBean.UtvgoSubjectRecordListBean selectBean = subjectRecordListBeen.get(playIndex);
-        if (selectBean.getHref().contains("qqmusic_zt.html")) {
+        if (selectBean.getHref().contains("qqmusic_zt.html")||selectBean.getHref().contains("topic.html")) {
             Intent intent = new Intent(this, TopicActivity.class);
             intent.putExtra("topicId", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
             startActivity(intent);
@@ -321,6 +321,7 @@ public class TopicActivity extends BuyActivity {
                 } else {
                     playBean.setContentMid(StrTool.getValueByName(bean.getHref(), "mvMid"));
                 }
+                playBean.setSingerMids("0");
                 playBean.setContentName(bean.getName());
                 playHistoryList.add(playBean);
             }

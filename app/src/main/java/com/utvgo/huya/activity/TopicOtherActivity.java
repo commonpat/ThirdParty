@@ -145,13 +145,13 @@ public class TopicOtherActivity extends BuyActivity {
 
     private void getMVData(String mid) {
         Log.e("df", mid);
-        asyncHttpRequest.getMVDetail(this, mid, new IVolleyRequestSuccess() {
-            @Override
-            public void onSucceeded(String method, String key, Object object) throws Exception {
-                BeanMVDetail mvDetail = (BeanMVDetail) object;
-                getHahaPlayerUrl(mvDetail.getMv().getVodId());
-            }
-        }, null);
+//        asyncHttpRequest.getMVDetail(this, mid, new IVolleyRequestSuccess() {
+//            @Override
+//            public void onSucceeded(String method, String key, Object object) throws Exception {
+//                BeanMVDetail mvDetail = (BeanMVDetail) object;
+//                getHahaPlayerUrl(mvDetail.getMv().getVodId());
+//            }
+//        }, null);
     }
 
     private void getHrefList(String href) {

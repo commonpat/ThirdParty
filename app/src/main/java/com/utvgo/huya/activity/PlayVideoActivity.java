@@ -23,10 +23,10 @@ import com.utvgo.huya.GlideApp;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BeanBasic;
-import com.utvgo.huya.beans.BeanMVDetail;
 import com.utvgo.huya.beans.BeanSongDetail;
 import com.utvgo.huya.beans.BeanStatistics;
 import com.utvgo.huya.beans.BeanUserPlayList;
+import com.utvgo.huya.beans.BeanVideoDetailZero;
 import com.utvgo.huya.constant.ConstantEnum;
 import com.utvgo.huya.utils.DiffHostConfig;
 import com.utvgo.huya.utils.HiFiDialogTools;
@@ -37,7 +37,6 @@ import com.utvgo.huya.utils.Tools;
 import com.utvgo.huya.utils.XLog;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,7 +72,7 @@ public class PlayVideoActivity extends BuyActivity {
     FrameLayout flPlayList;
     @BindView(R.id.fl_playlist_content)
     FrameLayout flPlayListContent;
-//    @BindView(R.id.lrcView)
+    //    @BindView(R.id.lrcView)
 //    LrcView lrcView;
     @BindView(R.id.iv_head)
     ImageView ivHead;
@@ -111,7 +110,7 @@ public class PlayVideoActivity extends BuyActivity {
     private ArrayList<BeanUserPlayList.DataBean> playList = new ArrayList<>();
 
     private BeanSongDetail songDetail;
-    private BeanMVDetail mvDetail;
+    private BeanVideoDetailZero mvDetail;
     private boolean playMVBySong = false;
     private boolean quickSeekNow = false;
 
@@ -159,7 +158,9 @@ public class PlayVideoActivity extends BuyActivity {
         traversalView(this);
         //调用复写的创建BorderView
         createBorderView(this);
-
+        //setContentType(mvBean.getMultiSetType());//单集多集
+        //setContentId(mvBean.getPkId());//pkgId
+        //MediaType(mvBean.getChannelId());//channelId
         playList = getIntent().getParcelableArrayListExtra("playList");
         fileType = getIntent().getIntExtra("fileType", 1);
         playingIndex = getIntent().getIntExtra("playIndex", 0);
@@ -182,13 +183,13 @@ public class PlayVideoActivity extends BuyActivity {
             //lrcView.setVisibility(View.VISIBLE);
             ivHead.setVisibility(View.VISIBLE);
             gifVideoLoad.setVisibility(View.GONE);
-       //     videoPlayerProgress.requestFocus();
+            //     videoPlayerProgress.requestFocus();
 //            videoPlayerProgress.setClickable(false);
 //            videoPlayerProgress.setEnabled(false);
 //              videoPlayerProgress.setSelected(false);
 //             videoPlayerProgress.setFocusable(false);
         } else {
-           // lrcView.setVisibility(View.GONE);
+            // lrcView.setVisibility(View.GONE);
             ivHead.setVisibility(View.GONE);
             gifVideoLoad.setVisibility(View.VISIBLE);
             ivVideoBg.setImageResource(R.mipmap.bg);
@@ -196,8 +197,8 @@ public class PlayVideoActivity extends BuyActivity {
 
         needFinish = true;
 
-        GlideApp.with(PlayVideoActivity.this).load(R.drawable.video_load).skipMemoryCache(true)
-                .placeholder(R.drawable.place_holder_song).into(gifVideoLoad);
+        GlideApp.with(PlayVideoActivity.this).load(R.drawable.playvideoload).skipMemoryCache(true)
+                .placeholder(R.drawable.playvideoload).into(gifVideoLoad);
     }
 
     /**
@@ -212,7 +213,7 @@ public class PlayVideoActivity extends BuyActivity {
     protected void onResume() {
         super.onResume();
         isToShowBuy = false;
-       // startXiri();
+        // startXiri();
 
         if (hadCallBuyView) {
             hadCallBuyView = false;
@@ -491,20 +492,20 @@ public class PlayVideoActivity extends BuyActivity {
                     return;
                 }
                 BeanUserPlayList.DataBean bean = playList.get(playingIndex);
-                if (mvDetail.getMv().getIfCollection() == 1) {
-                    asyncHttpRequest.deleteCollection(PlayVideoActivity.this, "1", bean.getContentMid(), this, this);
-                } else {
-                    asyncHttpRequest.addCollection(PlayVideoActivity.this, "1", bean.getContentMid(), this, this);
-                }
+
+                asyncHttpRequest.deleteCollection(PlayVideoActivity.this, "1", bean.getContentMid(), this, this);
+//                } else {
+//                    asyncHttpRequest.addCollection(PlayVideoActivity.this, "1", bean.getContentMid(), this, this);
+//                }
             } else {
                 if (songDetail == null) {
                     return;
                 }
                 BeanUserPlayList.DataBean bean = playList.get(playingIndex);
                 if (songDetail.getSong().getIfCollection() == 1) {
-                    asyncHttpRequest.deleteCollection(PlayVideoActivity.this, "0", bean.getContentMid(), this, this);
+                  //  asyncHttpRequest.addCollection(PlayVideoActivity.this, "0", bean.getContentId(),bean.getMediaType(), this, this);
                 } else {
-                    asyncHttpRequest.addCollection(PlayVideoActivity.this, "0", bean.getContentMid(), this, this);
+                    asyncHttpRequest.deleteCollection(PlayVideoActivity.this, "0", String.valueOf(bean.getContentId()), this, this);
                 }
             }
         }
@@ -518,7 +519,7 @@ public class PlayVideoActivity extends BuyActivity {
             if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
                 ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
                 if (fileType == 1) {
-                    mvDetail.getMv().setIfCollection(1);
+                    //  mvDetail.getMv().setIfCollection(1);
                 } else {
                     songDetail.getSong().setIfCollection(1);
                 }
@@ -530,7 +531,7 @@ public class PlayVideoActivity extends BuyActivity {
             if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
                 ivCollect.setImageResource(R.drawable.selector_player_collect_no);
                 if (fileType == 1) {
-                    mvDetail.getMv().setIfCollection(0);
+                    //mvDetail.getMv().setIfCollection(0);
                 } else {
                     songDetail.getSong().setIfCollection(0);
                 }
@@ -562,10 +563,10 @@ public class PlayVideoActivity extends BuyActivity {
                 }
 
                 if (shouldPlay) {
-                   // XLog.toast(this, "Will play audio asset Id " + assetId);
+                    // XLog.toast(this, "Will play audio asset Id " + assetId);
                     getHahaPlayerUrl(assetId);
                 } else {
-                  //  XLog.toast(this, "require payment");
+                    //  XLog.toast(this, "require payment");
                     isToShowBuy = false;
                     showBuy(assetId);
                 }
@@ -585,12 +586,12 @@ public class PlayVideoActivity extends BuyActivity {
                     lyricText = "暂无歌词，努力更新中...";
                 }
                 //解析歌词构造器
-               // ILrcBuilder builder = new DefaultLrcBuilder();
+                // ILrcBuilder builder = new DefaultLrcBuilder();
                 //解析歌词返回LrcRow集合
-               // List<LrcRow> rows = builder.getLrcRows(lyricText);
+                // List<LrcRow> rows = builder.getLrcRows(lyricText);
                 //将得到的歌词集合传给mLrcView用来展示
-               // lrcView.setLrc(rows);
-               // lrcView.setVisibility(View.VISIBLE);
+                // lrcView.setLrc(rows);
+                // lrcView.setVisibility(View.VISIBLE);
 
                 if (TextUtils.isEmpty(songDetail.getSong().getMvMid())) {
                     ivChangeMv.setVisibility(View.INVISIBLE);
@@ -620,47 +621,47 @@ public class PlayVideoActivity extends BuyActivity {
             } else {
                 HiFiDialogTools.getInstance().showtips(this, "获取信息失败，请稍后重试", null);
             }
-        } else if (TextUtils.equals(method, "mvDetail.utvgo")) {
+        } else if (TextUtils.equals(method, "program_content.utvgo")) {
             statisticsPlayId = "";
-            mvDetail = (BeanMVDetail) object;
+            mvDetail = (BeanVideoDetailZero) object;
             //mvDetail.getMv().setFreeTime(10);
 
             startStatisticsPlay();
             statisticsVideoPlay("0", "0");
             if (mvDetail != null && TextUtils.equals(mvDetail.getCode(), "1")) {
-                if (mvDetail.getMv().getIfCollection() == 1) {
-                    ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
-                } else {
-                    ivCollect.setImageResource(R.drawable.selector_player_collect_no);
-                }
+//                if (mvDetail.getMv().getIfCollection() == 1) {
+//                    ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
+//                } else {
+//                    ivCollect.setImageResource(R.drawable.selector_player_collect_no);
+//                }
 
-                if (HuyaApplication.hadBuy() || (mvDetail.getMv().getIsFree() == 1) || isExperience) {
+                if (HuyaApplication.hadBuy() || (mvDetail.getData().getIfFree() == "1") || isExperience) {
                     freeTime = -1;
-                    if (TextUtils.isEmpty(mvDetail.getMv().getVodIdHD()) || TextUtils.equals("0", mvDetail.getMv().getVodIdHD())) {
-                        getHahaPlayerUrl(mvDetail.getMv().getVodId());
+                    if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
+                        getHahaPlayerUrl(mvDetail.getData().getVodId());
                     } else {
-                        getHahaPlayerUrl(mvDetail.getMv().getVodIdHD());
+                        getHahaPlayerUrl(mvDetail.getData().getVideoUrlHigh());
                     }
-                } else if (mvDetail.getMv().getFreeTime() > 0) {
-                    freeTime = mvDetail.getMv().getFreeTime();
-                    if (TextUtils.isEmpty(mvDetail.getMv().getVodIdHD()) || TextUtils.equals("0", mvDetail.getMv().getVodIdHD())) {
-                        getHahaPlayerUrl(mvDetail.getMv().getVodId());
+                } else if (mvDetail.getData().getFreeSecond() > 0) {
+                    freeTime = mvDetail.getData().getFreeSecond();
+                    if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
+                        getHahaPlayerUrl(mvDetail.getData().getVodId());
                     } else {
-                        getHahaPlayerUrl(mvDetail.getMv().getVodIdHD());
+                        getHahaPlayerUrl(mvDetail.getData().getVideoUrlHigh());
                     }
                 } else {
                     freeTime = -1;
-                    if (TextUtils.isEmpty(mvDetail.getMv().getVodIdHD()) || TextUtils.equals("0", mvDetail.getMv().getVodIdHD())) {
-                        showBuy(mvDetail.getMv().getVodId());
+                    if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
+                        showBuy(mvDetail.getData().getVodId());
                     } else {
-                        showBuy(mvDetail.getMv().getVodIdHD());
+                        showBuy(mvDetail.getData().getVideoUrlHigh());
                     }
                 }
                 ivChangeMv.setVisibility(View.INVISIBLE);
             } else {
                 HiFiDialogTools.getInstance().showtips(this, "获取信息失败，请稍后重试", null);
             }
-           // lrcView.setVisibility(View.GONE);
+            // lrcView.setVisibility(View.GONE);
             ivHead.setVisibility(View.GONE);
 
             showViewByHandler(videoPlayerProgress);
@@ -675,8 +676,8 @@ public class PlayVideoActivity extends BuyActivity {
     @Override
     public void getHahaPlayerUrl(String vodID) {
         setHahaPlayer(vvJingling);
-        String asset = DiffHostConfig.getMediaAsset((mvDetail != null ) ? mvDetail.getMv() : null, (songDetail != null) ? songDetail.getSong() : null);
-        super.getHahaPlayerUrl(asset);
+        //String asset = DiffHostConfig.getMediaAsset((mvDetail != null ) ? mvDetail.getData(): null, (songDetail != null) ? songDetail.getSong() : null);
+        super.getHahaPlayerUrl(vodID);
     }
 
     @Override
@@ -691,7 +692,7 @@ public class PlayVideoActivity extends BuyActivity {
         }
 
         if (songDetail != null && !TextUtils.isEmpty(songDetail.getSong().getLyricText())) {
-           // lrcView.seekLrcToTime(nowTime);
+            // lrcView.seekLrcToTime(nowTime);
         }
         gifVideoLoad.setVisibility(View.GONE);
 
@@ -713,10 +714,10 @@ public class PlayVideoActivity extends BuyActivity {
                     }
                 } else {
                     //tvBuyTip.setVisibility(View.VISIBLE);
-                    if (TextUtils.isEmpty(mvDetail.getMv().getVodIdHD()) || TextUtils.equals("0", mvDetail.getMv().getVodIdHD())) {
-                        showBuy(mvDetail.getMv().getVodId());
+                    if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
+                        showBuy(mvDetail.getData().getVodId());
                     } else {
-                        showBuy(mvDetail.getMv().getVodIdHD());
+                        showBuy(mvDetail.getData().getVideoUrlHigh());
                     }
                 }
                 return true;
@@ -730,9 +731,9 @@ public class PlayVideoActivity extends BuyActivity {
         if (!isToShowBuy) {
             isToShowBuy = true;
 
-                hahaPausePlay();
-                super.showBuy(vodID);
-                needFinish = true;
+            hahaPausePlay();
+            super.showBuy(vodID);
+            needFinish = true;
 
             hadCallBuyView = true;
         }
@@ -777,20 +778,21 @@ public class PlayVideoActivity extends BuyActivity {
         }
 
         BeanUserPlayList.DataBean dataBean = playList.get(playingIndex);
-        if (fileType == 1) {
-            gifVideoLoad.setVisibility(View.VISIBLE);
-            String mvMid = dataBean.getContentMid();
-            if (playMVBySong) {
-                mvMid = songDetail.getSong().getMvMid();
-            }
-            //message = "fetch MV detail with mid " + mvMid;
-            asyncHttpRequest.getMVDetail(PlayVideoActivity.this, mvMid, this, this);
 
-        } else {
-            //XLog.toast(this, "get song detail with mid " + dataBean.getContentMid());
-          //  lrcView.setLoadingTipText("正在加载歌词...");
-            asyncHttpRequest.getSongDetail(PlayVideoActivity.this, dataBean.getContentMid(), this, this);
+        gifVideoLoad.setVisibility(View.VISIBLE);
+        String mvMid = dataBean.getContentMid();
+        if (playMVBySong) {
+            mvMid = songDetail.getSong().getMvMid();
         }
+        //String multiSetType, int pkgId,int channelId,
+
+        if(dataBean.getSingerMids().contains("http")){
+            getHahaPlayerUrl(dataBean.getSingerMids());
+
+        }else {
+            asyncHttpRequest.getMVDetail(PlayVideoActivity.this, dataBean.getContentType(), dataBean.getContentId(), dataBean.getMediaType(), this, this);
+        }
+
         tvTitle.setText(dataBean.getContentName());
         tvSingerName.setText(dataBean.getSingerNames());
     }
@@ -869,9 +871,9 @@ public class PlayVideoActivity extends BuyActivity {
                     videoId = songDetail.getSong().getSongMid();
                     statName = "音频播放-" + videoName;
                 } else {
-                    programId = mvDetail.getMv().getMvMid() + "";
-                    videoName = mvDetail.getMv().getName();
-                    videoId = mvDetail.getMv().getMvMid();
+                    programId = mvDetail.getData().getPkId() + "";
+                    videoName = mvDetail.getData().getName();
+                    videoId = String.valueOf(mvDetail.getData().getVideoId());
                     statName = "视频播放-" + videoName;
                 }
                 stat(statName);
@@ -904,9 +906,9 @@ public class PlayVideoActivity extends BuyActivity {
             programName = videoName;
 
         } else {
-            programId = mvDetail.getMv().getMvMid() + "";
-            videoName = mvDetail.getMv().getName();
-            videoId = mvDetail.getMv().getMvMid();
+            programId = mvDetail.getData().getPkId() + "";
+            videoName = mvDetail.getData().getName();
+            videoId = String.valueOf(mvDetail.getData().getVideoId());
             programName = videoName;
             channelId = "2";
         }
@@ -914,7 +916,7 @@ public class PlayVideoActivity extends BuyActivity {
                 spId, spName,
                 programId, programName, channelId, channelName,
                 "1", "0",  "1",//DiffConfig.CurrentPurchase.isPurchased() ? "1" : "0"
-                "vip_code_29", statisticsVideoId, playTime, totalTime, new NetUtils.NetCallBack() {
+                "vip_code_50", statisticsVideoId, playTime, totalTime, new NetUtils.NetCallBack() {
                     @Override
                     public void netBack(int requestTag, Object object) {
                         if (object != null && (object instanceof BeanStatistics)) {
@@ -926,7 +928,7 @@ public class PlayVideoActivity extends BuyActivity {
                     }
                 });
     }
-//进度条显示，快进快退，时间显示出来
+    //进度条显示，快进快退，时间显示出来
     private void setTvTimeTagInfo(int progress) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp130),
                 (int) getResources().getDimension(R.dimen.dp50));
