@@ -15,5 +15,4 @@
     <include layout="@layout/mv_ablum_template_default" android:id="@+id/template_default" android:visibility="visible"/>
     <include layout="@layout/topic_default" android:id="@+id/template1" android:visibility="gone"/>
     <include android:id="@+id/topic_1" layout="@layout/topic_1" android:visibility="gone" />
-
 </FrameLayout>

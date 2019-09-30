@@ -108,8 +108,8 @@ public class MVAlbumActivity extends BuyActivity {
 
         createBorderView(this);
         traversal(activityRootView);
-        borderView.setBorderBitmapResId(R.drawable.focus_border_1, (int) getResources().getDimension(R.dimen.dp50),
-                (int) getResources().getDimension(R.dimen.dp40));
+        //borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp10),
+        //        (int) getResources().getDimension(R.dimen.dp10));
 
         getData();
 
@@ -167,10 +167,10 @@ public class MVAlbumActivity extends BuyActivity {
             if (v == ivCollect) {
                 borderView.setBorderBitmapResId(R.drawable.sheet_collect_focus, (int) getResources().getDimension(R.dimen.dp40));
             } else if (v == ivVideoFocus) {
-                borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp30));
+                borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp10));
             } else if (itemList.contains(v)) {
-                borderView.setBorderBitmapResId(R.drawable.singer_list_f, (int) getResources().getDimension(R.dimen.dp50),
-                        (int) getResources().getDimension(R.dimen.dp40));
+                borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp10),
+                        (int) getResources().getDimension(R.dimen.dp10));
             } else if (showType.equals(MVAlbumTemplate.ONE)) {
                 borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp5), (int) getResources().getDimension(R.dimen.dp13));
             } else if (showType.equals(MVAlbumTemplate.TWO)) {
@@ -329,7 +329,6 @@ public class MVAlbumActivity extends BuyActivity {
         for (int i = 0; i < albumData.size(); i++) {
             BeanWLAblumData.DataBean.VideoBean mvDataBean = albumData.get(i);
             BeanTopic.DataBean.UtvgoSubjectRecordListBean subjectBean = new BeanTopic.DataBean.UtvgoSubjectRecordListBean();
-            //  subjectBean.setImgUrl(mvDataBean.getMvPoster());
             subjectBean.setHref(mvDataBean.getVideoUrlFluency());
             subjectBean.setImgUrl(mvDataBean.getImageSmall());
             subjectBean.setName(mvDataBean.getName());
@@ -339,7 +338,7 @@ public class MVAlbumActivity extends BuyActivity {
         final String albumName = beanWLAblumData.getData().getName();
         final String title = albumName;
         tvAblumName.setText(title);
-        //stat(title);todo
+        stat(title);
 
         pageSize = subjectRecordListBeen.size() / 4;
         if (subjectRecordListBeen.size() % 4 != 0) {
@@ -369,7 +368,7 @@ public class MVAlbumActivity extends BuyActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (focusView != null && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (focusView.getId() == R.id.rl_item4 && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {//下一页
+            if (focusView.getId() == R.id.rl_item4 && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {//下一页
 
                 if (pageIndex < (pageSize - 1)) {
                     pageIndex++;
@@ -378,7 +377,7 @@ public class MVAlbumActivity extends BuyActivity {
                 }
 
                 return true;
-            } else if (focusView.getId() == R.id.rl_item1 && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {//上一页
+            } else if (focusView.getId() == R.id.rl_item1 && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {//上一页
                 if (pageIndex > 0) {
                     pageIndex--;
                     initView();
@@ -400,12 +399,27 @@ public class MVAlbumActivity extends BuyActivity {
             BeanTopic.DataBean.UtvgoSubjectRecordListBean bean = subjectRecordListBeen.get(i);
             ImageTool.loadImageWithUrl(this, DiffHostConfig.generateImageUrl(bean.getImgUrl()), ivIconList.get(i % 4));
             tvNameList.get(i % 4).setText(bean.getName());
+            itemList.get(i % 4).setNextFocusUpId(R.id.iv_video_focus);
         }
 
         if ((subjectRecordListBeen.size() - pageIndex * 4) < 4) {
             for (int i = subjectRecordListBeen.size() - pageIndex * 4; i < 4; i++) {
                 itemList.get(i).setVisibility(View.GONE);
             }
+        }
+        //左右方向显示
+        ImageView hadLfet=findViewById(R.id.had_left);
+        ImageView hadRight=findViewById(R.id.had_right);
+
+        if ((pageIndex+1)<2){
+            hadLfet.setVisibility(View.INVISIBLE);
+        }
+        else {
+            hadLfet.setVisibility(View.VISIBLE);}
+        if ((pageIndex+1)-pageSize==0){
+            hadRight.setVisibility(View.INVISIBLE);
+        }else{
+            hadRight.setVisibility(View.VISIBLE);
         }
 
         tvCount.setText((pageIndex + 1) + "/" + pageSize);

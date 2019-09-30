@@ -85,6 +85,24 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/dp40"
         android:layout_marginLeft="@dimen/dp633" />
+    <ImageView
+        android:id="@+id/had_left"
+        style="@style/setEnableFocusNO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp150"
+        android:layout_marginTop="570dp"
+        android:background="@drawable/had_left"
+        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/had_right"
+        style="@style/setEnableFocusNO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1080dp"
+        android:layout_marginTop="570dp"
+        android:background="@drawable/had_right"
+        android:visibility="gone"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -103,6 +121,7 @@
                 android:layout_width="@dimen/dp193"
                 android:layout_height="@dimen/dp109"
                 android:orientation="horizontal"
+                android:nextFocusUp="@id/iv_video_focus"
                 style="@style/focusAndSetTag"
                 android:id="@+id/rl_item1">
 

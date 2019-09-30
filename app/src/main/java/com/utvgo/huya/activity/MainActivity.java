@@ -123,19 +123,8 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
         // binding.btnOrder.setOnFocusChangeListener((View.OnFocusChangeListener) this);
         binding.btnOrder.setOnClickListener(this);
         binding.btnCollect.setOnClickListener(this);
-        binding.btnUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ActivityUtility.goActivity(activity, UserCenterActivity.class);
-            }
-        });
-        binding.btnProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ActivityUtility.goActivity(activity, IntroduceActivity.class);
-            }
-        });
-        //  binding.focusView.setOnClickListener(this);
+        binding.btnUser.setOnClickListener(this);
+        binding.btnProduct.setOnClickListener(this);
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -164,28 +153,21 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
                 || newFocus.getId() == R.id.btn_main_user_center || newFocus.getId() == R.id.btn_main_user_favor ||
                 newFocus.getId() == R.id.main_tab_1  || newFocus.getId() == R.id.main_tab_2
                 || newFocus.getId() == R.id.main_tab_4 || newFocus.getId() == R.id.main_tab_3) {
-            binding.focusView.setVisibility(View.INVISIBLE);
+                binding.focusView.setVisibility(View.INVISIBLE);
         } else{
             binding.focusView.setVisibility(View.VISIBLE);
             if (binding.navs.equals(newFocus.getParent())) {
                 if (oldFocus != null && binding.navs.equals(oldFocus.getParent()) && currentButton != null && binding.navs.equals(newFocus.getParent())) {
-                    //       currentButton.requestFocus();
-//                ((RadioButton) newFocus).setChecked(true);
-//                // binding.navs.getChildAt(binding.navs.getCheckedRadioButtonId()).requestFocus();
-//            } else {
                     ((RadioButton) newFocus).setChecked(true);
                     currentButton = newFocus;
                 }
                 binding.focusView.setFocusView(newFocus, R.mipmap.border_focus_style_default);
-                // binding.focusView.setVisibility(View.INVISIBLE);
-
             } else {
                 if (oldFocus == null || (oldFocus != null && binding.navs.equals(oldFocus.getParent())) || (oldFocus != null && oldFocus.getId() == R.id.bits_1)) {
                     binding.focusView.setFocusView(newFocus, R.mipmap.border_focus_style_default);
                 } else {
                     binding.focusView.fly(newFocus, oldFocus, R.mipmap.border_focus_style_default);
                 }
-                //    binding.focusView.setVisibility(View.VISIBLE);
             }
         }
       }catch(Exception e){
@@ -204,10 +186,6 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        if (requestCode == TAGRecommendExit) {
-//
-//            turnHome();
-//        }else
         if(resultCode==RESULT_OK){
             turnHome();
             System.exit(0);
@@ -277,7 +255,6 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
             Bundle bundle = new Bundle();
             intent.putExtra("bgUrl", endPushContentBean.get(0).getBgImgUrl());
             intent.putExtra("contentMid", endPushContentBean.get(0).getTypeId());
-            //intent.putExtra("beanExitPage",  beanExitPage);
             intent.putExtra("recommendType", "exit");
             startActivityForResult(intent, ConstantEnum.TAGRecommendExit);
 

@@ -131,23 +131,8 @@ public class MVListActivity extends PageActivity {
 
         String statName = "";
         if (TextUtils.equals(mvType, "1")) {
-            statName = "MV";
-        } else if (TextUtils.equals(mvType, "3")) {
-            statName = "演唱会";
-        } else if (TextUtils.equals(mvType, "2")) {
-            statName = "超清";
-        } else if (TextUtils.equals(mvType, "4")) {
-            statName = "儿歌";
-        } else if (TextUtils.equals(mvType, "5")) { //收藏
-            statName = "我的收藏-演唱会";
-        } else if (TextUtils.equals(mvType, "6")) { //收藏
-            statName = "我的收藏-精选专辑";
-        } else if (TextUtils.equals(mvType, "7")) {
-            statName = "已购音乐-MV";
-        } else if (TextUtils.equals(mvType, "8")) {
-            statName = "已购音乐-演唱会";
-        } else if (TextUtils.equals(mvType, "10")) {
-            statName = "KTV";
+            statName = "Video";
+
         }
         if (!TextUtils.isEmpty(statName)) {
             stat(statName);
@@ -166,8 +151,6 @@ public class MVListActivity extends PageActivity {
                 }
                 ivList[i] = (ImageView) ((LinearLayout) view).getChildAt(0);
                 tvList[i] = (TextView) ((LinearLayout) view).getChildAt(1);
-                //freeList[i] = (TextView) ((LinearLayout) view).getChildAt(2);
-                //freeList[i].setVisibility(View.GONE);
             }
         }
 //        tvPage.setText("1/1");
@@ -321,7 +304,7 @@ public class MVListActivity extends PageActivity {
                     selectCheckBox.setChecked(true);
                     setItemUpFocusId(selectCheckBox.getId());
                 }
-                borderView.setBorderBitmapResId(R.drawable.singer_list_f, (int) getResources().getDimension(R.dimen.dp70));
+                borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp10));
             }
         }
         super.onFocusChange(v, hasFocus);

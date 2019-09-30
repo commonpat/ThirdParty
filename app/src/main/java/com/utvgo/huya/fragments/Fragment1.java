@@ -118,51 +118,25 @@ public class Fragment1 extends BaseFragment {
     }
 
     private void clickRecItem(int index) {
-//        if (!DiffConfig.validateDeviceKeyNO(this)) {
-//            return;
-//        }
+
         PageBean.DataBean selectBean = dataBeans.get(index);
-//        selectBean.setHref("http://172.16.146.41/qqmusic_zt.html?themId=139&styleID=6");
-//        selectBean.setHrefType("7");
         if (TextUtils.equals(selectBean.gethrefType(), "0")) { //超链接
             ActivityUtility.goWebActivityActivity(getActivity(), selectBean.getHref());
         } else if (TextUtils.equals(selectBean.gethrefType(), "3")) { //mv专辑
             Intent intent = new Intent(getActivity(), MVAlbumActivity.class);
             intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("pkId"));
             startActivity(intent);
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "1")) { //音频专辑
-//            Intent intent = new Intent(getActivity(), AlbumDetailActivity.class);
-//            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("zjid"));
-//            startActivity(intent);
+
 //        } else if (TextUtils.equals(selectBean.getHrefType(), "8")) { //活动
 //            //Intent intent = new Intent(IndexActivity.this, ActivityActivity.class);
 //            //startActivity(intent);
 //            //todo
-//        } else if (selectBean.getHref().contains("collect.html")) { //收藏
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 1);
-//            startActivity(intent);
-//        } else if (selectBean.getHref().contains("htyplay.html")) { //历史
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 0);
-//            startActivity(intent);
+
         } else if (TextUtils.equals(selectBean.gethrefType(), "4")) { //专题
             Intent intent = new Intent(getContext(), TopicActivity.class);
             intent.putExtra("topicId", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
             intent.putExtra("type", Uri.parse(selectBean.getHref()).getQueryParameter("styleID"));
             startActivity(intent);
-//        } else if (selectBean.getHref().contains("recordList_pd.html")) { //榜单
-//            ActivityUtility.goSongRankActivity(this, Uri.parse(selectBean.getHref()).getQueryParameter("mid"),
-//                    Uri.parse(selectBean.getHref()).getQueryParameter("id"), selectBean.getName());
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "12")) {//专题收录
-//            ActivityUtility.goActivity(this, TopicCollectionActivity.class);
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "13")) {//直播
-//            if (!TextUtils.isEmpty(selectBean.getHref())) {
-//                String[] strs = selectBean.getHref().split("=");
-//                if (strs.length > 1) {
-//                    turnLiveActivity(Integer.parseInt(strs[1]));
-//                }
-//            }
         } else {
             //视频播放
             ArrayList<BeanUserPlayList.DataBean> playHistoryList = new ArrayList<>();
