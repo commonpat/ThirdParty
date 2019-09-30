@@ -2,6 +2,7 @@ package com.utvgo.huya.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -100,13 +101,13 @@ public class PlayRecordActivity extends BaseActivity {
         if (hasFocus) {
             if (itemVideoList.contains(v)) {
                 if (v instanceof FrameLayout) {
-                    borderView.setBorderBitmapResId(R.drawable.song_list_focus, (int) getResources().getDimension(R.dimen.dp10));
+                    borderView.setBorderBitmapResId(R.drawable.video_list_focus, (int) getResources().getDimension(R.dimen.dp10));
                 }
                 if (v instanceof FrameLayout) {
                     FrameLayout frameLayout = (FrameLayout) v;
-                    ((ImageView) frameLayout.getChildAt(0)).setImageResource(R.mipmap.music_list_play);
+                   // ((ImageView) frameLayout.getChildAt(0)).setImageResource(R.mipmap.music_list_play);
                     ((TextView) frameLayout.getChildAt(1)).setTextColor(ContextCompat.getColor(this, R.color.transparent));
-                    ((TextView) ((LinearLayout) frameLayout.getChildAt(2)).getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.green));
+                    ((TextView) ((LinearLayout) frameLayout.getChildAt(2)).getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.yellow));
                 }
             }
         }else { if (v instanceof FrameLayout) {
@@ -208,12 +209,19 @@ public class PlayRecordActivity extends BaseActivity {
     @OnClick({R.id.fl_video1, R.id.fl_video2, R.id.fl_video3, R.id.fl_video4, R.id.fl_video5, R.id.fl_video6, R.id.fl_video7, R.id.fl_video8,
             R.id.fl_video9, R.id.fl_video10, R.id.fl_video11, R.id.fl_video12})
     public void onClick(View view) {
+        BeanPlayHistoryPageList.Data.Historys  playVideoBean=new BeanPlayHistoryPageList.Data.Historys();
             int playIndex = 0;
             int fileType = 0;
             if (itemVideoList.contains(view)) {
                 playIndex = itemVideoList.indexOf(view);
                 fileType = 1;
+                playVideoBean=playHistoryList.get(playIndex);
             }
+            if ("4".equals(playVideoBean.getMultiSetType())||"3".equals(playVideoBean.getMultiSetType())){
+                Intent intent = new Intent(this, MVAlbumActivity.class);
+                intent.putExtra("albumMid", playVideoBean.getProgramId()+"");
+                startActivity(intent);
+            }else {
             ArrayList<BeanUserPlayList.DataBean> playList = new ArrayList<>();
             for(int i = 0; i<playHistoryList.size(); i++) {
                 BeanPlayHistoryPageList.Data.Historys  videoBean= playHistoryList.get(i);
@@ -233,6 +241,6 @@ public class PlayRecordActivity extends BaseActivity {
             intent.putExtra("fileType", fileType);
             intent.putParcelableArrayListExtra("playList",  playList);
             this.startActivity(intent);
-        }
+        }}
 
 }

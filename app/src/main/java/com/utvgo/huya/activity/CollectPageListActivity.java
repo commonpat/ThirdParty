@@ -90,7 +90,7 @@ public class CollectPageListActivity extends BaseActivity {
         if (hasFocus) {
             if (v instanceof FrameLayout) {
                 scale = 1.0f;
-                borderView.setBorderBitmapResId(R.drawable.song_list_focus, (int) getResources().getDimension(R.dimen.dp10));
+                borderView.setBorderBitmapResId(R.drawable.video_list_focus, (int) getResources().getDimension(R.dimen.dp10));
             } else {
                 borderView.setBorderBitmapResId(0);
             }
@@ -98,9 +98,8 @@ public class CollectPageListActivity extends BaseActivity {
         if (v instanceof FrameLayout) {
             FrameLayout frameLayout = (FrameLayout) v;
             if (hasFocus) {
-                ((ImageView) frameLayout.getChildAt(0)).setImageResource(R.mipmap.music_list_play);
                 ((TextView) frameLayout.getChildAt(1)).setTextColor(ContextCompat.getColor(this, R.color.transparent));
-                ((TextView) ((LinearLayout) frameLayout.getChildAt(2)).getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.green));
+                ((TextView) ((LinearLayout) frameLayout.getChildAt(2)).getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.yellow));
             } else {
                 ((ImageView) frameLayout.getChildAt(0)).setImageResource(0);
                 ((TextView) frameLayout.getChildAt(1)).setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -161,7 +160,13 @@ public class CollectPageListActivity extends BaseActivity {
         super.onClick(v);
         if (itemList.contains(v)) {
             ArrayList<BeanUserPlayList.DataBean> playHistoryList = new ArrayList<>();
-
+            int index=itemList.indexOf(v);
+            BeanCollectPageList.Data.CollectList playVideoBean = collectPageList.get(index);
+            if ("4".equals(playVideoBean.getMultiSetType())||"3".equals(playVideoBean.getMultiSetType())){
+                Intent intent = new Intent(this, MVAlbumActivity.class);
+                intent.putExtra("albumMid", playVideoBean.getProgramId()+"");
+                startActivity(intent);
+            }else {
             for (int i = 0; i < collectPageList.size(); i++) {
                     BeanCollectPageList.Data.CollectList mvBean = collectPageList.get(i);
                     BeanUserPlayList.DataBean playBean = new BeanUserPlayList.DataBean();
@@ -181,7 +186,7 @@ public class CollectPageListActivity extends BaseActivity {
             intent.putExtra("playlistName", "我的收藏");
             intent.putParcelableArrayListExtra("playList", playHistoryList);
             this.startActivity(intent);
-        }
+        }}
     }
 
     @Override
