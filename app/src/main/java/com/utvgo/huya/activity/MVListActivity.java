@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -54,7 +55,10 @@ public class MVListActivity extends PageActivity {
 
     @BindView(R.id.fl_filter)
     FrameLayout flFilter;
-
+    @BindView(R.id.fra_had_left)
+    ImageView fraHadLeft;
+    @BindView(R.id.fra_had_right)
+    ImageView fraHadRight;
     private boolean isSingle;
 
     private String mvType = "1";//1为mv   2为超清  3为演唱会   4为儿歌  5收藏
@@ -113,7 +117,8 @@ public class MVListActivity extends PageActivity {
         }
         mvType = getIntent().getStringExtra("mvType");
         intentDefaultSelectedLabelId = getIntent().getStringExtra("labelId");
-
+        ImageView fra_had_right=findViewById(R.id.fra_had_right);
+        ImageView fra_had_left=findViewById(R.id.fra_had_left);
 
          flType.setVisibility(View.VISIBLE);
 
@@ -452,6 +457,14 @@ public class MVListActivity extends PageActivity {
                     itemList[n].setVisibility(View.GONE);
                 }
                 pageTotal = mvListByGenreId.getTotalPage();
+                if(mvListByGenreId.getCurrentPage()<2){
+                    fraHadLeft.setVisibility(View.INVISIBLE);
+                }else{
+                    fraHadLeft.setVisibility(View.VISIBLE);}
+                if(mvListByGenreId.getCurrentPage()- mvListByGenreId.getTotalPage()==0){
+                    fraHadRight.setVisibility(View.INVISIBLE);
+                }else{
+                    fraHadRight.setVisibility(View.VISIBLE);}
                 tvPage.setText("< " + mvListByGenreId.getCurrentPage() + "/" + mvListByGenreId.getTotalPage() + " >");
 //                showViewByHandler(itemList[0]);
                 if (isNextPage) {

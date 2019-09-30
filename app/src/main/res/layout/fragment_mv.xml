@@ -16,6 +16,24 @@
             android:layout_marginRight="75dp"
             android:scaleType="fitXY"
             android:src="@mipmap/logo"/>
+        <ImageView
+            android:id="@+id/fra_had_left"
+            style="@style/setEnableFocusNO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp370"
+            android:background="@drawable/had_left"
+            android:visibility="visible"/>
+        <ImageView
+            android:id="@+id/fra_had_right"
+            style="@style/setEnableFocusNO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1220dp"
+            android:layout_marginTop="370dp"
+            android:background="@drawable/had_right"
+            android:visibility="visible"/>
     </RelativeLayout>
 
     <FrameLayout

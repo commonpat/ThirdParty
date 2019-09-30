@@ -105,40 +105,6 @@ public class Fragment2 extends BaseFragment{
             }
         });
 
-
-//        getBaseActivity().server.getPage(typeId, getKeyNo(),new UTVGOSubscriber<PageBean>(){
-//            @Override
-//            public void onNext(PageBean pageBean) {
-//                for(int i=0;i<pageBean.getData().size()&&i<imgs.length;i++){
-//                    PageBean.DataBean dataBean = pageBean.getData().get(i);
-//                    if(i==0){
-//                        if(dataBean.getIsVideo().equals("0")){
-//                        }else {
-//                            ((View) binding.bits1.getParent()).setVisibility(View.VISIBLE);
-//                        }
-//                    }else {
-//                        if (dataBean.getIsVideo().equals("0")) {
-//                            Log.e(TAG, "onNext: "+pageBean.getImageProfix()+dataBean.getImgUrl() );
-//                            GlideApp.with(getContext()).load(pageBean.getImageProfix()+dataBean.getImgUrl()).into(imgs[i]);
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//        for(int i=0;i<pageBean.getData().size()&&i<imgs.length;i++){
-//            PageBean.DataBean dataBean = pageBean.getData().get(i);
-//            if(i==0){
-//                if(dataBean.getIsVideo().equals("0")){
-//                }else {
-//                    ((View) binding.bits1.getParent()).setVisibility(View.VISIBLE);
-//                }
-//            }else {
-//                if (dataBean.getIsVideo().equals("0")) {
-//                    Log.e(TAG, "onNext: "+pageBean.getImageProfix()+dataBean.getImgUrl() );
-//                    Glide.with(getContext()).load(pageBean.getImageProfix()+dataBean.getImgUrl()).into(imgs[i]);
-//                }
-//            }
-//        }
         return binding.getRoot();
     }
     private void clickRecItem(int index) {
