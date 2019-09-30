@@ -93,6 +93,17 @@
         <item name="android:nextFocusDown">@+id/item1</item>
     </style>
 
+    <style name="video_list" parent="setEnableFocusNO">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/sp28</item>
+        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:onClick">onClick</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:maxWidth">@dimen/dp480</item>
+        <item name="android:layout_marginLeft">@dimen/dp65</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
     <style name="song_list" parent="setEnableFocusNO">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -111,6 +122,12 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="fl_video_list" parent="focusAndSetTag">
+        <item name="android:layout_width">@dimen/dp500</item>
+        <item name="android:layout_height">@dimen/dp60</item>
+        <item name="android:paddingLeft">@dimen/dp20</item>
+        <item name="android:paddingRight">@dimen/dp20</item>
+    </style>
     <style name="fl_song_list" parent="focusAndSetTag">
         <item name="android:layout_width">@dimen/dp500</item>
         <item name="android:layout_height">@dimen/dp60</item>
@@ -118,12 +135,24 @@
         <item name="android:paddingRight">@dimen/dp20</item>
     </style>
 
+    <style name="fl_video_list_play_icon" parent="setEnableFocusNO">
+        <item name="android:layout_width">@dimen/dp20</item>
+        <item name="android:layout_height">@dimen/dp20</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
     <style name="fl_song_list_play_icon" parent="setEnableFocusNO">
         <item name="android:layout_width">@dimen/dp20</item>
         <item name="android:layout_height">@dimen/dp20</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
+    <style name="fl_video_list_index" parent="setEnableFocusNO">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/dp40</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/sp30</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
     <style name="fl_song_list_index" parent="setEnableFocusNO">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/dp40</item>

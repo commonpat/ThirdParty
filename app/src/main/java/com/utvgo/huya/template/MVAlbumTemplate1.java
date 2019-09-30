@@ -48,7 +48,7 @@ public class MVAlbumTemplate1 {
         View template1 = ((ViewGroup) bg_mv_ablum.getParent()).getChildAt(2);
         template1.setVisibility(View.VISIBLE);
         list = template1.findViewById(R.id.fl_topic_content);
-        mvAlbumActivity.borderView.setBorderBitmapResId(R.drawable.mains_f_2_p9, 0);
+        mvAlbumActivity.borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, 0);
     }
 
     public void addContent(BeanWLAblumData beanWLAblumData) {

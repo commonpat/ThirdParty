@@ -11,35 +11,24 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.utvgo.huya.HuyaApplication;
+import com.utvgo.huya.diff.DiffConfig;
+import com.utvgo.huya.diff.IPurchase;
 import com.utvgo.huya.interfaces.BuyInterface;
 import com.utvgo.huya.interfaces.CommonCallback;
-import com.utvgo.huya.interfaces.IPurchase;
-import com.utvgo.huya.net.Purchase;
-import com.utvgo.huya.utils.Appconfig;
-import com.utvgo.huya.utils.DiffHostConfig;
 import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.ToastUtil;
-//import com.utvgo.qqmusic.interfaces.BuyInterface;
-//import com.utvgo.qqmusic.interfaces.CommonCallback;
-//import com.utvgo.qqmusic.network.NetWork;
-//import com.utvgo.qqmusic.utils.HiFiDialogTools;
-//import com.utvgo.qqmusic.utils.ToastUtil;
-//
-//import diff.DiffConfig;
-//import diff.IPurchase;
-//import okhttp3.ResponseBody;
-//import rx.Observer;
+
 
 public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
     public boolean needShowBuy = false;
     public boolean needShowHadBuy = false;
     private String authVodid = "";
-    Purchase purchase;
+
 
     private void sendUtvgoAuthReq(String vodId) {
         final Context context = this;
         try{
-        purchase.auth(this, new IPurchase.AuthCallback() {
+            DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
             @Override
             public void onFinished(String message) {
                 final boolean isPurchased = HuyaApplication.hadBuy();
@@ -59,10 +48,10 @@ public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
                     {
                         hahaPausePlay();
 
-                        purchase.pay(context, new CommonCallback() {
+                        DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
                             @Override
                             public void onFinished(Context context) {
-                                //DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
+                                DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
                             }
                         });
                     }
@@ -75,24 +64,24 @@ public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
     }
 //
 
-//    @Override
-//    public void auth(String vodID, boolean needShowBuy) {
-//        authVodid = vodID;
-//        this.needShowBuy = needShowBuy;
-//        needShowHadBuy = true;
-//        if (needShowBuy) {
-//            sendUtvgoAuthReq(vodID);
-//        } else {
-//            getHahaPlayerUrl(vodID);
-//        }
-//    }
-//
-//    @Override
-//    public void authOnly() {
-//        this.needShowBuy = false;
-//        sendUtvgoAuthReq("");
-//    }
-//
+    @Override
+    public void auth(String vodID, boolean needShowBuy) {
+        authVodid = vodID;
+        this.needShowBuy = needShowBuy;
+        needShowHadBuy = true;
+        if (needShowBuy) {
+            sendUtvgoAuthReq(vodID);
+        } else {
+            getHahaPlayerUrl(vodID);
+        }
+    }
+
+    @Override
+    public void authOnly() {
+        this.needShowBuy = false;
+        sendUtvgoAuthReq("");
+    }
+
     @Override
     public void showBuy(String vodID) {
         authVodid = vodID;
@@ -101,15 +90,6 @@ public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
         sendUtvgoAuthReq(vodID);
     }
 
-    @Override
-    public void auth(String vodID, boolean needShowBuy) {
-
-    }
-
-    @Override
-    public void authOnly() {
-
-    }
 
 
     @Override

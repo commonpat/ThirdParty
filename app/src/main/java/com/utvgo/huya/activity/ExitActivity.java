@@ -46,10 +46,10 @@ public class ExitActivity extends BaseActivity {
     ImageView ivImg2;
     @BindView(R.id.iv_img3)
     ImageView ivImg3;
-    @BindView(R.id.btn_ok)
-    Button btnOk;
-    @BindView(R.id.btn_cancel)
-    Button btnCancel;
+    @BindView(R.id.btn_back)
+    Button btnBack;
+    @BindView(R.id.btn_exit)
+    Button btn_exit;
     @BindView(R.id.focusView)
     FocusView focusView;
 
@@ -61,7 +61,6 @@ public class ExitActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exit);
         ButterKnife.bind(this);
-        btnOk.requestFocus();
         asyncHttpRequest.getExitPage(this,null,this,this);
 //        DisplayMetrics metric = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -78,14 +77,13 @@ public class ExitActivity extends BaseActivity {
   //      stat("退出挽留页");
     }
 
-    @OnClick({R.id.iv_img0,R.id.iv_img1,R.id.iv_img2,R.id.iv_img3, R.id.btn_ok, R.id.btn_cancel})
+    @OnClick({R.id.iv_img0,R.id.iv_img1,R.id.iv_img2,R.id.iv_img3, R.id.btn_back, R.id.btn_exit})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_ok:
-                finish();
+            case R.id.btn_back:
                 onBackPressed();
                 break;
-            case R.id.btn_cancel:
+            case R.id.btn_exit:
                 setResult(RESULT_OK);
                 finish();
                 break;
@@ -107,62 +105,37 @@ public class ExitActivity extends BaseActivity {
     public void clickRecItem(int index) {
         //Log.d(TAG, "clickRecItem: " +beanArryPage.getData().get(index).get(0));
         BeanExitPage.Data selectBean = beanExitPage.getData().get(index);
-        if (TextUtils.equals(selectBean.getHrefType(), "0")) { //超链接
-            ActivityUtility.goWebActivityActivity(this, selectBean.getHref());
-        } else
-        if (TextUtils.equals(selectBean.getHrefType(), "3")) { //mv专辑
+        String href=selectBean.getHref();
+        if(href.indexOf("albumPlayer.html") >= 0)
+        {
             Intent intent = new Intent(this, MVAlbumActivity.class);
-            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("pkId"));
+            intent.putExtra("albumMid", Uri.parse(href).getQueryParameter("pkId"));
             startActivity(intent);
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "1")) { //音频专辑
-//            Intent intent = new Intent(getActivity(), AlbumDetailActivity.class);
-//            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("zjid"));
-//            startActivity(intent);
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "8")) { //活动
-//            //Intent intent = new Intent(IndexActivity.this, ActivityActivity.class);
-//            //startActivity(intent);
-//            //todo
-//        } else if (selectBean.getHref().contains("collect.html")) { //收藏
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 1);
-//            startActivity(intent);
-//        } else if (selectBean.getHref().contains("htyplay.html")) { //历史
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 0);
-//            startActivity(intent);
         }
-        else if (TextUtils.equals(selectBean.getHrefType(), "4")) { //专题
-            Intent intent = new Intent(this, TopicActivity.class);
-            intent.putExtra("topicId", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
-            intent.putExtra("type", Uri.parse(selectBean.getHref()).getQueryParameter("styleID"));
-            startActivity(intent);
-//        } else if (selectBean.getHref().contains("recordList_pd.html")) { //榜单
-//            ActivityUtility.goSongRankActivity(this, Uri.parse(selectBean.getHref()).getQueryParameter("mid"),
-//                    Uri.parse(selectBean.getHref()).getQueryParameter("id"), selectBean.getName());
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "12")) {//专题收录
-//            ActivityUtility.goActivity(this, TopicCollectionActivity.class);
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "13")) {//直播
-//            if (!TextUtils.isEmpty(selectBean.getHref())) {
-//                String[] strs = selectBean.getHref().split("=");
-//                if (strs.length > 1) {
-//                    turnLiveActivity(Integer.parseInt(strs[1]));
-//                }
-//            }
-//        } else {
-//            //视频播放
-//            ArrayList<BeanUserPlayList.DataBean> playHistoryList = new ArrayList<>();
-//            getHrefList(index, selectBean, playHistoryList);
-//            Intent intent = new Intent(this, PlayVideoActivity.class);
-//            if (index == 1) {
-//                intent.putExtra("playIndex", vodIdPlayIndex);
-//            } else {
-//                intent.putExtra("playIndex", 0);
-//            }
-//            intent.putExtra("fileType", 1);
-//            intent.putParcelableArrayListExtra("playList", playHistoryList);
-//            this.startActivity(intent);
+        else if(href.indexOf("listPage.html") >= 0)
+        {
+            String channelId=Uri.parse(selectBean.getHref()).getQueryParameter("channelId");
+            String labelId = "";
+            String category = "";
+            String mvType = "";
+            String groupId = "";
+            MVListActivity.show(this, false, channelId, category, mvType, labelId);
+        }
+
+//        if (TextUtils.equals(selectBean.getHrefType(), "0")) { //超链接
+//            ActivityUtility.goWebActivityActivity(this, selectBean.getHref());
+//        } else
+//        if (TextUtils.equals(selectBean.getHrefType(), "3")) { //mv专辑
+//            Intent intent = new Intent(this, MVAlbumActivity.class);
+//            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("pkId"));
+//            startActivity(intent);
 //        }
-        }
+//        else if (TextUtils.equals(selectBean.getHrefType(), "4")) { //专题
+//            Intent intent = new Intent(this, TopicActivity.class);
+//            intent.putExtra("topicId", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
+//            intent.putExtra("type", Uri.parse(selectBean.getHref()).getQueryParameter("styleID"));
+//            startActivity(intent);
+//        }
     }
 
     @Override
@@ -178,10 +151,10 @@ public class ExitActivity extends BaseActivity {
                      GlideApp.with(this).load(beanExitPage.getImageProfix()+beanExitPage.getData().get(i).getImgUrl()).into(imgViews[i]);
 
                     }
-                    btnOk.requestFocus();
-                    focusView.setFocusView(btnOk,R.drawable.focus_border);
-                    exitRoot.setBackground(imgViews[0].getBackground());
                     focusView.getViewTreeObserver().addOnGlobalFocusChangeListener(this);
+                GlideApp.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(0).getBgImgUrl()).into(exitRoot);
+                ivImg0.requestFocus();
+                focusView.setFocusView(ivImg0,R.drawable.focus_border);
                 break;
         }
     }

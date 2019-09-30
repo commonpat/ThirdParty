@@ -23,8 +23,6 @@ public abstract class BaseFragment extends Fragment {
     public HuyaApplication getApplication(){
         return ((HuyaApplication) getActivity().getApplication());
     }
-    public String getKeyNo(){
-        return getApplication().keyNo;
-    }
+
 
 }

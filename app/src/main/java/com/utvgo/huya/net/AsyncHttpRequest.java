@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanArryPage;
 import com.utvgo.huya.beans.BeanBasic;
+import com.utvgo.huya.beans.BeanCheckCollect;
 import com.utvgo.huya.beans.BeanCollectPageList;
 import com.utvgo.huya.beans.BeanExitPage;
 import com.utvgo.huya.beans.BeanMvListByGenreId;
@@ -25,14 +26,14 @@ import com.utvgo.huya.beans.BeanTypeGenre2;
 import com.utvgo.huya.beans.BeanUserBindingInfo;
 import com.utvgo.huya.beans.BeanVideoDetailZero;
 import com.utvgo.huya.beans.BeanWLAblumData;
+import com.utvgo.huya.diff.DiffConfig;
 import com.utvgo.huya.utils.Appconfig;
 import com.utvgo.huya.utils.LoadingDialogTools;
 import com.utvgo.huya.utils.NetUtils;
 import com.utvgo.huya.utils.XLog;
 
 import static com.utvgo.huya.Constants.APPNAME;
-import static com.utvgo.huya.Constants.BASE_URL;
-import static com.utvgo.huya.Constants.BASE_URL_HOST;
+
 
 
 /**
@@ -154,24 +155,24 @@ public class AsyncHttpRequest {
      * @param fail
      */
     public void getWLAblumData(Context context, String albumMid, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url =  BASE_URL+ "/utvgo-tv-mvc/tv/pageCenter/program_content.utvgo?multiSetType=4&channelId=1&pkId=" + albumMid + "&pageNo=1&pageSize=33";
+        String url =  DiffConfig.baseHost + "/utvgo-tv-mvc/tv/pageCenter/program_content.utvgo?multiSetType=4&channelId=1&pkId=" + albumMid + "&pageNo=1&pageSize=33";
         getJavaBean(url, BeanWLAblumData.class, context, null, success, fail);
     }
 
     public void getWLAblumDataSingle(Context context, String albumMid, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL+ "uuMusic/uuMusicDataController/mvAlbum.utvgo?albumMid=" + albumMid + "&pageNo=1&pageSize=33&singleOrderFlg=1";
+        String url = DiffConfig.baseHost+ "uuMusic/uuMusicDataController/mvAlbum.utvgo?albumMid=" + albumMid + "&pageNo=1&pageSize=33&singleOrderFlg=1";
         getJavaBean(url, BeanWLAblumData.class, context, null, success, fail);
     }
     /**
-     * 1.1.	根据风格类型获取MV列表信息接口：
+     * 1.1.	根据列表信息接口：
      *
      * @param success
      * @param fail
      * /utvgo-tv-mvc/tv/pageCenter/program_content.utvgo?multiSetType=4&channelId=36&pkId=57652&pageNo=1&pageSize=10000&keyNo=8002004093892878&platform=linux
      */
     public void getMVDetail(Context context, String multiSetType, int pkgId,int channelId,IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL + "/utvgo-tv-mvc/tv/pageCenter/program_content.utvgo?multiSetType="+multiSetType+"&channelId="+channelId+"&pkId="+pkgId+"&pageNo=1" +
-                "&pageSize=10000&platform=linuxkeyNo=" + Appconfig.getKeyNo(context) ;
+        String url = DiffConfig.baseHost + "/utvgo-tv-mvc/tv/pageCenter/program_content.utvgo?multiSetType="+multiSetType+"&channelId="+channelId+"&pkId="+pkgId+"&pageNo=1" +
+                "&pageSize=10000&platform=linux&keyNo=" + Appconfig.getKeyNo(context) ;
         if ("0".equals(multiSetType)){
             getJavaBean(url, BeanVideoDetailZero.class, context, null, success, fail);
         }
@@ -189,25 +190,27 @@ public class AsyncHttpRequest {
     /**
      * 删除收藏(歌曲\mv\专辑)接口
      *http://172.16.146.6/utvgo-user/collect/savecollect.utvgo
-     * @param collectionType 0音频，1MV，2专辑
-     * @param success
-     * @param fail
+     * @param collectionType 0音频，1单集，2专辑
+     * @param
+     * @param
      */
-    public void addCollection(Context context, String collectionType, int pkgId,int channelId, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL_HOST + "/utvgo-user/collect/savecollect.utvgo?keyNo=" + Appconfig.getKeyNo(context)
+    public void addCollection(Context context, String collectionType, int pkgId,int channelId,  NetUtils.NetCallBack callback) {
+        String url = DiffConfig.statisticsHost + "/utvgo-user/collect/savecollect.utvgo?keyNo=" + Appconfig.getKeyNo(context)
                 + "&programId=" + pkgId + "&channelId=" + channelId;
-        getJavaBean(url, BeanBasic.class, context, null, success, fail);
+        String params="keyNo=" + Appconfig.getKeyNo(context)+ "&programId=" + pkgId + "&channelId=" + channelId;
+      //  getJavaBean(url, BeanBasic.class, context, null, success, fail);
+        NetUtils.postData(context,url,1,params,BeanBasic.class,callback);
     }
 
     /**
      * 添加收藏(歌曲\mv\专辑)接口
      *
-     * @param collectionType 0音频，1MV，2专辑
+     * @param collectionType 0音频，1单集，2专辑
      * @param success
      * @param fail
      */
     public void deleteCollection(Context context, String collectionType, String idStr, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL + "/utvgo-user/collect/delcollect.utvgo?keyNo=" +Appconfig.getKeyNo(context)
+        String url = DiffConfig.statisticsHost + "/utvgo-user/collect/delcollect.utvgo?keyNo=" +Appconfig.getKeyNo(context)
                 + "&idStr=" +idStr;
         getJavaBean(url, BaseResponse.class, context, null, success, fail);
     }
@@ -218,7 +221,7 @@ public class AsyncHttpRequest {
      * @param fail
      */
     public void getSongDetail(Context context, String songMid, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL + "/uuMusic/uuMusicDataController/songDetail.utvgo?keyNo=" + Appconfig.getKeyNo(context) + "&songMid=" + songMid + "&sourceType=1";
+        String url = DiffConfig.baseHost + "/uuMusic/uuMusicDataController/songDetail.utvgo?keyNo=" + Appconfig.getKeyNo(context) + "&songMid=" + songMid + "&sourceType=1";
         getJavaBean(url, BeanSongDetail.class, context, null, success, fail);
     }
     public void statisticsVideo(Context context, String playPoint,
@@ -232,7 +235,7 @@ public class AsyncHttpRequest {
                                 String playTime,
                                 long totalTime,
                                 NetUtils.NetCallBack callback) {
-        String url = BASE_URL_HOST + "/utvgo-statistics/video/statistics.utvgo";
+        String url = DiffConfig.statisticsHost + "/utvgo-statistics/video/statistics.utvgo";
         String params = "keyNo=" + Appconfig.getKeyNo(context) + "&branchNo=" + Appconfig.getRegionCode(context) + "&playPoint=" + playPoint + "&videoId=" + videoId +
                 "&playTime=" + playTime + "&videoName=" + videoName + "&spId=" + spId + "&id=" + id + "&vipCode=" + vipCode + "&isBase=" + isBase + "&multiSetType=" + multiSetType +
                 "&channelId=" + channelId + "&channelName=" + channelName + "&programId=" + programId + "&spName=" + spName + "&programName=" + programName + "&orderStatus=" + orderStatus + "&totalTime=" + totalTime;
@@ -242,7 +245,7 @@ public class AsyncHttpRequest {
     //用户页面浏览数据采集接口
     public void statisticsVisit(final Context context, final String pageName, final String pageTitle, final String pageUrl) {
         String orderStatus ="0"; //DiffConfig.CurrentPurchase.isPurchased() ? "0" : "1";
-        final String url = BASE_URL_HOST + "/utvgo-statistics/visit/statistics.utvgo";
+        final String url = DiffConfig.statisticsHost + "/utvgo-statistics/visit/statistics.utvgo";
         String params = "branchNo=" + Appconfig.getRegionCode(context) + "&keyNo=" + Appconfig.getKeyNo(context)
                 + "&vipCode=" + "vip_code_50" + "&orderStatus=" + orderStatus + "&vipName=" + APPNAME + "&pageName=" + pageName + "&visitTime=1" +
                 "&id=&pageUrl=" + pageUrl + "&boxInfo=&channelId=&channelName=&referrer=&labels=&labelIds=&pageTitle=" + pageTitle;
@@ -254,61 +257,92 @@ public class AsyncHttpRequest {
         });
     }
     /**
-     * 获取排行榜列表接口
+     * 获取列表接口
      *
      * @param topicId
      * @param success
      * @param fail
      */
     public void getTopic(Context context, String topicId, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url =BASE_URL+ "/utvgo-tv-mvc/ui/tv/subject/select.utvgo?id=" + topicId;
+        String url =DiffConfig.baseHost+ "/utvgo-tv-mvc/ui/tv/subject/select.utvgo?id=" + topicId;
         getJavaBean(url, BeanTopic.class, context, null, success, fail);
     }
     /**
      * 根据channelId专题获得视频列表
      * */
     public void getGenreIdLabel(Context context, String keyNo, String channelId, String genreId, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url=BASE_URL+"/utvgo-tv-mvc/tv/pageCenter/vipLabelList.utvgo?channelId="+channelId+"&packageId=29&count=100&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
+        String url=DiffConfig.baseHost+"/utvgo-tv-mvc/tv/pageCenter/vipLabelList.utvgo?channelId="+channelId+"&packageId=29&count=100&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
         getJavaBean(url, BeanTypeGenre2.class, context, null, success, fail, null);
     }
     //String url = BASE_URL + "/utvgo-tv-mvc/tv/pageCenter/programList.utvgo?channelId=34&supplierId=39&packageId=29&labelId=790&pageNo=1&pageSize=8&isContainAlbum=0&keyNo=8002004093892878&platform=linux";
     public void getMvListByLabelId(Context context, String keyNo, String labelId, String channelId, String category, String orderType, int pageNo, int pageSize, IVolleyRequestSuccess success, IVolleyRequestfail fail) {
-        String url = BASE_URL+ "/utvgo-tv-mvc/tv/pageCenter/programList.utvgo?channelId="+channelId+"&supplierId=39&packageId=29&labelId="+labelId+"&pageNo="+pageNo+"&pageSize=8&isContainAlbum=0&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
+        String url = DiffConfig.baseHost+ "/utvgo-tv-mvc/tv/pageCenter/programList.utvgo?channelId="+channelId+"&supplierId=39&packageId=29&labelId="+labelId+"&pageNo="+pageNo+"&pageSize=8&isContainAlbum=0&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
         getJavaBean(url, BeanMvListByGenreId.class, context, null, success, fail, null);
     }
     /**
      * 用户信息接口
      * */
     public void getUserInfo(Context context,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
-        String url=BASE_URL+"/huyaTV-order-web/system/QueryUserInfoController/queryUserInfo.utvgo?keyNo="+Appconfig.getKeyNo(context)+"&regionCode="+Appconfig.getRegionCode(context);
+        String url=DiffConfig.baseHost+"/huyaTV-order-web/system/QueryUserInfoController/queryUserInfo.utvgo?keyNo="+Appconfig.getKeyNo(context)+"&regionCode="+Appconfig.getRegionCode(context);
         getJavaBean(url,BeanUserBindingInfo.class,context,success,fail,null);
     }
     /**
      * 会员专享接口
      * */
     public  void getArryPage(Context context,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
-        String url=BASE_URL+"/utvgo-tv-mvc/ui/vip/index/arryPage.utvgo?typeId=73&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
+        String url=DiffConfig.baseHost+"/utvgo-tv-mvc/ui/vip/index/arryPage.utvgo?typeId=73&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
         getJavaBean(url, BeanArryPage.class,context,success,fail,null);
     }
     /**
      * 退出挽留页
      * */
     public  void getExitPage(Context context,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
-        String url=BASE_URL+"/utvgo-tv-mvc/ui/vip/index/page.utvgo?typeId=72&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
+        String url=DiffConfig.baseHost+"/utvgo-tv-mvc/ui/vip/index/page.utvgo?typeId=72&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
         getJavaBean(url, BeanExitPage.class,context,success,fail,null);
     }
     /**
      * http://172.16.146.66/utvgo-user/collect/collectPageList.utvgo?pageNo=1&pageSize=9&keyNo=8002004093892878&platform=linux
      * */
     public  void getCollectPageList(Context context,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
-        String url=BASE_URL+"/utvgo-user/collect/collectPageList.utvgo?pageNo=1&pageSize=8&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
+        String url=DiffConfig.baseHost+"/utvgo-user/collect/collectPageList.utvgo?pageNo=1&pageSize=8&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
         getJavaBean(url, BeanCollectPageList.class,context,success,fail,null);
     }
     /**
      * http://172.16.146.6/utvgo-user/video/playhistoryPageList.utvgo
      * */
-    public  void getPlayHistoryPageList(Context context,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
-        String url=BASE_URL_HOST+"/utvgo-user/video/playhistoryPageList.utvgo?pageNo=1&pageSize=8&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
+    public  void getPlayHistoryPageList(Context context,String keyNo,int pageNo,int pageSize,IVolleyRequestSuccess success,IVolleyRequestfail fail){
+        String url=DiffConfig.baseHost+"/utvgo-user/video/playhistoryPageList.utvgo?pageNo="+pageNo+"&pageSize="+pageSize+"&keyNo="+Appconfig.getKeyNo(context)+"&platform=linux";
         getJavaBean(url, BeanPlayHistoryPageList.class,context,success,fail,null);
+    }
+    /**
+     * 检查节目是否收藏
+     * @String programId
+     * @
+     * */
+    public void checkCollect(Context context,String programId,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
+        String url=DiffConfig.statisticsHost+"/utvgo-user/collect/checkcollect.utvgo?programId="+programId+"&keyNo="+Appconfig.getKeyNo(context);
+        getJavaBean(url, BeanCheckCollect.class,context,success,fail,null);
+    }
+    /**
+     * 虎牙TV播放记录接口
+     * statisticsVideo记录播放时间
+     * @
+     * */
+    public void addToPlayListHistoy(Context context, String playPoint,
+                                    String videoId, final String videoName,
+                                    String programId, String programName,
+                                    String channelId,
+                                    String multiSetType,
+                                    long totalTime,
+                                    NetUtils.NetCallBack callback) {
+        String url = DiffConfig.baseHost+ "/utvgo-user/video/playhistory.utvgo";
+        String params = "keyNo=" + Appconfig.getKeyNo(context) + "&branchNo=" + Appconfig.getRegionCode(context) + "&playPoint=" + playPoint + "&videoId=" + videoId +
+                 "&videoName=" + videoName+ "&multiSetType=" + multiSetType +
+                "&channelId=" + channelId + "&programId=" + programId + "&programName=" + programName  + "&totalTime=" + totalTime;
+        NetUtils.postDataNoLoading(context, url, 1, params, BaseResponse.class, callback);
+    }
+    public void userPlayList(Context context,String programId,String keyNo,IVolleyRequestSuccess success,IVolleyRequestfail fail){
+        String url=DiffConfig.statisticsHost+"/utvgo-user/collect/checkcollect.utvgo?programId="+programId+"&keyNo="+Appconfig.getKeyNo(context);
+        getJavaBean(url, BeanCheckCollect.class,context,success,fail,null);
     }
 }

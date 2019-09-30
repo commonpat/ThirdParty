@@ -4,59 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg">
-
-
-    <ImageView
-        android:id="@+id/btn_search_mv"
-        style="@style/focusAndSetTag"
-        android:layout_width="@dimen/dp180"
-        android:layout_height="@dimen/dp70"
-        android:src="@drawable/home_search"
-        android:nextFocusDown="@+id/cb_re"
-        android:onClick="onClick"
-        android:layout_marginTop="@dimen/dp30"
-        android:layout_marginLeft="@dimen/dp30"
-        />
-
-    <CheckBox
-        android:id="@+id/cb_mv"
-        style="@style/focusAndSetTag"
-        android:layout_width="@dimen/dp220"
-        android:layout_height="@dimen/dp90"
-        android:layout_marginLeft="@dimen/dp410"
-        android:layout_marginTop="@dimen/dp20"
-        android:background="@drawable/selector_top_title_bg"
-        android:button="@null"
-        android:checked="true"
-        android:gravity="center"
-        android:nextFocusDown="@+id/item_ImageBtn1"
-        android:text="MV播放记录"
-        android:textColor="@drawable/selector_text_color"
-        android:textSize="@dimen/sp25" />
-
-    <CheckBox
-        android:id="@+id/cb_song"
-        style="@style/focusAndSetTag"
-        android:layout_width="@dimen/dp220"
-        android:layout_height="@dimen/dp90"
-        android:layout_marginLeft="@dimen/dp640"
-        android:layout_marginTop="@dimen/dp20"
-        android:background="@drawable/selector_top_title_bg"
-        android:button="@null"
-        android:gravity="center"
-        android:nextFocusDown="@+id/item_ImageBtn1"
-        android:text="歌曲播放记录"
-        android:textColor="@drawable/selector_text_color"
-        android:textSize="@dimen/sp25" />
-
-    <Button
-        android:layout_width="106dp"
-        android:layout_height="45dp"
-        android:background="@drawable/clear_all"
-        android:id="@+id/btn_clear_all"
-        android:layout_marginTop="@dimen/dp85"
-        android:layout_gravity="center_horizontal"
-        />
+    <TextView
+        android:id="@+id/historyName"
+        style="@style/setEnableFocusNO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="播放历史"
+        android:textSize="@dimen/dp30"
+        android:textColor="@color/white"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal"/>
 
     <include
         android:layout_width="match_parent"
@@ -64,13 +21,6 @@
         layout="@layout/layout_song_list"
         android:layout_marginTop="@dimen/dp120"
         android:visibility="gone"
-        ></include>
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/layout_mv_list"
-        android:layout_marginTop="@dimen/dp130"
         ></include>
 
     <TextView

@@ -19,10 +19,14 @@ import com.utvgo.huya.GlideApp;
 import com.utvgo.huya.R;
 import com.utvgo.huya.UTVGOSubscriber;
 import com.utvgo.huya.activity.MVAlbumActivity;
+import com.utvgo.huya.activity.PlayVideoActivity;
 import com.utvgo.huya.activity.TopicActivity;
+import com.utvgo.huya.beans.BeanUserPlayList;
 import com.utvgo.huya.beans.PageBean;
 import com.utvgo.huya.databinding.Page1Binding;
 import com.utvgo.huya.utils.ActivityUtility;
+import com.utvgo.huya.utils.Appconfig;
+import com.utvgo.huya.utils.ToastUtil;
 import com.utvgo.huya.views.CustomVideoView;
 
 import java.util.ArrayList;
@@ -46,6 +50,7 @@ public class Fragment1 extends BaseFragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.page_1, container, false);
         imgs = new ImageView[]{binding.bits1, binding.bits2, binding.bits3, binding.bits4, binding.bits5, binding.bits6, binding.bits7, binding.bits8, binding.bits9, binding.bits10};
+
 
         for (int i = 0; i < imgs.length; i++) {
             imgs[i].setOnClickListener(new View.OnClickListener() {
@@ -87,7 +92,7 @@ public class Fragment1 extends BaseFragment {
                 }
             });
         }
-        getBaseActivity().server.getPage(typeId, getKeyNo(), new UTVGOSubscriber<PageBean>() {
+        getBaseActivity().server.getPage(typeId, Appconfig.getKeyNo(getContext()), new UTVGOSubscriber<PageBean>() {
             @Override
             public void onNext(PageBean pageBean) {
                 dataBeans = pageBean.getData();
@@ -158,21 +163,32 @@ public class Fragment1 extends BaseFragment {
 //                    turnLiveActivity(Integer.parseInt(strs[1]));
 //                }
 //            }
-//        } else {
-//            //视频播放
-//            ArrayList<BeanUserPlayList.DataBean> playHistoryList = new ArrayList<>();
-//            getHrefList(index, selectBean, playHistoryList);
-//            Intent intent = new Intent(this, PlayVideoActivity.class);
-//            if (index == 1) {
-//                intent.putExtra("playIndex", vodIdPlayIndex);
-//            } else {
-//                intent.putExtra("playIndex", 0);
-//            }
-//            intent.putExtra("fileType", 1);
-//            intent.putParcelableArrayListExtra("playList", playHistoryList);
-//            this.startActivity(intent);
-//        }
+        } else {
+            //视频播放
+            ArrayList<BeanUserPlayList.DataBean> playHistoryList = new ArrayList<>();
+            getHrefList(index, selectBean, playHistoryList);
+            Intent intent = new Intent(getContext(), PlayVideoActivity.class);
+            if (index == 1) {
+                intent.putExtra("playIndex", vodIdStrIndex);
+            } else {
+                intent.putExtra("playIndex", 0);
+            }
+            intent.putExtra("fileType", 1);
+            intent.putParcelableArrayListExtra("playList", playHistoryList);
+            this.startActivity(intent);
         }
+
+    }
+    private void getHrefList(int index,  PageBean.DataBean  selectBean, ArrayList<BeanUserPlayList.DataBean> playHistoryList) {
+                for(int i=0;i<dataBeans.size();i++){
+                    BeanUserPlayList.DataBean playBean = new BeanUserPlayList.DataBean();
+                    playBean.setSingerMids(vodIdStr[vodIdStrIndex]);
+                    if(playBean.getSingerMids()==null||"".equals(playBean.getSingerMids()))
+                    {
+                        ToastUtil.show(getContext(),"资源数据有误！");
+                    }
+                    playHistoryList.add(playBean);
+                }
     }
 
     public void playVideo() {
@@ -197,6 +213,9 @@ public class Fragment1 extends BaseFragment {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 // playEnd(0.1f);
+                mp.setDisplay(null);
+                mp.reset();
+                mp.setDisplay(videoView.getHolder());
                 playVideo();
                 Log.d(TAG, "onCompletion: 播放结束");
             }

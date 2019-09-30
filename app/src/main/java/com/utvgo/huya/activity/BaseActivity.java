@@ -25,6 +25,7 @@ import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BeanUserPlayList;
 import com.utvgo.huya.beans.SelectData;
+import com.utvgo.huya.diff.DiffConfig;
 import com.utvgo.huya.net.AsyncHttpRequest;
 import com.utvgo.huya.net.IVolleyRequestSuccess;
 import com.utvgo.huya.net.IVolleyRequestfail;
@@ -38,7 +39,6 @@ import com.utvgo.huya.views.FocusBorderView;
 
 import java.util.ArrayList;
 
-import static com.utvgo.huya.Constants.BASE_URL;
 import static com.utvgo.huya.Constants.DESIGN_WIDTH;
 
 public  class BaseActivity extends RooterActivity implements View.OnFocusChangeListener
@@ -68,7 +68,7 @@ public  class BaseActivity extends RooterActivity implements View.OnFocusChangeL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        server = new UTVGOServer(BASE_URL);
+        server = new UTVGOServer(DiffConfig.baseHost);
         DensityUtil.init(this,DESIGN_WIDTH);
         super.onCreate(savedInstanceState);
     }
@@ -321,7 +321,6 @@ public  class BaseActivity extends RooterActivity implements View.OnFocusChangeL
 
     @Override
     public void onSucceeded(String method, String key, Object object) throws Exception {
-
     }
 
     public void showViewTip(String tipStr) {

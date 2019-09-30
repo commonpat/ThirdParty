@@ -40,7 +40,6 @@ public class Fragment2 extends BaseFragment{
     private String TAG="Fragment2";
     private Page2Binding binding;
     private ImageView[] imgs;
-    //PageBean pageBean=new PageBean();
     AsyncHttpRequest asyncHttpRequest=new AsyncHttpRequest();
     private List<BeanTopic.DataBean.UtvgoSubjectRecordListBean> utvgoSubjectRecordListBeans;
     @Override
@@ -95,17 +94,8 @@ public class Fragment2 extends BaseFragment{
                 utvgoSubjectRecordListBeans=beanTopic.getData().getUtvgoSubjectRecordList();
                 for(int i=0;i<beanTopic.getData().getUtvgoSubjectRecordList().size() &&i<imgs.length;i++){
                     BeanTopic.DataBean.UtvgoSubjectRecordListBean dataBean = beanTopic.getData().getUtvgoSubjectRecordList().get(i);
-//                    if(i==0){
-//                        if(dataBean.getIsVideo().equals("0")){
-//                        }else {
-//                            ((View) binding.bits1.getParent()).setVisibility(View.VISIBLE);
-//                        }
-//                    }else {
-                       // if (dataBean.getIsVideo().equals("0")) {
                      Log.e(TAG, "onNext: "+beanTopic.getImageProfix()+dataBean.getImgUrl() );
                      GlideApp.with(getContext()).load(beanTopic.getImageProfix()+dataBean.getImgUrl()).into(imgs[i]);
-
-
                 }
             }
         }, new IVolleyRequestfail() {

@@ -27,6 +27,7 @@ import com.utvgo.huya.beans.BeanTopic;
 import com.utvgo.huya.beans.BeanUserPlayList;
 import com.utvgo.huya.beans.BeanWLAblumData;
 import com.utvgo.huya.constant.MVAlbumTemplate;
+import com.utvgo.huya.diff.DiffConfig;
 import com.utvgo.huya.template.MVAlbumTemplate1;
 import com.utvgo.huya.template.MVAlbumTemplate2;
 import com.utvgo.huya.utils.DiffHostConfig;
@@ -42,7 +43,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.utvgo.huya.Constants.BASE_URL_VIDEO;
 
 /**
  * Created by haha on 2018/6/8.
@@ -108,7 +108,7 @@ public class MVAlbumActivity extends BuyActivity {
 
         createBorderView(this);
         traversal(activityRootView);
-        borderView.setBorderBitmapResId(R.drawable.singer_list_f, (int) getResources().getDimension(R.dimen.dp50),
+        borderView.setBorderBitmapResId(R.drawable.focus_border_1, (int) getResources().getDimension(R.dimen.dp50),
                 (int) getResources().getDimension(R.dimen.dp40));
 
         getData();
@@ -167,14 +167,14 @@ public class MVAlbumActivity extends BuyActivity {
             if (v == ivCollect) {
                 borderView.setBorderBitmapResId(R.drawable.sheet_collect_focus, (int) getResources().getDimension(R.dimen.dp40));
             } else if (v == ivVideoFocus) {
-                borderView.setBorderBitmapResId(R.drawable.mains_f_2, (int) getResources().getDimension(R.dimen.dp30));
+                borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp30));
             } else if (itemList.contains(v)) {
                 borderView.setBorderBitmapResId(R.drawable.singer_list_f, (int) getResources().getDimension(R.dimen.dp50),
                         (int) getResources().getDimension(R.dimen.dp40));
             } else if (showType.equals(MVAlbumTemplate.ONE)) {
-                borderView.setBorderBitmapResId(R.drawable.mains_f_2_p9, (int) getResources().getDimension(R.dimen.dp5), (int) getResources().getDimension(R.dimen.dp13));
+                borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp5), (int) getResources().getDimension(R.dimen.dp13));
             } else if (showType.equals(MVAlbumTemplate.TWO)) {
-                borderView.setBorderBitmapResId(R.drawable.mains_f_2_p9, (int) getResources().getDimension(R.dimen.dp15), (int) getResources().getDimension(R.dimen.dp13));
+                borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp15), (int) getResources().getDimension(R.dimen.dp13));
             }
         }
         super.onFocusChange(v, hasFocus);
@@ -228,7 +228,7 @@ public class MVAlbumActivity extends BuyActivity {
         if (mvDetail != null) {
             try {
                 String videoName = mvDetail.getMv().getName();
-                //stat("视频播放-" + videoName);todo
+                stat("视频播放-" + videoName);
             } catch (Exception o) {
                 o.printStackTrace();
             }
@@ -477,7 +477,7 @@ public class MVAlbumActivity extends BuyActivity {
                     || !TextUtils.isEmpty(bean.getMvMid())) {
                 BeanUserPlayList.DataBean playBean = new BeanUserPlayList.DataBean();
                 if (!bean.getHref().contains("http")&&bean.getHref().contains("mp4")){
-                    playBean.setSingerMids(BASE_URL_VIDEO+bean.getHref());
+                    playBean.setSingerMids(DiffConfig.playHost +bean.getHref());
                 }else {
                     playBean.setSingerMids(bean.getHref());}
                 playBean.setBigPic(bean.getImgUrl());

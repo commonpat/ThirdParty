@@ -6,6 +6,7 @@
     <dimen name="dp1">1.0dip</dimen>
     <dimen name="dp10">10.0dip</dimen>
     <dimen name="dp100">100.0dip</dimen>
+    <dimen name="dp109">109.0dip</dimen>
     <dimen name="dp1000">1000.0dip</dimen>
     <dimen name="dp1005">1005.0dip</dimen>
     <dimen name="dp1012">1012.0dip</dimen>
@@ -38,6 +39,7 @@
     <dimen name="dp190">190.0dip</dimen>
     <dimen name="dp191">191.0dip</dimen>
     <dimen name="dp192">192.0dip</dimen>
+    <dimen name="dp193">193.0dip</dimen>
     <dimen name="dp194">194.0dip</dimen>
     <dimen name="dp197">197.0dip</dimen>
     <dimen name="dp198">198.0dip</dimen>

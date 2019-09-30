@@ -1,6 +1,8 @@
-package com.utvgo.huya.interfaces;
+package com.utvgo.huya.diff;
 
 import android.content.Context;
+
+import com.utvgo.huya.interfaces.CommonCallback;
 
 public abstract class IPurchase {
 

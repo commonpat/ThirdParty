@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -22,14 +21,15 @@ import com.utvgo.huya.R;
 import com.utvgo.huya.UTVGOSubscriber;
 import com.utvgo.huya.beans.BeanExitPage;
 import com.utvgo.huya.beans.TypesBean;
+import com.utvgo.huya.constant.ConstantEnum;
 import com.utvgo.huya.databinding.ActivityMainBinding;
+import com.utvgo.huya.diff.DiffConfig;
+import com.utvgo.huya.diff.IPurchase;
 import com.utvgo.huya.fragments.Fragment1;
 import com.utvgo.huya.fragments.Fragment2;
 import com.utvgo.huya.interfaces.CommonCallback;
-import com.utvgo.huya.interfaces.IPurchase;
 import com.utvgo.huya.listeners.MainPageChangeListener;
 import com.utvgo.huya.listeners.MyDialogEnterListener;
-import com.utvgo.huya.net.Purchase;
 import com.utvgo.huya.utils.ActivityUtility;
 import com.utvgo.huya.utils.Appconfig;
 import com.utvgo.huya.utils.HiFiDialogTools;
@@ -46,7 +46,6 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
     private List<Fragment> list = new ArrayList();
     private MainFragmentAdapter adapter;
     TypesBean typesBean = new TypesBean();
-    Purchase purchase = new Purchase();
     final Activity activity = this;
     BeanExitPage beanExitPage;
     List<BeanExitPage.Data> endPushContentBean;
@@ -122,30 +121,7 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
 //        initNavsId();
         binding.navs.setOnCheckedChangeListener(this);
         // binding.btnOrder.setOnFocusChangeListener((View.OnFocusChangeListener) this);
-        binding.btnOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                purchase.auth(activity, new IPurchase.AuthCallback() {
-                    @Override
-                    public void onFinished(String message) {
-                        if (HuyaApplication.hadBuy()) {
-                            ToastUtil.show(activity, "你已订购");
-                        } else {
-                            if (!TextUtils.isEmpty(message)) {
-                                ToastUtil.show(activity, message);
-                            }
-                            purchase.pay(activity, new CommonCallback() {
-                                @Override
-                                public void onFinished(Context context) {
-
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        });
+        binding.btnOrder.setOnClickListener(this);
         binding.btnCollect.setOnClickListener(this);
         binding.btnUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,9 +204,13 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == TAGRecommendExit) {
-
+//        if (requestCode == TAGRecommendExit) {
+//
+//            turnHome();
+//        }else
+        if(resultCode==RESULT_OK){
             turnHome();
+            System.exit(0);
         }
     }
 
@@ -245,7 +225,7 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
         switch (v.getId()) {
             case R.id.btn_main_order:
 
-                purchase.auth(this, new IPurchase.AuthCallback() {
+                DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
                     @Override
                     public void onFinished(String message) {
                         if (HuyaApplication.hadBuy()) {
@@ -254,7 +234,7 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
                             if (!TextUtils.isEmpty(message)) {
                                 ToastUtil.show(context, message);
                             }
-                            purchase.pay(context, new CommonCallback() {
+                            DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
                                 @Override
                                 public void onFinished(Context context) {
 
@@ -265,7 +245,7 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
                 });
                 break;
             case R.id.btn_main_user_favor: {
-                startActivity(new Intent(this,  SongListActivity.class));
+                startActivity(new Intent(this,  CollectPageListActivity.class));
                 break;
             }
             case R.id.btn_main_introduction: {
@@ -290,18 +270,16 @@ public class MainActivity extends BuyActivity implements RadioGroup.OnCheckedCha
                 break;
         }
     }
-
     @Override
     public void onBackPressed() {
-        if (endPushContentBean != null && !HuyaApplication.hadBuy()) {
+        if (endPushContentBean != null ) {
             Intent intent = new Intent(MainActivity.this, ExitActivity.class);
             Bundle bundle = new Bundle();
             intent.putExtra("bgUrl", endPushContentBean.get(0).getBgImgUrl());
             intent.putExtra("contentMid", endPushContentBean.get(0).getTypeId());
             //intent.putExtra("beanExitPage",  beanExitPage);
             intent.putExtra("recommendType", "exit");
-            startActivity(intent);
-            //startActivityForResult(intent, ConstantEnum.TAGRecommendExit);
+            startActivityForResult(intent, ConstantEnum.TAGRecommendExit);
 
         } else {
             endDefault();

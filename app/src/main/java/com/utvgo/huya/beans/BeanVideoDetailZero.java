@@ -340,7 +340,7 @@ public class BeanVideoDetailZero
         }
         public static class History
         {
-            private int modifiedTime;
+            private long modifiedTime;
 
             private int totalTime;
 
@@ -354,7 +354,7 @@ public class BeanVideoDetailZero
 
             private String videoName;
 
-            private int createdTime;
+            private long createdTime;
 
             private int id;
 
@@ -366,10 +366,10 @@ public class BeanVideoDetailZero
 
             private int programId;
 
-            public void setModifiedTime(int modifiedTime){
+            public void setModifiedTime(long modifiedTime){
                 this.modifiedTime = modifiedTime;
             }
-            public int getModifiedTime(){
+            public long getModifiedTime(){
                 return this.modifiedTime;
             }
             public void setTotalTime(int totalTime){
@@ -408,10 +408,10 @@ public class BeanVideoDetailZero
             public String getVideoName(){
                 return this.videoName;
             }
-            public void setCreatedTime(int createdTime){
+            public void setCreatedTime(long createdTime){
                 this.createdTime = createdTime;
             }
-            public int getCreatedTime(){
+            public long getCreatedTime(){
                 return this.createdTime;
             }
             public void setId(int id){

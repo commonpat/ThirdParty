@@ -74,7 +74,7 @@ public class TopicActivity extends BuyActivity {
                     && subjectRecordListBeen != null && subjectRecordListBeen.size() > 0) {
                 page.setText(v.getId() + 1 + "/" + subjectRecordListBeen.size());
                 if (v.getParent().equals(flTopicContent)) {
-                    borderView.setBorderBitmapResId(R.drawable.mains_f_2_p9, (int) getResources().getDimension(R.dimen.dp5), (int) getResources().getDimension(R.dimen.dp13));
+                    borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp5), (int) getResources().getDimension(R.dimen.dp13));
                 }
             }
 
@@ -282,7 +282,7 @@ public class TopicActivity extends BuyActivity {
         super.onClick(view);
         int playIndex = view.getId();
         BeanTopic.DataBean.UtvgoSubjectRecordListBean selectBean = subjectRecordListBeen.get(playIndex);
-        if (selectBean.getHref().contains("qqmusic_zt.html")||selectBean.getHref().contains("topic.html")) {
+        if (selectBean.getHref().contains("topic.html")) {
             Intent intent = new Intent(this, TopicActivity.class);
             intent.putExtra("topicId", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
             startActivity(intent);
@@ -290,17 +290,10 @@ public class TopicActivity extends BuyActivity {
 //            Intent intent = new Intent(this, AlbumDetailActivity.class);
 //            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("zjid"));
 //            startActivity(intent);
-        } else if (selectBean.getHref().contains("albumPlayer.html")) {
+        } else if (selectBean.getHref().contains("albumPlayer")) {
             Intent intent = new Intent(this, MVAlbumActivity.class);
             intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("pkId"));
             startActivity(intent);
-        } else if (selectBean.getHref().contains("recordList_gs.html")) {
-//            Intent intent = new Intent(this, SongListActivity.class);
-//            BeanAreaTypeSingerList.DataBean bean = new BeanAreaTypeSingerList.DataBean();
-//            bean.setSingerMid(Uri.parse(selectBean.getHref()).getQueryParameter("singerMid"));
-//            bean.setSingerName(selectBean.getName());
-//            intent.putExtra("BeanAreaTypeSinger", bean);
-//            startActivity(intent);
         } else {
             playVideoFullScreen(playIndex);
         }

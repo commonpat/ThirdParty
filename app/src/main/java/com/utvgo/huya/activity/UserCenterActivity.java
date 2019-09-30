@@ -16,11 +16,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.utvgo.huya.GlideApp;
+import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BeanArryPage;
+import com.utvgo.huya.diff.DiffConfig;
+import com.utvgo.huya.diff.IPurchase;
+import com.utvgo.huya.interfaces.CommonCallback;
 import com.utvgo.huya.utils.ActivityUtility;
 import com.utvgo.huya.utils.Appconfig;
 import com.utvgo.huya.utils.FocusView;
+import com.utvgo.huya.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -172,24 +177,32 @@ public class UserCenterActivity extends BuyActivity {
     public void onClick(View view) {
         String keyNO = Appconfig.getKeyNo(this);
         final Context context = this;
-//        if (!DiffConfig.validateDeviceKeyNO(this)) {
-//            return;
-//        }
 
         int i = view.getId();
-//        if (i == R.id.btn_collect) {
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 1);
-//            startActivity(intent);
-//
-//        } else
         if (i == R.id.btn_playRecord) {
             Intent intent = new Intent(this, PlayRecordActivity.class);
             intent.putExtra("type", 0);
             startActivity(intent);
 
         } else if (i == R.id.btn_order) {
-            showBuy("");
+            DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
+                @Override
+                public void onFinished(String message) {
+                    if (HuyaApplication.hadBuy()) {
+                        ToastUtil.show(context, "您已经是 " + getResources().getString(R.string.app_name) + " 尊贵会员");
+                    } else {
+                        if (!TextUtils.isEmpty(message)) {
+                            ToastUtil.show(context, message);
+                        }
+                        DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
+                            @Override
+                            public void onFinished(Context context) {
+
+                            }
+                        });
+                    }
+                }
+            });
         } else if (i == R.id.btn_view0) {
             clickRecItem(0);
         } else if (i == R.id.btn_view1) {
@@ -200,9 +213,9 @@ public class UserCenterActivity extends BuyActivity {
     }
 
     public void clickRecItem(int index) {
-//        if (!DiffConfig.validateDeviceKeyNO(this)) {
-//            return;
-//        }
+        if (!DiffConfig.validateDeviceKeyNO(this)) {
+            return;
+        }
         Log.d(TAG, "clickRecItem: " + beanArryPage.getData().get(index).get(0));
         BeanArryPage.Data selectBean = beanArryPage.getData().get(index).get(0);
         if (TextUtils.equals(selectBean.getHrefType(), "0")) { //超链接
@@ -211,39 +224,19 @@ public class UserCenterActivity extends BuyActivity {
             Intent intent = new Intent(this, MVAlbumActivity.class);
             intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("pkId"));
             startActivity(intent);
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "1")) { //音频专辑
-//            Intent intent = new Intent(getActivity(), AlbumDetailActivity.class);
-//            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("zjid"));
-//            startActivity(intent);
+
 //        } else if (TextUtils.equals(selectBean.getHrefType(), "8")) { //活动
 //            //Intent intent = new Intent(IndexActivity.this, ActivityActivity.class);
 //            //startActivity(intent);
 //            //todo
-//        } else if (selectBean.getHref().contains("collect.html")) { //收藏
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 1);
-//            startActivity(intent);
-//        } else if (selectBean.getHref().contains("htyplay.html")) { //历史
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 0);
-//            startActivity(intent);
+
         } else if (TextUtils.equals(selectBean.getHrefType(), "4")) { //专题
             Intent intent = new Intent(this, TopicActivity.class);
             intent.putExtra("topicId", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
             intent.putExtra("type", Uri.parse(selectBean.getHref()).getQueryParameter("styleID"));
             startActivity(intent);
-//        } else if (selectBean.getHref().contains("recordList_pd.html")) { //榜单
-//            ActivityUtility.goSongRankActivity(this, Uri.parse(selectBean.getHref()).getQueryParameter("mid"),
-//                    Uri.parse(selectBean.getHref()).getQueryParameter("id"), selectBean.getName());
 //        } else if (TextUtils.equals(selectBean.getHrefType(), "12")) {//专题收录
 //            ActivityUtility.goActivity(this, TopicCollectionActivity.class);
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "13")) {//直播
-//            if (!TextUtils.isEmpty(selectBean.getHref())) {
-//                String[] strs = selectBean.getHref().split("=");
-//                if (strs.length > 1) {
-//                    turnLiveActivity(Integer.parseInt(strs[1]));
-//                }
-//            }
 //        } else {
 //            //视频播放
 //            ArrayList<BeanUserPlayList.DataBean> playHistoryList = new ArrayList<>();

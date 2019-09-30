@@ -16,11 +16,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.utvgo.huya.R;
+import com.utvgo.huya.diff.DiffConfig;
 import com.utvgo.huya.utils.Appconfig;
 import com.utvgo.huya.utils.URLBuilder;
 import com.utvgo.huya.views.QJSInterface;
 
-import static com.utvgo.huya.Constants.BASE_URL_WEB;
 
 
 /**
@@ -86,7 +86,7 @@ public class QWebViewActivity extends BaseActivity {
         if (intent != null) {
             String url = intent.getStringExtra(IntentUrl);
             if (!url.contains("http")){
-                url=BASE_URL_WEB+url;
+                url= DiffConfig.baseUrlWeb +url;
             }
             if (TextUtils.isEmpty(url)) {
 

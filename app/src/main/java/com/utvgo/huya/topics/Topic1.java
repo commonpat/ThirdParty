@@ -52,7 +52,7 @@ public class Topic1 {
             view.setOnClickListener(activity);
             view.setOnFocusChangeListener(activity);
             activity.getMusicList1().addView(view, -1, -2);
-            activity.focusOn1stView(activity.getMusicList1().getChildAt(0), R.drawable.mains_f_2, (int) activity.getResources().getDimension(R.dimen.dp20),
+            activity.focusOn1stView(activity.getMusicList1().getChildAt(0), R.mipmap.border_focus_style_default, (int) activity.getResources().getDimension(R.dimen.dp20),
                     (int) activity.getResources().getDimension(R.dimen.dp6));
         }
     }

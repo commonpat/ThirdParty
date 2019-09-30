@@ -1,4 +1,4 @@
-package com.utvgo.huya.net;
+package com.utvgo.huya.diff;
 
 import android.content.Context;
 
@@ -7,22 +7,22 @@ import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
 import com.utvgo.huya.activity.QWebViewActivity;
 import com.utvgo.huya.beans.BeanVipAuth;
+import com.utvgo.huya.diff.DiffConfig;
+import com.utvgo.huya.diff.IPurchase;
 import com.utvgo.huya.interfaces.CommonCallback;
-import com.utvgo.huya.interfaces.IPurchase;
 import com.utvgo.huya.utils.Appconfig;
 import com.utvgo.huya.utils.JsonCallback;
 import com.utvgo.huya.utils.XLog;
 
 
-import static com.utvgo.huya.Constants.Base_AUTH;
 import static com.utvgo.huya.Constants.VIP_CODE;
 
 
-public class Purchase extends IPurchase {
+public class GZPurchase extends IPurchase {
 
     @Override
     public void pay(final Context context, final CommonCallback callback) {
-        String url = Base_AUTH+  "TVMaiShiOrderController/order.utvgo?"+
+        String url = DiffConfig.authHost+  "TVMaiShiOrderController/order.utvgo?"+
                 "keyNo=" + Appconfig.getKeyNo(context) +"&vipCode=" + VIP_CODE+ "&contentMid=&backUrl=http://" ;
 
         XLog.d("payurl",url);
@@ -32,7 +32,7 @@ public class Purchase extends IPurchase {
     @Override
     public void auth(final Context context, final AuthCallback authCallback) {
 
-        String url = Base_AUTH + "order/TVUtvgoVipAuthorizationController/checkVipAuthorization.utvgo?keyNo="
+        String url = DiffConfig.authHost + "order/TVUtvgoVipAuthorizationController/checkVipAuthorization.utvgo?keyNo="
                 + Appconfig.getKeyNo(context) + "&regionCode=" + Appconfig.getRegionCode(context) + "&vipCode=" + VIP_CODE +
                 "&contentMid=" + "";
 

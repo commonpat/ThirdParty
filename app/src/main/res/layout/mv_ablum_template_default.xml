@@ -27,7 +27,7 @@
             android:layout_width="821dp"
             android:layout_height="461dp"
             android:layout_marginLeft="230dp"
-            android:layout_marginTop="@dimen/dp90"
+            android:layout_marginTop="83dp"
             android:background="@color/transparent" />
     </FrameLayout>
     <ImageView
@@ -36,7 +36,7 @@
         android:layout_width="821dp"
         android:layout_height="461dp"
         android:layout_marginLeft="@dimen/dp230"
-        android:layout_marginTop="@dimen/dp85"
+        android:layout_marginTop="83dp"
         android:visibility="gone" />
 
     <ImageView
@@ -94,29 +94,28 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp240"
-            android:layout_marginLeft="@dimen/dp150"
+            android:layout_marginLeft="@dimen/dp230"
             android:layout_marginTop="@dimen/dp560"
             android:background="@color/transparent">
 
             <RelativeLayout
                 android:onClick="onClick"
-                android:layout_width="@dimen/dp240"
-                android:layout_height="@dimen/dp140"
+                android:layout_width="@dimen/dp193"
+                android:layout_height="@dimen/dp109"
                 android:orientation="horizontal"
                 style="@style/focusAndSetTag"
                 android:id="@+id/rl_item1">
 
                 <ImageView
                     android:id="@+id/iv_icon1"
-                    android:layout_width="@dimen/dp240"
-                    android:layout_height="@dimen/dp140"
-                    android:src="@drawable/place_holder_song"
+                    android:layout_width="@dimen/dp193"
+                    android:layout_height="@dimen/dp109"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/tv_name1"
-                    android:layout_width="@dimen/dp240"
+                    android:layout_width="@dimen/dp193"
                     android:layout_height="@dimen/dp40"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -132,24 +131,23 @@
 
             <RelativeLayout
                 android:onClick="onClick"
-                android:layout_width="@dimen/dp240"
-                android:layout_height="@dimen/dp140"
+                android:layout_width="@dimen/dp193"
+                android:layout_height="@dimen/dp109"
                 android:orientation="horizontal"
                 style="@style/focusAndSetTag"
-                android:layout_marginLeft="240dp"
+                android:layout_marginLeft="211dp"
                 android:id="@+id/rl_item2">
 
                 <ImageView
                     android:id="@+id/iv_icon2"
-                    android:layout_width="@dimen/dp240"
-                    android:layout_height="@dimen/dp140"
-                    android:src="@drawable/place_holder_song"
+                    android:layout_width="@dimen/dp193"
+                    android:layout_height="@dimen/dp109"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/tv_name2"
-                    android:layout_width="@dimen/dp240"
+                    android:layout_width="@dimen/dp193"
                     android:layout_height="@dimen/dp40"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -165,24 +163,23 @@
 
             <RelativeLayout
                 android:onClick="onClick"
-                android:layout_width="@dimen/dp240"
-                android:layout_height="@dimen/dp140"
+                android:layout_width="@dimen/dp193"
+                android:layout_height="@dimen/dp109"
                 android:orientation="horizontal"
                 style="@style/focusAndSetTag"
-                android:layout_marginLeft="480dp"
+                android:layout_marginLeft="422dp"
                 android:id="@+id/rl_item3">
 
                 <ImageView
                     android:id="@+id/iv_icon3"
-                    android:layout_width="@dimen/dp240"
-                    android:layout_height="@dimen/dp140"
-                    android:src="@drawable/place_holder_song"
+                    android:layout_width="@dimen/dp193"
+                    android:layout_height="@dimen/dp109"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/tv_name3"
-                    android:layout_width="@dimen/dp240"
+                    android:layout_width="@dimen/dp193"
                     android:layout_height="@dimen/dp40"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -198,24 +195,23 @@
 
             <RelativeLayout
                 android:id="@+id/rl_item4"
-                android:layout_width="@dimen/dp240"
-                android:layout_height="@dimen/dp140"
+                android:layout_width="@dimen/dp193"
+                android:layout_height="@dimen/dp109"
                 android:orientation="horizontal"
                 style="@style/focusAndSetTag"
-                android:layout_marginLeft="@dimen/dp720"
+                android:layout_marginLeft="@dimen/dp633"
                 android:onClick="onClick">
 
                 <ImageView
                     android:id="@+id/iv_icon4"
-                    android:layout_width="@dimen/dp240"
-                    android:layout_height="@dimen/dp140"
-                    android:src="@drawable/place_holder_song"
+                    android:layout_width="@dimen/dp193"
+                    android:layout_height="@dimen/dp109"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/tv_name4"
-                    android:layout_width="@dimen/dp240"
+                    android:layout_width="@dimen/dp193"
                     android:layout_height="@dimen/dp40"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -234,7 +230,7 @@
 
     <TextView
         android:id="@+id/tv_count"
-        android:layout_width="@dimen/dp240"
+        android:layout_width="@dimen/dp193"
         android:layout_height="@dimen/dp40"
         android:textColor="@color/white"
         android:textSize="18sp"

@@ -1,5 +1,8 @@
 package com.utvgo.huya.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
     public class BeanPlayHistoryPageList
@@ -63,8 +66,7 @@ import java.util.List;
             public List<Historys> getHistorys(){
                 return this.historys;
             }
-            public class Historys
-            {
+            public static class Historys implements Parcelable {
                 private String keyNo;
 
                 private int totalTime;
@@ -145,6 +147,53 @@ import java.util.List;
                 public int getChannelId(){
                     return this.channelId;
                 }
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+                @Override
+                public void writeToParcel(Parcel dest, int flags) {
+                    dest.writeString(this.keyNo);
+                    dest.writeInt(this.totalTime);
+                    dest.writeString(this.videoName);
+                    dest.writeString(this.programName);
+                    dest.writeString(this.multiSetType);
+                    dest.writeInt(this.videoId);
+                    dest.writeInt(this.id);
+                    dest.writeInt(this.playPoint);
+                    dest.writeInt(this.programId);
+                    dest.writeInt(this.channelId);
+                }
+
+                public Historys() {
+                }
+
+                protected Historys(Parcel in) {
+                    this.keyNo = in.readString();
+                    this.totalTime = in.readInt();
+                    this.videoName = in.readString();
+                    this.programName = in.readString();
+                    this.multiSetType = in.readString();
+                    this.videoId = in.readInt();
+                    this.id = in.readInt();
+                    this.playPoint = in.readInt();
+                    this.programId = in.readInt();
+                    this.channelId = in.readInt();
+                }
+
+                public static final Parcelable.Creator<Historys> CREATOR = new Parcelable.Creator<Historys>() {
+                    @Override
+                    public Historys createFromParcel(Parcel source) {
+                        return new Historys(source);
+                    }
+
+                    @Override
+                    public Historys[] newArray(int size) {
+                        return new Historys[size];
+                    }
+                };
             }
         }
 

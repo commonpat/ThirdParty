@@ -73,7 +73,7 @@ public class Topic3 {
                 v.setVisibility(View.GONE);
             }
         }
-        activity.focusOn1stView(activity.findViewById(0), R.drawable.mains_f_2, (int) activity.getResources().getDimension(R.dimen.dp20), (int) activity.getResources().getDimension(R.dimen.dp20));
+        activity.focusOn1stView(activity.findViewById(0), R.mipmap.border_focus_style_default, (int) activity.getResources().getDimension(R.dimen.dp20), (int) activity.getResources().getDimension(R.dimen.dp20));
     }
 
 

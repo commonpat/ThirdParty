@@ -26,7 +26,7 @@ public final class ActivityUtility {
 //    }
 //
 //    public static void goSongListActivity(Activity activity, BeanAreaTypeSingerList.DataBean dataBean) {
-//        Intent intent = new Intent(activity, SongListActivity.class);
+//        Intent intent = new Intent(activity, CollectPageListActivity.class);
 //        intent.putExtra("BeanAreaTypeSinger", dataBean);
 //        activity.startActivity(intent);
 //    }

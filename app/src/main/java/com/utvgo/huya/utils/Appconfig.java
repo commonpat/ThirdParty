@@ -11,6 +11,7 @@ import android.text.TextUtils;
  * 传递的参数 context 请使用getApplicationContext() 避免出现act的内存泄露
  */
 public class Appconfig {
+    public static boolean LocalTest = false;
     private static final String APPNAME = "虎牙TV";
     private static final String KEYNO = "KEYNO";
     private static final String COOKIE = "COOKIE";

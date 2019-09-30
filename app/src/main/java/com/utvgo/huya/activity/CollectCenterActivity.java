@@ -93,7 +93,7 @@ public class CollectCenterActivity extends BaseActivity {
                 break;
 //            case R.id.iv_song:
 //                if (type == 1) {
-//                    Intent intent = new Intent(this, SongListActivity.class);
+//                    Intent intent = new Intent(this, CollectPageListActivity.class);
 //                    startActivity(intent);
 //                } else {
 //                    Intent intent = new Intent(this, PlayRecordActivity.class);

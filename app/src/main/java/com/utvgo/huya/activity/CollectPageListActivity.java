@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  * Created by fute on 17/3/21.
  */
 
-public class SongListActivity extends BaseActivity {
+public class CollectPageListActivity extends BaseActivity {
 
     @BindView(R.id.fl_songList)
     FrameLayout flSongList;

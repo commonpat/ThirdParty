@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.utvgo.huya.GlideApp;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BeanBasic;
+import com.utvgo.huya.beans.BeanCheckCollect;
+import com.utvgo.huya.beans.BeanCollect;
 import com.utvgo.huya.beans.BeanSongDetail;
 import com.utvgo.huya.beans.BeanStatistics;
 import com.utvgo.huya.beans.BeanUserPlayList;
@@ -40,6 +43,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.utvgo.huya.Constants.VIP_CODE;
 
 
 /**
@@ -127,6 +132,7 @@ public class PlayVideoActivity extends BuyActivity {
     private boolean isExperience;
 
     private long exitTime = 0;
+    private String ifCollectton="no";
 
     public static void play(final Context context,
                             final ConstantEnum.MediaType mediaType,
@@ -174,6 +180,7 @@ public class PlayVideoActivity extends BuyActivity {
             }
         }
         playVideo();
+        checkCollect();
         initView();
 
         ivChangeMv.setVisibility(View.INVISIBLE);
@@ -303,6 +310,9 @@ public class PlayVideoActivity extends BuyActivity {
                 tvProgressTag.setVisibility(View.GONE);
             }
             needQuickTime = hasFocus;
+
+        }else if (v.getId()==R.id.iv_collect) {
+            //todo
         } else if (hasFocus) {
             tvProgressTag.setVisibility(View.GONE);
         }
@@ -492,29 +502,49 @@ public class PlayVideoActivity extends BuyActivity {
                     return;
                 }
                 BeanUserPlayList.DataBean bean = playList.get(playingIndex);
-
-                asyncHttpRequest.deleteCollection(PlayVideoActivity.this, "1", bean.getContentMid(), this, this);
-//                } else {
-//                    asyncHttpRequest.addCollection(PlayVideoActivity.this, "1", bean.getContentMid(), this, this);
-//                }
-            } else {
-                if (songDetail == null) {
-                    return;
-                }
-                BeanUserPlayList.DataBean bean = playList.get(playingIndex);
-                if (songDetail.getSong().getIfCollection() == 1) {
-                  //  asyncHttpRequest.addCollection(PlayVideoActivity.this, "0", bean.getContentId(),bean.getMediaType(), this, this);
+                if("yes".equals(ifCollectton)){
+                asyncHttpRequest.deleteCollection(PlayVideoActivity.this, "1", String.valueOf(bean.getContentId()), this, this);
                 } else {
-                    asyncHttpRequest.deleteCollection(PlayVideoActivity.this, "0", String.valueOf(bean.getContentId()), this, this);
+                asyncHttpRequest.addCollection(PlayVideoActivity.this, "1", bean.getContentId(), bean.getMediaType(), new NetUtils.NetCallBack() {
+                    @Override
+                    public void netBack(int requestTag, Object object) {
+                        BeanBasic beanBasic = (BeanBasic) object;
+                        if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
+                            checkCollect();
+                            ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
+                            if (fileType == 1) {
+                                //  mvDetail.getMv().setIfCollection(1);
+                            } else {
+                                songDetail.getSong().setIfCollection(1);
+                            }
+                        } else {
+                            HiFiDialogTools.getInstance().showtips(getBaseContext()
+                                    , "收藏失败，请稍后重试", null);
+                        }
+                    }
+                });
                 }
             }
         }
     }
 
+    private void checkCollect(){
+        asyncHttpRequest.checkCollect(this,String.valueOf(playList.get(playingIndex).getContentId()),"",this,this);
+    }
+
     @Override
     public void onSucceeded(String method, String key, Object object) throws Exception {
         super.onSucceeded(method, key, object);
-        if (TextUtils.equals(method, "addCollection.utvgo")) {
+        if(TextUtils.equals(method,"checkcollect.utvgo")){
+            BeanCheckCollect beanCheckCollect =(BeanCheckCollect) object;
+            ifCollectton=beanCheckCollect.getData().getIsCollect();
+            if ( "yes".equals(ifCollectton )) {
+                ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
+            } else {
+                ivCollect.setImageResource(R.drawable.selector_player_collect_no);
+            }
+        }
+        if (TextUtils.equals(method, "savecollect.utvgo")) {
             BeanBasic beanBasic = (BeanBasic) object;
             if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
                 ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
@@ -526,7 +556,7 @@ public class PlayVideoActivity extends BuyActivity {
             } else {
                 HiFiDialogTools.getInstance().showtips(this, "收藏失败，请稍后重试", null);
             }
-        } else if (TextUtils.equals(method, "deleteCollection.utvgo")) {
+        } else if (TextUtils.equals(method, "delcollect.utvgo")) {
             BeanBasic beanBasic = (BeanBasic) object;
             if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
                 ivCollect.setImageResource(R.drawable.selector_player_collect_no);
@@ -538,102 +568,19 @@ public class PlayVideoActivity extends BuyActivity {
             } else {
                 HiFiDialogTools.getInstance().showtips(this, "收藏失败，请稍后重试", null);
             }
-        } else if (TextUtils.equals(method, "songDetail.utvgo")) {
-            statisticsPlayId = "";
-            songDetail = (BeanSongDetail) object;
-
-            if (songDetail != null && TextUtils.equals(songDetail.getCode(), "1")) {
-                //songDetail.getSong().setFreeTime(10);
-                boolean shouldPlay = true;
-                startStatisticsPlay();
-                statisticsVideoPlay("0", "0");
-
-                if (HuyaApplication.hadBuy() || (songDetail.getSong().getIsFree() == 1) || isExperience) {
-                    freeTime = -1;
-                } else {
-                    freeTime = Math.max(songDetail.getSong().getFreeTime(), 0);
-                }
-                if (freeTime == 0) {
-                    shouldPlay = false;
-                }
-
-                String assetId = songDetail.getSong().getVodIdSq();
-                if (TextUtils.isEmpty(songDetail.getSong().getVodIdSq()) || TextUtils.equals("0", songDetail.getSong().getVodIdSq())) {
-                    assetId = songDetail.getSong().getVodIdHq();
-                }
-
-                if (shouldPlay) {
-                    // XLog.toast(this, "Will play audio asset Id " + assetId);
-                    getHahaPlayerUrl(assetId);
-                } else {
-                    //  XLog.toast(this, "require payment");
-                    isToShowBuy = false;
-                    showBuy(assetId);
-                }
-
-                playMVBySong = false;
-                fileType = 0;
-
-                if (songDetail.getSong().getIfCollection() == 1) {
-                    ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
-                } else {
-                    ivCollect.setImageResource(R.drawable.selector_player_collect_no);
-                }
-
-                String lyricText = songDetail.getSong().getLyricText();
-                if(TextUtils.isEmpty(lyricText))
-                {
-                    lyricText = "暂无歌词，努力更新中...";
-                }
-                //解析歌词构造器
-                // ILrcBuilder builder = new DefaultLrcBuilder();
-                //解析歌词返回LrcRow集合
-                // List<LrcRow> rows = builder.getLrcRows(lyricText);
-                //将得到的歌词集合传给mLrcView用来展示
-                // lrcView.setLrc(rows);
-                // lrcView.setVisibility(View.VISIBLE);
-
-                if (TextUtils.isEmpty(songDetail.getSong().getMvMid())) {
-                    ivChangeMv.setVisibility(View.INVISIBLE);
-                } else {
-                    ivChangeMv.setVisibility(View.VISIBLE);
-                    /*
-                    if (platfromUtils.isGuiZhou()) {
-                        ivChangeMv.setVisibility(View.INVISIBLE);
-                    } else {
-                        ivChangeMv.setVisibility(View.VISIBLE);
-                    }
-                    */
-                }
-                String imageUrl = songDetail.getSong().getSingerSmallPic();
-                if(TextUtils.isEmpty(imageUrl))
-                {
-                    ivHead.setImageResource(R.drawable.place_holder_song);
-                }
-                else
-                {
-                    ImageTool.loadImageWithUrl(this, DiffHostConfig.generateImageUrl(songDetail.getSong().getSingerSmallPic()), ivHead);
-                }
-                ivVideoBg.setVisibility(View.VISIBLE);
-                ivHead.setVisibility(View.VISIBLE);
-
-                showViewByHandler(ivPlayerPlay);
-            } else {
-                HiFiDialogTools.getInstance().showtips(this, "获取信息失败，请稍后重试", null);
-            }
         } else if (TextUtils.equals(method, "program_content.utvgo")) {
             statisticsPlayId = "";
             mvDetail = (BeanVideoDetailZero) object;
             //mvDetail.getMv().setFreeTime(10);
-
             startStatisticsPlay();
             statisticsVideoPlay("0", "0");
+            checkCollect();
             if (mvDetail != null && TextUtils.equals(mvDetail.getCode(), "1")) {
-//                if (mvDetail.getMv().getIfCollection() == 1) {
-//                    ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
-//                } else {
-//                    ivCollect.setImageResource(R.drawable.selector_player_collect_no);
-//                }
+                if ( "yes".equals(ifCollectton )) {
+                    ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
+                } else {
+                    ivCollect.setImageResource(R.drawable.selector_player_collect_no);
+                }
 
                 if (HuyaApplication.hadBuy() || (mvDetail.getData().getIfFree() == "1") || isExperience) {
                     freeTime = -1;
@@ -690,12 +637,7 @@ public class PlayVideoActivity extends BuyActivity {
         if (!quickSeekNow) {
             videoPlayerProgress.setProgress((int) (nowTime * videoPlayerProgress.getMax() / allTime));
         }
-
-        if (songDetail != null && !TextUtils.isEmpty(songDetail.getSong().getLyricText())) {
-            // lrcView.seekLrcToTime(nowTime);
-        }
         gifVideoLoad.setVisibility(View.GONE);
-
         needBuy();
     }
 
@@ -706,20 +648,12 @@ public class PlayVideoActivity extends BuyActivity {
         final boolean isPurchased = HuyaApplication.hadBuy();
         if (freeTime >= 0) {
             if (nowTime / 1000 >= freeTime) {
-                if (fileType == 0) {
-                    if (TextUtils.isEmpty(songDetail.getSong().getVodIdSq()) || TextUtils.equals("0", songDetail.getSong().getVodIdSq())) {
-                        showBuy(songDetail.getSong().getVodIdHq());
-                    } else {
-                        showBuy(songDetail.getSong().getVodIdSq());
-                    }
-                } else {
                     //tvBuyTip.setVisibility(View.VISIBLE);
-                    if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
-                        showBuy(mvDetail.getData().getVodId());
-                    } else {
-                        showBuy(mvDetail.getData().getVideoUrlHigh());
-                    }
-                }
+               if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
+                   showBuy(mvDetail.getData().getVodId());
+               } else {
+                   showBuy(mvDetail.getData().getVideoUrlHigh());
+               }
                 return true;
             }
         }
@@ -858,6 +792,7 @@ public class PlayVideoActivity extends BuyActivity {
 //        }
 //    });
 
+
     private void startStatisticsPlay() {
         if (songDetail != null || mvDetail != null) {
             try {
@@ -865,17 +800,10 @@ public class PlayVideoActivity extends BuyActivity {
                 String videoName = "";
                 String videoId = "";
                 String statName = "";
-                if (fileType == 0) {
-                    programId = songDetail.getSong().getSongMid() + "";
-                    videoName = songDetail.getSong().getSongName();
-                    videoId = songDetail.getSong().getSongMid();
-                    statName = "音频播放-" + videoName;
-                } else {
-                    programId = mvDetail.getData().getPkId() + "";
-                    videoName = mvDetail.getData().getName();
-                    videoId = String.valueOf(mvDetail.getData().getVideoId());
-                    statName = "视频播放-" + videoName;
-                }
+                programId = mvDetail.getData().getPkId() + "";
+                videoName = mvDetail.getData().getName();
+                videoId = String.valueOf(mvDetail.getData().getVideoId());
+                statName = "视频播放-" + videoName;
                 stat(statName);
             } catch (Exception o) {
                 o.printStackTrace();
@@ -887,11 +815,12 @@ public class PlayVideoActivity extends BuyActivity {
         String programId = "";
         String programName = "";
         String channelId = "1";
-        String channelName = "QQ音乐";
+        String channelName = "虎牙TV";
         String spId = "1";
-        String spName = "QQ音乐";
+        String spName = "虎牙TV";
         String videoName = "";
         String videoId = "";
+        String multiSetType="";
         long totalTime = 0;
         try {
             totalTime = videoView.getDuration();
@@ -899,24 +828,28 @@ public class PlayVideoActivity extends BuyActivity {
             e.printStackTrace();
         }
 
-        if (fileType == 0) {
-            programId = songDetail.getSong().getSongMid() + "";
-            videoName = songDetail.getSong().getSongName();
-            videoId = songDetail.getSong().getSongMid();
-            programName = videoName;
 
-        } else {
-            programId = mvDetail.getData().getPkId() + "";
-            videoName = mvDetail.getData().getName();
-            videoId = String.valueOf(mvDetail.getData().getVideoId());
-            programName = videoName;
-            channelId = "2";
-        }
+
+        programId = mvDetail.getData().getPkId() + "";
+        videoName = mvDetail.getData().getName();
+        videoId = mvDetail.getData().getVideoId()+"";
+        programName = mvDetail.getData().getName();
+        channelId = mvDetail.getData().getChannelId()+"";
+        multiSetType=mvDetail.getData().getMultiSetType();
+        asyncHttpRequest.addToPlayListHistoy(this, playPoint, videoId, videoName, programId, programName, channelId, multiSetType, totalTime, new NetUtils.NetCallBack() {
+            @Override
+            public void netBack(int requestTag, Object object) {
+                if(object!=null){
+                    Log.d(TAG, "netBack: addToPlayListHistoy_success");
+                }
+            }
+        });
+
         asyncHttpRequest.statisticsVideo(this, playPoint, videoId, videoName,
                 spId, spName,
                 programId, programName, channelId, channelName,
-                "1", "0",  "1",//DiffConfig.CurrentPurchase.isPurchased() ? "1" : "0"
-                "vip_code_50", statisticsVideoId, playTime, totalTime, new NetUtils.NetCallBack() {
+                multiSetType, "0",  HuyaApplication.hadBuy()?"1":"0",
+                VIP_CODE, statisticsVideoId, playTime, totalTime, new NetUtils.NetCallBack() {
                     @Override
                     public void netBack(int requestTag, Object object) {
                         if (object != null && (object instanceof BeanStatistics)) {

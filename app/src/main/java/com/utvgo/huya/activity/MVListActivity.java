@@ -312,8 +312,6 @@ public class MVListActivity extends PageActivity {
                     }
                 }
                 selectCheckBox = (CheckBox) v;
-            } else if (v.getId() == R.id.btn_search_mv) {
-                borderView.setBorderBitmapResId(0);
             } else {
                 scale = 1.0f;
                 if (selectCheckBox != null) {
