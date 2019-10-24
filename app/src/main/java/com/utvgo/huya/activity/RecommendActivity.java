@@ -7,9 +7,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.huya.R;
-import com.utvgo.huya.utils.Appconfig;
-import com.utvgo.huya.utils.DiffHostConfig;
 import com.utvgo.huya.utils.ImageTool;
 
 
@@ -26,10 +25,6 @@ public class RecommendActivity extends BaseActivity {
 
     @BindView(R.id.iv_bg)
     ImageView ivBg;
-//    @BindView(R.id.btn_play_enter)
-//    Button btnPlayEnter;
-//    @BindView(R.id.btn_play_exit)
-//    Button btnPlayExit;
 
     private String recommendType = "enter";
     private String contentMid = "31";
@@ -44,8 +39,7 @@ public class RecommendActivity extends BaseActivity {
         String bgUrl = getIntent().getStringExtra("bgUrl");
         contentMid = getIntent().getStringExtra("contentMid");
 
-        ImageTool.loadImgByGlideToImageView(this, DiffHostConfig.generateImageUrl(bgUrl),
-                R.mipmap.bg, ivBg);
+        loadImage(ivBg, DiffConfig.generateImageUrl(bgUrl));
     }
 
     @OnClick({R.id.iv_bg})
@@ -83,5 +77,4 @@ public class RecommendActivity extends BaseActivity {
         super.onResume();
         stat(TextUtils.equals("exit", recommendType) ? "退出推荐" : "启动推荐");
     }
-
 }

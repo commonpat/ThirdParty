@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,46 +16,45 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.RadioGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.lzy.okgo.model.Response;
+import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
-import com.utvgo.huya.beans.BeanUserPlayList;
-import com.utvgo.huya.beans.SelectData;
-import com.utvgo.huya.diff.DiffConfig;
-import com.utvgo.huya.net.AsyncHttpRequest;
-import com.utvgo.huya.net.IVolleyRequestSuccess;
-import com.utvgo.huya.net.IVolleyRequestfail;
-import com.utvgo.huya.net.UTVGOServer;
+import com.utvgo.huya.beans.BaseResponse;
+import com.utvgo.huya.beans.OpItem;
+import com.utvgo.huya.beans.ProgramContent;
+import com.utvgo.huya.beans.ProgramInfoBase;
+import com.utvgo.huya.constant.ConstantEnum;
+import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.DensityUtil;
-import com.utvgo.huya.utils.DiffHostConfig;
 import com.utvgo.huya.utils.HiFiDialogTools;
-import com.utvgo.huya.utils.StrTool;
-import com.utvgo.huya.utils.XLog;
+import com.utvgo.huya.utils.StringUtils;
 import com.utvgo.huya.views.FocusBorderView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.utvgo.huya.Constants.DESIGN_WIDTH;
-
-public  class BaseActivity extends RooterActivity implements View.OnFocusChangeListener
-        , View.OnClickListener
-        , AdapterView.OnItemSelectedListener
-        , AdapterView.OnItemClickListener
-        , ViewTreeObserver.OnTouchModeChangeListener,   // 用于监听 Touch 和非 Touch 模式的转换
+public class BaseActivity extends RooterActivity implements View.OnFocusChangeListener,
+        AdapterView.OnItemSelectedListener,
+        AdapterView.OnItemClickListener,
+        View.OnClickListener,
+        ViewTreeObserver.OnTouchModeChangeListener,   // 用于监听 Touch 和非 Touch 模式的转换
         ViewTreeObserver.OnGlobalLayoutListener,     // 用于监听布局之类的变化，比如某个空间消失了
         ViewTreeObserver.OnPreDrawListener,        // 用于在屏幕上画 View 之前，要做什么额外的工作
-        ViewTreeObserver.OnGlobalFocusChangeListener, // 用于监听焦点的变化
-        IVolleyRequestSuccess,
-        IVolleyRequestfail{
-    public String TAG ="huya";
+        ViewTreeObserver.OnGlobalFocusChangeListener // 用于监听焦点的变化
+{
+    public String TAG = "huya";
     public float scale = 1.0f;
     public View focusView = null;
     Handler handler = new Handler();
-    public UTVGOServer server;
-    public AsyncHttpRequest asyncHttpRequest = new AsyncHttpRequest();
+
     public HiFiDialogTools hiFiDialogTools = new HiFiDialogTools();
     private FrameLayout topLayout;
     private View viewTip;
@@ -68,31 +66,29 @@ public  class BaseActivity extends RooterActivity implements View.OnFocusChangeL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        server = new UTVGOServer(DiffConfig.baseHost);
-        DensityUtil.init(this,DESIGN_WIDTH);
+        DensityUtil.init(this, 1280);
         super.onCreate(savedInstanceState);
     }
+
     @Override
     protected void onDestroy() {
         try {
             unregisterReceiver(mHomeKeyEventReceiver);
-        }catch (Exception e){
+        } catch (Exception e) {
             //TODO
         }
         // LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
         borderView = null;
-        asyncHttpRequest = null;
         hiFiDialogTools = null;
         focusView = null;
         topLayout = null;
         viewTip = null;
         super.onDestroy();
-//        setContentView(R.shape_bg_player_controller.view_null);
     }
 
     //对 专题 聚焦框进行另一种处理 （与showViewByHandler并行项目聚焦框）
     public void focusOn1stView(final View view, final int borderId, final int borderViewAndX, final int borderViewAndY) {
-        new Handler().post(new Runnable() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 if (view == null) {
@@ -135,8 +131,6 @@ public  class BaseActivity extends RooterActivity implements View.OnFocusChangeL
             topLayout.addView(borderView);
 
         }
-        XLog.d("BaseActivity == onActivityCreated ----> Create  FocusBorderView!");
-
     }
 
     public View getRootView(Activity context) {
@@ -248,30 +242,6 @@ public  class BaseActivity extends RooterActivity implements View.OnFocusChangeL
     }
 
     @Override
-    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.btn_order: {
-//                Intent intent = new Intent(this, SearchListActivity.class);
-//                intent.putExtra("SearchType", 2);
-//                startActivity(intent);
-//            }
-//            break;
-//            case R.id.btn_search_mv: {
-//                Intent intent = new Intent(this, SearchListActivity.class);
-//                intent.putExtra("SearchType", 1);
-//                startActivity(intent);
-//            }
-//            break;
-//            case R.id.btn_search_song: {
-//                Intent intent = new Intent(this, SearchListActivity.class);
-//                intent.putExtra("SearchType", 0);
-//                startActivity(intent);
-//            }
-//            break;
- //       }
-    }
-
-    @Override
     public void startActivity(Intent intent) {
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);//设置切换没有动画，用来实现活动之间的无缝切换
         super.startActivity(intent);
@@ -311,16 +281,6 @@ public  class BaseActivity extends RooterActivity implements View.OnFocusChangeL
 //            springs.get(i).setCurrentValue(value);
 //        }
 //        springChain.setControlSpringIndex(2).getControlSpring().setEndValue(0);
-    }
-
-
-    @Override
-    public void onFailed(String method, String key, int errorTipId) throws Exception {
-
-    }
-
-    @Override
-    public void onSucceeded(String method, String key, Object object) throws Exception {
     }
 
     public void showViewTip(String tipStr) {
@@ -387,73 +347,87 @@ public  class BaseActivity extends RooterActivity implements View.OnFocusChangeL
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void onClick(View view) {
+
+    }
+
     protected void stat(final String name, final String title) {
-        asyncHttpRequest.statisticsVisit(this, "app-" + name, title, "");
+        NetworkService.defaultService().statisticsVisit(this, "app-" + name, title, "");
     }
 
     public void stat(final String name) {
         stat(name, "");
     }
 
+    public void loadImage(final ImageView imageView, final String imageUrl) {
+        Glide.with(this).load(DiffConfig.generateImageUrl(imageUrl)).into(imageView);
+    }
 
-    protected void actionOnOp(final SelectData.SData selectBean, final DiffHostConfig.SubPortalType subPortalType) {
-        Uri uri = Uri.parse(selectBean.getHref());
-        if (selectBean.getHref().contains("column.html")) {
-            String labelId = uri.getQueryParameter("labelId");
-            String category = uri.getQueryParameter("category");
-            String mvType = subPortalType.toId();
-            String groupId = uri.getQueryParameter("groupId");
-         //   MVListActivity.show(this, false, groupId, category, mvType, labelId);
-            //ActivityUtility.goMVActivity(this, "10", Uri.parse(selectBean.getHref()).getQueryParameter("category"), Uri.parse(selectBean.getHref()).getQueryParameter("groupId"));
-        } else if (TextUtils.equals(selectBean.getHrefType(), "0")) { //超链接
-          //  ActivityUtility.goWebActivityActivity(this, selectBean.getHref());
-        } else if (TextUtils.equals(selectBean.getHrefType(), "2")) { //mv专辑
-            Intent intent = new Intent(this, MVAlbumActivity.class);
-            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
-            startActivity(intent);
-        } else if (TextUtils.equals(selectBean.getHrefType(), "1")) { //音频专辑
-//          1  Intent intent = new Intent(this, AlbumDetailActivity.class);
-//            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("zjid"));
-//            startActivity(intent);
-        }
-        //else if (TextUtils.equals(selectBean.getHrefType(), "8")) { //活动
-            //Intent intent = new Intent(this, ActivityActivity.class);
-            //startActivity(intent);
-            //todo
-//        } else if (selectBean.getHref().contains("collect.html")) { //收藏
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 1);
-//            startActivity(intent);
-//        } else if (selectBean.getHref().contains("htyplay.html")) { //历史
-//            Intent intent = new Intent(this, CollectCenterActivity.class);
-//            intent.putExtra("type", 0);
-//            startActivity(intent);
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "7")) { //专题
-//            Intent intent = new Intent(this, TopicActivity.class);
-//            intent.putExtra("topicId", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
-//            startActivity(intent);
-//        } else if (selectBean.getHref().contains("recordList_pd.html")) { //榜单
-//            ActivityUtility.goSongRankActivity(this, Uri.parse(selectBean.getHref()).getQueryParameter("mid"),
-//                    Uri.parse(selectBean.getHref()).getQueryParameter("id"), selectBean.getName());
-//        } else if (TextUtils.equals(selectBean.getHrefType(), "12")) {//专题收录
-//            ActivityUtility.goActivity(this, TopicCollectionActivity.class);
-//        }
-           else {
-            //视频播放
-            ArrayList<BeanUserPlayList.DataBean> playHistoryList = new ArrayList<>();
-            if (!TextUtils.isEmpty(selectBean.getHref()) && !TextUtils.isEmpty(StrTool.getValueByName(selectBean.getHref(), "mvMid"))) {
-                BeanUserPlayList.DataBean playBean = new BeanUserPlayList.DataBean();
-                playBean.setBigPic(selectBean.getImgUrl());
-                playBean.setSmallPic(selectBean.getImgUrl());
-                playBean.setContentMid(StrTool.getValueByName(selectBean.getHref(), "mvMid"));
-                playBean.setContentName(selectBean.getName());
-                playHistoryList.add(playBean);
+    public boolean actionOnOp(final OpItem opItem)
+    {
+        boolean ret = false;
+        if(opItem != null)
+        {
+            ret = true;
+            final Context context = this;
+            ConstantEnum.OpType opType = ConstantEnum.OpType.fromTypeString(opItem.getHrefType());
+            String href = opItem.getHref();
+            Uri uri = Uri.parse(href);
+            switch (opType)
+            {
+                case web:
+                {
+                    QWebViewActivity.navigateUrl(this, href);
+                    break;
+                }
+                case program:
+                {
+                    String programId = uri.getQueryParameter("pkId");
+                    String multisetType = uri.getQueryParameter("multisetType");
+                    String channelId = uri.getQueryParameter("channelId");
+                    NetworkService.defaultService().fetchProgramContent(this, StringUtils.intValueOfString(programId),
+                            multisetType, StringUtils.intValueOfString(channelId), new JsonCallback<BaseResponse<ProgramContent>>() {
+                                @Override
+                                public void onSuccess(Response<BaseResponse<ProgramContent>> response) {
+                                    BaseResponse<ProgramContent> data = response.body();
+                                    if(data.isOk())
+                                    {
+                                        ArrayList<ProgramInfoBase> list = new ArrayList<>();
+                                        list.add(data.getData());
+                                        PlayVideoActivity.play(context, list, 0, false);
+                                    }
+                                }
+                            });
+                    break;
+                }
+
+                case album:{
+                    String albumId = uri.getQueryParameter("pkId");
+                    MediaAlbumActivity.show(this, StringUtils.intValueOfString(albumId));
+                    break;
+                }
+
+                case topic:{
+                    String topicId = uri.getQueryParameter("themId");
+                    String styleId = uri.getQueryParameter("styleId");
+                    TopicActivity.show(this, topicId, styleId);
+                    break;
+                }
+
+                case topicPage:
+                case topicCollection:
+                case albumList:
+                case more:
+                case back:
+                case activity:
+                        default:
+                {
+                    ret = false;
+                    break;
+                }
             }
-            Intent intent = new Intent(this, PlayVideoActivity.class);
-            intent.putExtra("playIndex", 0);
-            intent.putExtra("fileType", 1);
-            intent.putParcelableArrayListExtra("playList", playHistoryList);
-            startActivity(intent);
         }
+        return ret;
     }
 }

@@ -4,25 +4,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import com.utvgo.huya.GlideApp;
-import com.utvgo.huya.HuyaApplication;
+import com.bumptech.glide.Glide;
 import com.utvgo.huya.R;
-import com.utvgo.huya.beans.BeanArryPage;
 import com.utvgo.huya.beans.BeanExitPage;
-import com.utvgo.huya.utils.ActivityUtility;
-import com.utvgo.huya.utils.DiffHostConfig;
-import com.utvgo.huya.utils.FocusView;
-import com.utvgo.huya.utils.ImageTool;
-
+import com.utvgo.huya.views.FocusView;
 
 import java.util.List;
 
@@ -36,6 +26,8 @@ import butterknife.OnClick;
  */
 
 public class ExitActivity extends BaseActivity {
+    public static final int TAGRecommendExit = 1008;
+
     @BindView(R.id.exitRoot)
     ImageView   exitRoot;
     @BindView(R.id.iv_img0)
@@ -61,7 +53,7 @@ public class ExitActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exit);
         ButterKnife.bind(this);
-        asyncHttpRequest.getExitPage(this,null,this,this);
+//        asyncHttpRequest.getExitPage(this,null,this,this);
 //        DisplayMetrics metric = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(metric);
 //        WindowManager.LayoutParams p = getWindow().getAttributes();
@@ -108,7 +100,7 @@ public class ExitActivity extends BaseActivity {
         String href=selectBean.getHref();
         if(href.indexOf("albumPlayer.html") >= 0)
         {
-            Intent intent = new Intent(this, MVAlbumActivity.class);
+            Intent intent = new Intent(this, MediaAlbumActivity.class);
             intent.putExtra("albumMid", Uri.parse(href).getQueryParameter("pkId"));
             startActivity(intent);
         }
@@ -119,7 +111,7 @@ public class ExitActivity extends BaseActivity {
             String category = "";
             String mvType = "";
             String groupId = "";
-            MVListActivity.show(this, false, channelId, category, mvType, labelId);
+            //MediaListActivity.show(this, false, channelId, category, mvType, labelId);
         }
 
 //        if (TextUtils.equals(selectBean.getHrefType(), "0")) { //超链接
@@ -138,6 +130,7 @@ public class ExitActivity extends BaseActivity {
 //        }
     }
 
+    /*
     @Override
     public void onSucceeded(String method, String key, Object object) throws Exception {
         super.onSucceeded(method, key, object);
@@ -148,36 +141,37 @@ public class ExitActivity extends BaseActivity {
                     endPushContentBean=beanExitPage.getData();
                     ImageView[] imgViews= new ImageView[]{ivImg0,ivImg1,ivImg2,ivImg3};
                     for (int i=0;i<4;i++){
-                     GlideApp.with(this).load(beanExitPage.getImageProfix()+beanExitPage.getData().get(i).getImgUrl()).into(imgViews[i]);
+                     Glide.with(this).load(beanExitPage.getImageProfix()+beanExitPage.getData().get(i).getImgUrl()).into(imgViews[i]);
 
                     }
                     focusView.getViewTreeObserver().addOnGlobalFocusChangeListener(this);
-                GlideApp.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(0).getBgImgUrl()).into(exitRoot);
+                Glide.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(0).getBgImgUrl()).into(exitRoot);
                 ivImg0.requestFocus();
                 focusView.setFocusView(ivImg0,R.drawable.focus_border);
                 break;
         }
     }
+    */
 
     @Override
     public void onGlobalFocusChanged(View oldFocus, View newFocus) {
         try {
-            focusView.setFocusView(newFocus, R.drawable.focus_border);
+            focusView.setFocusView(newFocus, R.mipmap.border_focus_style_default);
             switch (newFocus.getId()) {
                 case R.id.iv_img0:
-                    GlideApp.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(0).getBgImgUrl()).into(exitRoot);
+                    Glide.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(0).getBgImgUrl()).into(exitRoot);
                     break;
                 case R.id.iv_img1:
-                    GlideApp.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(1).getBgImgUrl()).into(exitRoot);
+                    Glide.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(1).getBgImgUrl()).into(exitRoot);
                     break;
                 case R.id.iv_img2:
-                    GlideApp.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(2).getBgImgUrl()).into(exitRoot);
+                    Glide.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(2).getBgImgUrl()).into(exitRoot);
                     break;
                 case R.id.iv_img3:
-                    GlideApp.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(3).getBgImgUrl()).into(exitRoot);
+                    Glide.with(this).load(beanExitPage.getImageProfix() + endPushContentBean.get(3).getBgImgUrl()).into(exitRoot);
                     break;
                 default:
-                    exitRoot.setBackgroundResource(R.drawable.bg1);
+                    exitRoot.setBackgroundResource(R.mipmap.bg_second);
                     break;
             }
         } catch (Exception e) {

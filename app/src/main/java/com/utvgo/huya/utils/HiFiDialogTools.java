@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.R;
 import com.utvgo.huya.listeners.MyDialogEnterListener;
 import com.utvgo.huya.views.FilterView;

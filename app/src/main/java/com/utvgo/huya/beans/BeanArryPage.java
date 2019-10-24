@@ -3,21 +3,11 @@ package com.utvgo.huya.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeanArryPage {
-    private String code;
+public class BeanArryPage extends BaseResponse  {
 
     private ArrayList<ArrayList<Data>> data;
-
-    private String message;
-
     private String imageProfix;
 
-    public void setCode(String code){
-        this.code = code;
-    }
-    public String getCode(){
-        return this.code;
-    }
 
     public ArrayList<ArrayList<Data>> getData() {
         return data;
@@ -27,12 +17,6 @@ public class BeanArryPage {
         this.data = data;
     }
 
-    public void setMessage(String message){
-        this.message = message;
-    }
-    public String getMessage(){
-        return this.message;
-    }
     public void setImageProfix(String imageProfix){
         this.imageProfix = imageProfix;
     }

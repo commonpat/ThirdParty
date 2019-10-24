@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.R;
 import com.utvgo.huya.listeners.MyDialogEnterListener;
 

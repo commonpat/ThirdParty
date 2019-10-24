@@ -28,28 +28,54 @@
             <!--android:resource="@xml/actions" />-->
 
         <activity android:name=".activity.LaunchActivity">
+
+        </activity>
+
+        <activity android:name=".activity.HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="com.utvgo.huya.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
+
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.BuyActivity" />
-        <activity android:name=".activity.MVAlbumActivity" />
+
+        <activity android:name=".activity.MediaAlbumActivity" >
+
+        </activity>
+
         <activity android:name=".activity.QWebViewActivity" />
-        <activity android:name=".activity.TopicActivity" />
-        <activity android:name=".activity.MVListActivity" />
+
+        <activity android:name=".activity.TopicActivity" >
+
+        </activity>
+
+        <activity android:name=".activity.MediaListActivity" >
+
+        </activity>
+
         <activity android:name=".activity.PlayVideoActivity" />
+
         <activity android:name=".activity.IntroduceActivity" />
-        <activity android:name=".activity.UserCenterActivity" />
-        <activity android:name=".activity.CollectCenterActivity" />
+
+        <activity android:name=".activity.UserCenterActivity">
+
+        </activity>
+
         <activity android:name=".activity.ExitActivity" />
-        <activity android:name=".activity.CollectPageListActivity" />
-        <activity android:name=".activity.PlayRecordActivity" />
+
+        <activity android:name=".activity.UserFavoriteActivity" >
+
+        </activity>
+        <activity android:name=".activity.UserPlayHistoryActivity" >
+
+        </activity>
+
+        <activity android:name=".activity.CategoryListActivity" >
+        </activity>
 
     </application>
 

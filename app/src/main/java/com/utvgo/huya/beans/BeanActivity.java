@@ -2,45 +2,15 @@ package com.utvgo.huya.beans;
 
 import java.util.List;
 
-/**
- * Created by oo on 2018/3/26.
- */
+public class BeanActivity extends BaseResponse {
 
-public class BeanActivity {
-
-
-    /**
-     * code : 1
-     * data : {"operateList":[{"id":1,"name":"提交按钮","normalImg":"2018/04/13/activity_5.png","focusImg":"2018/04/13/activity_4.png","type":2,"xPos":100,"yPos":324,"status":"1","themeId":"2"},{"id":2,"name":"输入框","normalImg":"","focusImg":"","type":1,"xPos":200,"yPos":300,"status":"1","themeId":"2"}],"infoImg":"activity_1.jpg","smallImg":"activity_3.png","name":"test2","bigBgImg":"activity_2.jpg","id":2,"templateId":9}
-     * message : success
-     */
-
-    private String code;
     private DataBean data;
-    private String message;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public DataBean getData() {
         return data;
     }
 
     public void setData(DataBean data) {
         this.data = data;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public static class DataBean {

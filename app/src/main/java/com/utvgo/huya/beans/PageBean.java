@@ -2,7 +2,7 @@ package com.utvgo.huya.beans;
 
 import java.util.List;
 
-public class PageBean {
+public class PageBean extends BaseResponse {
 
     /**
      * code : 1
@@ -11,26 +11,8 @@ public class PageBean {
      * imageProfix : http://172.16.146.40:81/cms/uploadFile/image/
      */
 
-    private String code;
-    private String message;
     private String imageProfix;
     private List<DataBean> data;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public String getImageProfix() {
         return imageProfix;

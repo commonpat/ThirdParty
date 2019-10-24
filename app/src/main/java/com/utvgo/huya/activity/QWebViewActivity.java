@@ -15,17 +15,10 @@ import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.utils.URLBuilder;
 import com.utvgo.huya.R;
-import com.utvgo.huya.diff.DiffConfig;
-import com.utvgo.huya.utils.Appconfig;
-import com.utvgo.huya.utils.URLBuilder;
-import com.utvgo.huya.views.QJSInterface;
-
-
-
-/**
- * Created by Administrator on 2017/9/15.
- */
+import com.utvgo.huya.net.QJSInterface;
 
 public class QWebViewActivity extends BaseActivity {
 
@@ -49,7 +42,7 @@ public class QWebViewActivity extends BaseActivity {
     private static final String IntentRequestType = "IntentRequestType";
     private static final String IntentRequestParams = "IntentRequestParams";
 
-    public static final String  QuitScheme = "QQMusicQuit";
+    public static final String  QuitScheme = "UTVGOQuit";
 
     View loadView;
 
@@ -85,9 +78,6 @@ public class QWebViewActivity extends BaseActivity {
         final Intent intent = getIntent();
         if (intent != null) {
             String url = intent.getStringExtra(IntentUrl);
-            if (!url.contains("http")){
-                url= DiffConfig.baseUrlWeb +url;
-            }
             if (TextUtils.isEmpty(url)) {
 
             } else {
@@ -109,7 +99,7 @@ public class QWebViewActivity extends BaseActivity {
                     webView.loadUrl(
                             new URLBuilder()
                                     .appendPath(url)
-                                    .appendParam("ca", Appconfig.getKeyNo(this))
+                                    .appendParam("ca", DiffConfig.getCA(this))
                                     .appendParam("isPurchase",  "true")
                                     .toString());
                 }

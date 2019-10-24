@@ -20,7 +20,7 @@
                 android:layout_marginTop="62dp"
                 android:background="@color/transparent">
 
-                <com.utvgo.huya.views.CustomVideoView
+                <com.utvgo.handsome.views.CustomVideoView
                     android:id="@+id/vv_small"
                     style="@style/setEnableFocusNO"
                     android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:layout_marginLeft="90dp"
                 android:layout_marginTop="62dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall" />
+                android:src="@drawable/place_holder_default" />
 
             <ImageView
                 android:id="@+id/bits_2"
@@ -49,7 +49,7 @@
                 android:layout_marginLeft="90dp"
                 android:layout_marginTop="167dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall" />
+                android:src="@drawable/place_holder_default" />
 
             <ImageView
                 android:id="@+id/bits_3"
@@ -59,7 +59,7 @@
                 android:layout_marginLeft="90dp"
                 android:layout_marginTop="272dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall" />
+                android:src="@drawable/place_holder_default" />
 
             <ImageView
                 android:id="@+id/bits_4"
@@ -79,7 +79,7 @@
                 android:layout_marginLeft="830dp"
                 android:layout_marginTop="62dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall" />
+                android:src="@drawable/place_holder_default" />
 
             <ImageView
                 android:id="@+id/bits_6"
@@ -89,7 +89,7 @@
                 android:layout_marginLeft="90dp"
                 android:layout_marginTop="377dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall" />
+                android:src="@drawable/place_holder_default" />
 
             <ImageView
                 android:id="@+id/bits_7"
@@ -99,7 +99,7 @@
                 android:layout_marginLeft="275dp"
                 android:layout_marginTop="377dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall" />
+                android:src="@drawable/place_holder_default" />
 
             <ImageView
                 android:id="@+id/bits_8"
@@ -109,7 +109,7 @@
                 android:layout_marginLeft="460dp"
                 android:layout_marginTop="377dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall" />
+                android:src="@drawable/place_holder_default" />
 
             <ImageView
                 android:id="@+id/bits_9"
@@ -119,7 +119,7 @@
                 android:layout_marginLeft="645dp"
                 android:layout_marginTop="377dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall"/>
+                android:src="@drawable/place_holder_default"/>
 
             <ImageView
                 android:id="@+id/bits_10"
@@ -129,7 +129,7 @@
                 android:layout_marginLeft="830dp"
                 android:layout_marginTop="312dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/default_musichall" />
+                android:src="@drawable/place_holder_default" />
 
 
         </FrameLayout>

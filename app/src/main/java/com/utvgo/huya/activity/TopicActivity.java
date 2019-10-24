@@ -1,5 +1,6 @@
 package com.utvgo.huya.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
@@ -21,29 +21,28 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.lzy.okgo.model.Response;
+import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.huya.R;
+import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanTopic;
-import com.utvgo.huya.beans.BeanUserPlayList;
-import com.utvgo.huya.topics.Topic1;
-import com.utvgo.huya.topics.Topic2;
-import com.utvgo.huya.topics.Topic3;
-import com.utvgo.huya.topics.Topic5;
-import com.utvgo.huya.utils.DiffHostConfig;
+import com.utvgo.huya.beans.OpItem;
+import com.utvgo.huya.beans.ProgramInfoBase;
+import com.utvgo.huya.constant.ConstantEnum;
+import com.utvgo.huya.net.NetworkService;
+import com.utvgo.huya.template.Topic1;
+import com.utvgo.huya.template.Topic2;
+import com.utvgo.huya.template.Topic3;
+import com.utvgo.huya.template.Topic5;
 import com.utvgo.huya.utils.HiFiDialogTools;
-import com.utvgo.huya.utils.ImageTool;
-import com.utvgo.huya.utils.StrTool;
-
+import com.utvgo.huya.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-
-/**
- * Created by oo on 2017/10/23.
- */
 
 public class TopicActivity extends BuyActivity {
 
@@ -63,46 +62,6 @@ public class TopicActivity extends BuyActivity {
     private Topic3 topic3;
     private int type = 0;
     private Topic5 topic5;
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
-            if (v.getParent().equals(flTopicContent)
-                    || v.getParent().equals(musicList1)
-                    || v.getParent().equals(musicList2)
-                    || (v.getParent().getParent() != null && v.getParent().getParent().equals(layoutTopic3))
-                    && subjectRecordListBeen != null && subjectRecordListBeen.size() > 0) {
-                page.setText(v.getId() + 1 + "/" + subjectRecordListBeen.size());
-                if (v.getParent().equals(flTopicContent)) {
-                    borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp5), (int) getResources().getDimension(R.dimen.dp13));
-                }
-            }
-
-        }
-        super.onFocusChange(v, hasFocus);
-    }
-
-    ;
-
-    public FrameLayout getTopicDefault() {
-        return topicDefault;
-    }
-
-    public FrameLayout getLayoutTopic1() {
-        return layoutTopic1;
-    }
-
-    public FrameLayout getLayoutTopic2() {
-        return layoutTopic2;
-    }
-
-    public LinearLayout getLayoutTopic3() {
-        return layoutTopic3;
-    }
-
-    public FrameLayout getLayoutTopic5() {
-        return layoutTopic5;
-    }
 
     //topic_default
     @BindView(R.id.iv_bg)
@@ -151,8 +110,17 @@ public class TopicActivity extends BuyActivity {
 
     private boolean isRecommendExit = false;
     public int topMargin = 0;
-    public List<BeanTopic.DataBean.UtvgoSubjectRecordListBean> subjectRecordListBeen;
+    public List<OpItem> subjectRecordListBeen;
 
+    protected String topicId;
+
+    public static void show(final Context context, final String topicId, final String style)
+    {
+        Intent intent = new Intent(context, TopicActivity.class);
+        intent.putExtra("topicId", topicId);
+        intent.putExtra("type", style);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -163,16 +131,20 @@ public class TopicActivity extends BuyActivity {
         if (type == 0) {
             topMargin = (int) getResources().getDimension(R.dimen.dp430);
         }
-
         isRecommendExit = getIntent().getBooleanExtra("isRecommendExit", false);
-        if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("6")) {
-            Intent intent = new Intent(this, TopicOtherActivity.class);
-            intent.putExtra(TopicOtherActivity.INTENT_ID, getIntent().getStringExtra("topicId") + "");
-            startActivity(intent);
-            finish();
-        } else {
-            getData();
+
+        this.topicId = getIntent().getStringExtra("topicId");
+        if(TextUtils.isEmpty(this.topicId))
+        {
+            this.topicId = "159";
         }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        });
     }
 
     @Override
@@ -183,60 +155,7 @@ public class TopicActivity extends BuyActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private void showTopic(int type, BeanTopic beanTopic) {
-        try{
-            switch (type) {
-                case 0:
-                    borderView.setBorderBitmapResId(0, (int) getResources().getDimension(R.dimen.dp38),
-                            (int) getResources().getDimension(R.dimen.dp50));
-                    initView(beanTopic);
-                    page.setVisibility(View.VISIBLE);
-                    break;
-                case 1:
-                    topic1 = new Topic1(this);
-                    topic1.addContent(beanTopic);
-                    FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) page.getLayoutParams();
-                    layoutParams1.leftMargin = (int) getResources().getDimension(R.dimen.dp460);
-                    layoutParams1.bottomMargin = (int) getResources().getDimension(R.dimen.dp40);
-                    page.setLayoutParams(layoutParams1);
-                    break;
-                case 2:
-                    topic2 = new Topic2(this);
-                    topic2.addContent(beanTopic);
-                    FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) page.getLayoutParams();
-                    layoutParams2.bottomMargin = (int) getResources().getDimension(R.dimen.dp20);
-                    layoutParams2.leftMargin = (int) getResources().getDimension(R.dimen.dp100);
-                    page.setLayoutParams(layoutParams2);
-                    break;
-                case 3:
-                    topic3 = new Topic3(this);
-                    topic3.addContent(beanTopic);
-                    FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) page.getLayoutParams();
-                    layoutParams3.bottomMargin = (int) getResources().getDimension(R.dimen.dp10);
-                    layoutParams3.leftMargin = 0;
-                    layoutParams3.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
-                    page.setLayoutParams(layoutParams3);
-                    break;
-                case 5:
-                    topic5 = new Topic5(this);
-                    topic5.addContent(beanTopic);
-                    page.setVisibility(View.GONE);
-                    break;
-                default:
-                    break;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-//themId=151&styleID=5
-    public void getData() {
-        String topicId = getIntent().getStringExtra("topicId");
-        asyncHttpRequest.getTopic(this, topicId, this, this);
-    }
-
-    public void initView( BeanTopic beanTopic) {
+    public void initView(BeanTopic beanTopic) {
         int allWidth = 0;
         for (int i = 0; i < subjectRecordListBeen.size(); i++) {
             View itemTopic = View.inflate(this, R.layout.item_topic, null);
@@ -260,101 +179,108 @@ public class TopicActivity extends BuyActivity {
             ImageView ivIcon = (ImageView) itemTopic.findViewById(R.id.iv_icon);
             TextView tvName = (TextView) itemTopic.findViewById(R.id.tv_name);
 
-            BeanTopic.DataBean.UtvgoSubjectRecordListBean bean = subjectRecordListBeen.get(i);
-            Log.d(TAG, "initView: url"+DiffHostConfig.generateImageUrl(bean.getImgUrl()));
-            ImageTool.loadImageWithUrl(this,DiffHostConfig.generateImageUrl(bean.getImgUrl()), ivIcon);
+            OpItem bean = subjectRecordListBeen.get(i);
             tvName.setText(bean.getName());
-//            if (i == 0) {
-//                showViewByHandler(itemTopic);
-//            }
+            loadImage(ivIcon, DiffConfig.generateImageUrl(bean.getImgUrl()));
         }
-
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(allWidth, ViewGroup.LayoutParams.MATCH_PARENT);
         flTopicContent.setLayoutParams(params);
-        focusOn1stView(findViewById(0), R.drawable.singer_list_f, (int) getResources().getDimension(R.dimen.dp50),
+
+        focusOn1stView(findViewById(0), R.mipmap.border_focus_style_default,
+                (int) getResources().getDimension(R.dimen.dp50),
                 (int) getResources().getDimension(R.dimen.dp58));
     }
-
 
     @Override
     public void onClick(View view) {
         super.onClick(view);
         int playIndex = view.getId();
-        BeanTopic.DataBean.UtvgoSubjectRecordListBean selectBean = subjectRecordListBeen.get(playIndex);
-        if (selectBean.getHref().contains("topic.html")) {
-            Intent intent = new Intent(this, TopicActivity.class);
-            intent.putExtra("topicId", Uri.parse(selectBean.getHref()).getQueryParameter("themId"));
-            startActivity(intent);
-        } else if (selectBean.getHref().contains("play_album.html")) {
-//            Intent intent = new Intent(this, AlbumDetailActivity.class);
-//            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("zjid"));
-//            startActivity(intent);
-        } else if (selectBean.getHref().contains("albumPlayer")) {
-            Intent intent = new Intent(this, MVAlbumActivity.class);
-            intent.putExtra("albumMid", Uri.parse(selectBean.getHref()).getQueryParameter("pkId"));
-            startActivity(intent);
-        } else {
+        OpItem selectBean = subjectRecordListBeen.get(playIndex);
+        if(!actionOnOp(selectBean))
+        {
             playVideoFullScreen(playIndex);
         }
     }
 
-    public void playVideoFullScreen(int playIndex) {
-        ArrayList<BeanUserPlayList.DataBean> playHistoryList = new ArrayList<>();
-        for (int i = 0; i < subjectRecordListBeen.size(); i++) {
-            BeanTopic.DataBean.UtvgoSubjectRecordListBean bean = subjectRecordListBeen.get(i);
-            if ((!TextUtils.isEmpty(bean.getHref()) &&
-                    !TextUtils.isEmpty(StrTool.getValueByName(bean.getHref(), "mvMid")))
-                    || !TextUtils.isEmpty(bean.getMvMid())) {
-                BeanUserPlayList.DataBean playBean = new BeanUserPlayList.DataBean();
-                playBean.setBigPic(bean.getImgUrl());
-                playBean.setSmallPic(bean.getImgUrl());
-                if (!TextUtils.isEmpty(bean.getMvMid())) {
-                    playBean.setContentMid(bean.getMvMid());
-                } else {
-                    playBean.setContentMid(StrTool.getValueByName(bean.getHref(), "mvMid"));
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            if (v.getParent().equals(flTopicContent)
+                    || v.getParent().equals(musicList1)
+                    || v.getParent().equals(musicList2)
+                    || (v.getParent().getParent() != null && v.getParent().getParent().equals(layoutTopic3))
+                    && subjectRecordListBeen != null && subjectRecordListBeen.size() > 0) {
+                page.setText(v.getId() + 1 + "/" + subjectRecordListBeen.size());
+                if (v.getParent().equals(flTopicContent)) {
+                    borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp5), (int) getResources().getDimension(R.dimen.dp13));
                 }
-                playBean.setSingerMids("0");
-                playBean.setContentName(bean.getName());
-                playHistoryList.add(playBean);
             }
-        }
 
-        Intent intent = new Intent(this, PlayVideoActivity.class);
-        intent.putExtra("playIndex", playIndex);
-        intent.putExtra("fileType", 1);
-        intent.putParcelableArrayListExtra("playList", playHistoryList);
-        startActivity(intent);
-        if (isRecommendExit) {
-            setResult(RESULT_OK);
-            finish();
         }
+        super.onFocusChange(v, hasFocus);
     }
 
-    @Override
-    public void onSucceeded(String method, String key, Object object) throws Exception {
-        super.onSucceeded(method, key, object);
-        if (TextUtils.equals(method, "select.utvgo")) {
-//            Gson gson = new Gson();
-//            BeanTopic beanTopic = gson.fromJson("{\"message\":\"success\",\"data\":{\"createTime\":null,\"des\":\"暑期档这些影视原声OST不能错过\",\"nameBgColor\":\"\",\"updateTime\":null,\"remark\":\"\",\"status\":\"0\",\"editeBy\":null,\"imgNum\":0,\"createBy\":null,\"imgUrl\":\"2018\\/07\\/25\\/20180725161638713.jpg\",\"id\":42,\"imgUrl1\":\"\",\"imgUrl3\":\"\",\"name\":\"暑期档这些影视原声OST不能错过\",\"imgUrl2\":\"\",\"imgUrl4\":\"\",\"utvgoSubjectRecordList\":[{\"imgUrl\":\"2018\\/07\\/25\\/20180725161808588.jpg\",\"id\":520,\"createTime\":null,\"des\":\"《扶摇》电视剧命运主题曲\",\"updateTime\":null,\"remark\":\"\",\"status\":\"0\",\"priority\":6,\"subjectId\":42,\"name\":\"《扶摇》电视剧命运主题曲\",\"editeBy\":null,\"createBy\":null,\"href\":\"play_video.html?mvsMid=53,1,29,12&mvMid=v002659hihz\"},{\"imgUrl\":\"2018\\/07\\/25\\/20180725162149398.jpg\",\"id\":524,\"createTime\":null,\"des\":\"《为了你我愿意热爱整个世界》电视剧主题曲\",\"updateTime\":null,\"remark\":\"\",\"status\":\"0\",\"priority\":4,\"subjectId\":42,\"name\":\"《为了你我愿意热爱整个世界》电视剧主题曲\",\"editeBy\":null,\"createBy\":null,\"href\":\"play_video.html?mvsMid=53,1,29,12&mvMid=g0026vtixiu\"},{\"imgUrl\":\"2018\\/07\\/25\\/20180725163326900.jpg\",\"id\":526,\"createTime\":null,\"des\":\"《芸汐传》电视剧推广曲\",\"updateTime\":null,\"remark\":\"\",\"status\":\"0\",\"priority\":4,\"subjectId\":42,\"name\":\"《芸汐传》电视剧推广曲\",\"editeBy\":null,\"createBy\":null,\"href\":\"play_video.html?mvsMid=53,1,29,12&mvMid=z0026cjg5vs\"},{\"imgUrl\":\"2018\\/07\\/25\\/20180725162110747.jpg\",\"id\":523,\"createTime\":null,\"des\":\"《网球少年》电视剧开赛推广曲\",\"updateTime\":null,\"remark\":\"\",\"status\":\"0\",\"priority\":3,\"subjectId\":42,\"name\":\"《网球少年》电视剧开赛推广曲\",\"editeBy\":null,\"createBy\":null,\"href\":\"play_video.html?mvsMid=53,1,29,12&mvMid=l0026jvhi1g\"},{\"imgUrl\":\"2018\\/07\\/25\\/20180725161914884.jpg\",\"id\":522,\"createTime\":null,\"des\":\"《来到你的世界》网络剧主题曲\",\"updateTime\":null,\"remark\":\"\",\"status\":\"0\",\"priority\":2,\"subjectId\":42,\"name\":\"《来到你的世界》网络剧主题曲\",\"editeBy\":null,\"createBy\":null,\"href\":\"play_video.html?mvsMid=53,1,29,12&mvMid=r0026i2qjp1\"},{\"imgUrl\":\"2018\\/07\\/25\\/20180725161839429.jpg\",\"id\":521,\"createTime\":null,\"des\":\"《快把我哥带走》网剧主题曲\",\"updateTime\":null,\"remark\":\"\",\"status\":\"0\",\"priority\":1,\"subjectId\":42,\"name\":\"《快把我哥带走》网剧主题曲\",\"editeBy\":null,\"createBy\":null,\"href\":\"play_video.html?mvsMid=53,1,29,12&mvMid=m0026xz6a8g\"}],\"nameColor\":\"\"},\"imageProfix\":\"http:\\/\\/10.69.45.49:81\\/cms\\/uploadFile\\/image\\/\",\"code\":\"1\"}", BeanTopic.class);
-            BeanTopic beanTopic = (BeanTopic) object;
-            if (beanTopic != null && TextUtils.equals(beanTopic.getCode(), "1")) {
-                subjectRecordListBeen = beanTopic.getData().getUtvgoSubjectRecordList();
-                try {
-                    type = Integer.parseInt(beanTopic.getData().getShowType());
-                } catch (Exception e) {
-                    type = 0;
+    public FrameLayout getTopicDefault() {
+        return topicDefault;
+    }
+
+    public FrameLayout getLayoutTopic1() {
+        return layoutTopic1;
+    }
+
+    public FrameLayout getLayoutTopic2() {
+        return layoutTopic2;
+    }
+
+    public LinearLayout getLayoutTopic3() {
+        return layoutTopic3;
+    }
+
+    public FrameLayout getLayoutTopic5() {
+        return layoutTopic5;
+    }
+
+    public void playVideoFullScreen(int playIndex) {
+        ArrayList<ProgramInfoBase> list = new ArrayList<>();
+        int channelId = 0;
+        int playPosition = 0;
+        for (int i = 0; i < subjectRecordListBeen.size(); i++) {
+
+            OpItem bean = subjectRecordListBeen.get(i);
+            ConstantEnum.OpType opType = ConstantEnum.OpType.fromTypeString(bean.getHrefType());
+            if(opType == ConstantEnum.OpType.program)
+            {
+                ProgramInfoBase programInfoBase = new ProgramInfoBase();
+                programInfoBase.setName(bean.getName());
+
+                String href = bean.getHref();
+                try{
+                    Uri uri = Uri.parse(href);
+                    String pkIdString = uri.getQueryParameter("pkId");
+                    int pkId = StringUtils.intValueOfString(pkIdString);
+                    if(pkId > 0)
+                    {
+                        programInfoBase.setPkId(pkId);
+                        String channelIdString = uri.getQueryParameter("channelId");
+                        channelId = StringUtils.intValueOfString(channelIdString);
+                        programInfoBase.setChannelId(channelId);
+                        list.add(programInfoBase);
+                    }
+
+                    if(i == playIndex)
+                    {
+                        playPosition = list.size() - 1;
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                ImageTool.loadImageWithUrl(this, DiffHostConfig.generateImageUrl(beanTopic.getData().getImgUrl()), ivBg);
-//                if(ApkUtil.isDebug(TopicActivity.this)){
-//                    // TODO: 2019/3/8 模板类型测试
-////                    type=3;
-//                }
-                showTopic(type, beanTopic);
-                stat("专题-" + beanTopic.getData().getName());
-            } else {
-                HiFiDialogTools.getInstance().showtips(this, "获取数据失败，请稍后重试", null);
             }
+        }
+        if(!list.isEmpty())
+        {
+            PlayVideoActivity.play(this, list, playPosition, false);
         }
     }
 
@@ -398,4 +324,83 @@ public class TopicActivity extends BuyActivity {
         System.gc();
     }
 
+    void showTopicData(final BeanTopic bean)
+    {
+        subjectRecordListBeen = bean.getUtvgoSubjectRecordList();
+        type = StringUtils.intValueOfString(bean.getShowType());
+        loadImage(ivBg, DiffConfig.generateImageUrl(bean.getImgUrl()));
+        showTopic(type, bean);
+        stat("专题-" + bean.getName());
+    }
+
+    private void showTopic(int type, BeanTopic beanTopic) {
+        try {
+            switch (type) {
+                case 0:
+                    borderView.setBorderBitmapResId(0, (int) getResources().getDimension(R.dimen.dp38),
+                            (int) getResources().getDimension(R.dimen.dp50));
+                    initView(beanTopic);
+                    page.setVisibility(View.VISIBLE);
+                    break;
+
+                case 1:
+                    topic1 = new Topic1(this);
+                    topic1.addContent(beanTopic);
+                    FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) page.getLayoutParams();
+                    layoutParams1.leftMargin = (int) getResources().getDimension(R.dimen.dp460);
+                    layoutParams1.bottomMargin = (int) getResources().getDimension(R.dimen.dp40);
+                    page.setLayoutParams(layoutParams1);
+                    break;
+
+                case 2:
+                    topic2 = new Topic2(this);
+                    topic2.addContent(beanTopic);
+                    FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) page.getLayoutParams();
+                    layoutParams2.bottomMargin = (int) getResources().getDimension(R.dimen.dp20);
+                    layoutParams2.leftMargin = (int) getResources().getDimension(R.dimen.dp100);
+                    page.setLayoutParams(layoutParams2);
+                    break;
+
+                case 3:
+                    topic3 = new Topic3(this);
+                    topic3.addContent(beanTopic);
+                    FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) page.getLayoutParams();
+                    layoutParams3.bottomMargin = (int) getResources().getDimension(R.dimen.dp10);
+                    layoutParams3.leftMargin = 0;
+                    layoutParams3.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+                    page.setLayoutParams(layoutParams3);
+                    break;
+
+                case 5:
+                    topic5 = new Topic5(this);
+                    topic5.addContent(beanTopic);
+                    page.setVisibility(View.GONE);
+                    break;
+
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //themId=151&styleID=5
+    public void getData() {
+        final Context context = this;
+        NetworkService.defaultService().fetchTopicData(this, topicId, new JsonCallback<BaseResponse<BeanTopic>>() {
+            @Override
+            public void onSuccess(Response<BaseResponse<BeanTopic>> response) {
+                BaseResponse<BeanTopic> bean = response.body();
+                if(bean != null && bean.isOk())
+                {
+                    showTopicData(bean.getData());
+                }
+                else
+                {
+                    HiFiDialogTools.getInstance().showtips(context, "获取数据失败，请稍后重试", null);
+                }
+            }
+        });
+    }
 }

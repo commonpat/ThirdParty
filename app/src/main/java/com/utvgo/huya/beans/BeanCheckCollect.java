@@ -1,28 +1,9 @@
 package com.utvgo.huya.beans;
 
 
-public class BeanCheckCollect  {
+public class BeanCheckCollect extends BaseResponse {
 
-    private String code;
-    private String message;
     private Data data;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public Data getData() {
         return data;
     }
@@ -32,11 +13,9 @@ public class BeanCheckCollect  {
     }
     public static class Data{
         private String isCollect;
-
         public String getIsCollect() {
             return isCollect;
         }
-
         public void setIsCollect(String isCollect) {
             this.isCollect = isCollect;
         }

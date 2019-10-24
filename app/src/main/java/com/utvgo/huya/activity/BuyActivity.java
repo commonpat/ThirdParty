@@ -11,10 +11,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.utvgo.huya.HuyaApplication;
-import com.utvgo.huya.diff.DiffConfig;
-import com.utvgo.huya.diff.IPurchase;
+import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.IPurchase;
 import com.utvgo.huya.interfaces.BuyInterface;
-import com.utvgo.huya.interfaces.CommonCallback;
+import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.ToastUtil;
 

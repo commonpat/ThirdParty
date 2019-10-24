@@ -1,9 +1,10 @@
 package com.utvgo.huya.beans;
 
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TypesBean {
+public class TypesBean extends BaseResponse {
 
     /**
      * code : 1
@@ -27,25 +28,7 @@ public class TypesBean {
      * }
      */
 
-    private String code;
-    private String message;
     private DataBean data;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public DataBean getData() {
         return data;
@@ -55,7 +38,7 @@ public class TypesBean {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * typeName : 全部
          * typeId : 48

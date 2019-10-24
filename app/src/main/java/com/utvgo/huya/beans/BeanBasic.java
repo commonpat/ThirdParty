@@ -1,10 +1,6 @@
 package com.utvgo.huya.beans;
 
-/**
- * Created by lgh on 2018/8/13
- */
-
-public class BeanBasic {
+public class BeanBasic extends BaseResponse {
 
 
     /**
@@ -13,32 +9,14 @@ public class BeanBasic {
      * code : 1
      */
     private  Data data;
-    private String message;
-    private String code;
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public Data getData() {
         return data;
     }
-
     public void setData(Data data) {
         this.data = data;
     }
+
     public static class Data{
         private int id;
 

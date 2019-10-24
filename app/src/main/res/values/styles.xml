@@ -19,18 +19,13 @@
     </style>
 
     <style name="navStyle1" parent="focusView">
-        <item name="android:layout_marginLeft">18pt</item>
-        <item name="android:textSize">26pt</item>
+        <item name="android:textSize">26sp</item>
         <item name="android:button">@null</item>
         <item name="android:textColor">#fff</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:paddingLeft">10pt</item>
-        <item name="android:paddingRight">10pt</item>
-        <item name="android:paddingBottom">1pt</item>
-        <item name="android:paddingTop">1pt</item>
+        <item name="android:layout_height">58dp</item>
+        <item name="android:layout_width">181dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:visibility">invisible</item>
+        <item name="android:visibility">visible</item>
     </style>
     <style name="focusAndSetTag">
         <item name="android:enabled">true</item>
@@ -167,7 +162,7 @@
         <item name="android:layout_marginLeft">@dimen/dp40</item>
         <item name="android:textColor">@drawable/selector_text_color</item>
         <item name="android:textSize">@dimen/sp28</item>
-        <item name="android:background">@drawable/selector_title_item_bg</item>
+        <!--item name="android:background">@drawable/selector_title_item_bg</item-->
         <item name="android:button">@null</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">left|center</item>
@@ -233,13 +228,6 @@
     </style>
 
 
-    <style name="search_button">
-        <item name="android:textSize">24sp</item>
-        <item name="android:background">@drawable/shape_search_button</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_margin">1.5dp</item>
-        <item name="android:onClick">onClickEvent</item>
-    </style>
     <style name="txt_class_title1" parent="setEnableFocusNO">
         <item name="android:textSize">@dimen/title_class_1</item>
         <item name="android:textStyle">bold</item>
@@ -250,7 +238,25 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarSize">0dp</item>
-        <item name="android:windowBackground">@drawable/bg_launch</item>
     </style>
 
+    <style name="MainNav">
+        <item name="android:layout_height">58dp</item>
+        <item name="android:layout_width">181dp</item>
+    </style>
+
+    <style name="CategoryItem">
+        <item name="android:layout_height">220dp</item>
+        <item name="android:layout_width">258dp</item>
+    </style>
+
+    <style name="TextViewAlbumItemTitle">
+        <item name="android:layout_height">34dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
 </resources>

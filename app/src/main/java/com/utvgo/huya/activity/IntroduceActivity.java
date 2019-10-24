@@ -3,25 +3,21 @@ package com.utvgo.huya.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
-import com.utvgo.huya.diff.DiffConfig;
-import com.utvgo.huya.diff.IPurchase;
-import com.utvgo.huya.interfaces.CommonCallback;
+import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.IPurchase;
+import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.huya.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class IntroduceActivity extends BuyActivity {
+public class IntroduceActivity extends BaseActivity {
     @BindView(R.id.btn_purchase)
     Button  btnOrder;
 

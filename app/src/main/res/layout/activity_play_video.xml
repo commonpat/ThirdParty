@@ -14,36 +14,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.utvgo.huya.views.CustomVideoView
+        <com.utvgo.handsome.views.CustomVideoView
             android:id="@+id/vv_jingling"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <ImageView
-            android:id="@+id/iv_video_bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@mipmap/bg" />
-
-        <ImageView
-            android:id="@+id/iv_head"
-            android:layout_width="@dimen/dp250"
-            android:layout_height="@dimen/dp250"
-            android:layout_marginLeft="@dimen/dp160"
-            android:layout_marginTop="@dimen/dp200"
-            android:src="@drawable/default_musichall" />
-
-        <TextView
-            android:id="@+id/lrcView"
-            android:layout_width="@dimen/dp700"
-            android:layout_height="@dimen/dp400"
-            android:layout_toRightOf="@+id/iv_head"
-            android:layout_marginLeft="@dimen/dp90"
-            android:layout_marginTop="@dimen/dp160"
-            android:visibility="gone"
-            />
 
         <RelativeLayout
             android:id="@+id/rl_control"
@@ -191,14 +166,6 @@
                         android:src="@drawable/selector_player_next"
                         android:scaleType="fitXY"/>
 
-                    <ImageView
-                        android:id="@+id/iv_change_mv"
-                        style="@style/focusAndSetTag"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="@dimen/dp220"
-                        android:onClick="onClick"
-                        android:src="@drawable/selector_change_mv" />
 
                     <ImageView
                         android:id="@+id/iv_collect"
@@ -291,22 +258,12 @@
 
     <ImageView
         android:id="@+id/gif_video_load"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/video_load"
-        android:scaleType="fitXY"
-        android:visibility="gone"
-        />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_buy_tip"
-        android:text="请先订购"
-        android:textSize="28sp"
-        android:textColor="@color/white"
         android:layout_gravity="center"
-        android:visibility="gone"
+        android:src="@drawable/logo"
+        android:scaleType="fitXY"
+        android:visibility="visible"
         />
 
 </FrameLayout>

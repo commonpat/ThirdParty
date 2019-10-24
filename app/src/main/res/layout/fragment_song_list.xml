@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp55"
-        android:text="HAha"
+        android:text="播放记录"
         android:textColor="@color/white"
         android:textSize="@dimen/sp40" />
 
@@ -547,9 +547,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="@dimen/dp50"
-        android:drawableLeft="@mipmap/page_arrow_left"
-        android:drawableRight="@mipmap/page_arrow_right"
-        android:text=" 0/0 "
+        android:text=""
         android:textColor="@color/white"
         android:textSize="@dimen/sp25" />
 

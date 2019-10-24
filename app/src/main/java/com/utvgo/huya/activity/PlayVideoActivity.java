@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,36 +21,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.utvgo.huya.GlideApp;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.model.Response;
+import com.utvgo.handsome.config.AppConfig;
+import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
-import com.utvgo.huya.beans.BeanBasic;
+import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanCheckCollect;
-import com.utvgo.huya.beans.BeanCollect;
-import com.utvgo.huya.beans.BeanSongDetail;
 import com.utvgo.huya.beans.BeanStatistics;
-import com.utvgo.huya.beans.BeanUserPlayList;
-import com.utvgo.huya.beans.BeanVideoDetailZero;
+import com.utvgo.huya.beans.ProgramContent;
+import com.utvgo.huya.beans.ProgramInfoBase;
+import com.utvgo.huya.beans.TPageData;
+import com.utvgo.huya.beans.VideoInfo;
 import com.utvgo.huya.constant.ConstantEnum;
-import com.utvgo.huya.utils.DiffHostConfig;
+import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.HiFiDialogTools;
-import com.utvgo.huya.utils.ImageTool;
-import com.utvgo.huya.utils.NetUtils;
 import com.utvgo.huya.utils.ToastUtil;
 import com.utvgo.huya.utils.Tools;
-import com.utvgo.huya.utils.XLog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.utvgo.huya.Constants.VIP_CODE;
-
-
-/**
- * Created by fute on 17/1/9.
- */
 
 public class PlayVideoActivity extends BuyActivity {
 
@@ -59,14 +58,12 @@ public class PlayVideoActivity extends BuyActivity {
     TextView tv_quick_info;
     @BindView(R.id.iv_quick_icon)
     ImageView iv_quick_icon;
-    @BindView(R.id.iv_video_bg)
-    ImageView ivVideoBg;
+
     @BindView(R.id.iv_player_play)
     ImageView ivPlayerPlay;
     @BindView(R.id.iv_collect)
     ImageView ivCollect;
-    @BindView(R.id.iv_change_mv)
-    ImageView ivChangeMv;
+
     @BindView(R.id.rl_control)
     RelativeLayout rlControl;
     @BindView(R.id.tv_title)
@@ -77,10 +74,7 @@ public class PlayVideoActivity extends BuyActivity {
     FrameLayout flPlayList;
     @BindView(R.id.fl_playlist_content)
     FrameLayout flPlayListContent;
-    //    @BindView(R.id.lrcView)
-//    LrcView lrcView;
-    @BindView(R.id.iv_head)
-    ImageView ivHead;
+
     @BindView(R.id.tv_singer_name)
     TextView tvSingerName;
     @BindView(R.id.tv_dur_left)
@@ -105,18 +99,14 @@ public class PlayVideoActivity extends BuyActivity {
     ImageView gifVideoLoad;
     @BindView(R.id.tv_progress_tag)
     TextView tvProgressTag;
-    @BindView(R.id.tv_buy_tip)
-    TextView tvBuyTip;
+
     @BindView(R.id.vv_jingling)
     VideoView vvJingling;
 
     private int playingIndex = 0;
     private String playlistName = "";
-    private ArrayList<BeanUserPlayList.DataBean> playList = new ArrayList<>();
+    private ArrayList<ProgramInfoBase> playList = new ArrayList<>();
 
-    private BeanSongDetail songDetail;
-    private BeanVideoDetailZero mvDetail;
-    private boolean playMVBySong = false;
     private boolean quickSeekNow = false;
 
     private ArrayList<View> playListItem = new ArrayList<>();
@@ -130,26 +120,42 @@ public class PlayVideoActivity extends BuyActivity {
     private boolean isToShowBuy;
     private HiFiDialogTools tools;
     private boolean isExperience;
+    boolean isMultiSetType = false;
 
     private long exitTime = 0;
-    private String ifCollectton="no";
+    private String ifCollectton = "no";
+
+    ProgramContent currentProgramContent;
+
+    private static final int TagStartStatisticsPlay = 10011;
+    private String statisticsPlayId = "";
+    private String statisticsVideoId = "";
+    final Handler statHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            if (message.what == TagStartStatisticsPlay) {
+                startStatisticsPlay();
+                statHandler.sendEmptyMessageDelayed(TagStartStatisticsPlay, 30 * 1000);
+            }
+            return false;
+        }
+    });
 
     public static void play(final Context context,
-                            final ConstantEnum.MediaType mediaType,
-                            final boolean isSingle,
-                            final String buySingleName,
-                            final ArrayList<BeanUserPlayList.DataBean> data,
+                            final ArrayList<ProgramInfoBase> data, //name, pkId
                             final int defaultPlayPosition,
-                            final boolean isFree)
-    {
+                            final boolean isFree) {
+        final ConstantEnum.MediaType mediaType = ConstantEnum.MediaType.video;
         Intent intent = new Intent(context, PlayVideoActivity.class);
-        intent.putExtra("isSingle", isSingle);
         intent.putExtra("playIndex", defaultPlayPosition);
         intent.putExtra("fileType", mediaType.ordinal());
         intent.putExtra("isExperience", isFree);
-        intent.putParcelableArrayListExtra("playList", data);
-        if (isSingle) {
-            intent.putExtra("buySingleName", buySingleName);
+        if(data != null)
+        {
+            Gson gson = new Gson();
+            Type typeToken = new TypeToken<ArrayList<ProgramInfoBase>>(){}.getType();
+            String jsonString = gson.toJson(data, typeToken);
+            intent.putExtra("playList", jsonString);
         }
         context.startActivity(intent);
     }
@@ -164,74 +170,40 @@ public class PlayVideoActivity extends BuyActivity {
         traversalView(this);
         //调用复写的创建BorderView
         createBorderView(this);
-        //setContentType(mvBean.getMultiSetType());//单集多集
-        //setContentId(mvBean.getPkId());//pkgId
-        //MediaType(mvBean.getChannelId());//channelId
-        playList = getIntent().getParcelableArrayListExtra("playList");
-        fileType = getIntent().getIntExtra("fileType", 1);
+
         playingIndex = getIntent().getIntExtra("playIndex", 0);
         playlistName = getIntent().getStringExtra("playlistName");
-        buySingle = getIntent().getBooleanExtra("isSingle", false);
         isExperience = getIntent().getBooleanExtra("isExperience", false);
 
-        if (buySingle) {
-            if (getIntent().hasExtra("buySingleName")) {
-                buySingleName = getIntent().getStringExtra("buySingleName");
+        String playListJsonString = getIntent().getStringExtra("playList");
+        if(!TextUtils.isEmpty(playListJsonString))
+        {
+            Gson gson = new Gson();
+            Type typeToken = new TypeToken<ArrayList<ProgramInfoBase>>(){}.getType();
+            ArrayList<ProgramInfoBase> videoInfoArray = gson.fromJson(playListJsonString, typeToken);
+            this.playList.addAll(videoInfoArray);
+
+            if(this.playList.size() == 1)
+            {
+                ProgramInfoBase programInfoBase = this.playList.get(0);
+                if("4".equalsIgnoreCase(programInfoBase.getMultiSetType()))
+                {
+                    this.isMultiSetType = true;
+                    this.playlistName = programInfoBase.getName();
+                }
             }
         }
-        playVideo();
-        checkCollect();
+
         initView();
 
-        ivChangeMv.setVisibility(View.INVISIBLE);
-        tvBuyTip.setVisibility(View.GONE);
-        if (fileType == 0) {//音频
-            ivVideoBg.setImageResource(R.mipmap.bg);
-            //lrcView.setVisibility(View.VISIBLE);
-            ivHead.setVisibility(View.VISIBLE);
-            gifVideoLoad.setVisibility(View.GONE);
-            //     videoPlayerProgress.requestFocus();
-//            videoPlayerProgress.setClickable(false);
-//            videoPlayerProgress.setEnabled(false);
-//              videoPlayerProgress.setSelected(false);
-//             videoPlayerProgress.setFocusable(false);
-        } else {
-            // lrcView.setVisibility(View.GONE);
-            ivHead.setVisibility(View.GONE);
-            gifVideoLoad.setVisibility(View.VISIBLE);
-            ivVideoBg.setImageResource(R.mipmap.bg);
-        }
-
         needFinish = true;
-
-        GlideApp.with(PlayVideoActivity.this).load(R.drawable.playvideoload).skipMemoryCache(true)
-                .placeholder(R.drawable.playvideoload).into(gifVideoLoad);
-    }
-
-    /**
-     * 监听焦点之前将设置为不可聚焦
-     */
-    private void clearSomeFocusBeforeListen() {
-        tvProgressTag.setFocusable(false);
-        vvJingling.setFocusable(false);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        isToShowBuy = false;
-        // startXiri();
-
-        if (hadCallBuyView) {
-            hadCallBuyView = false;
-            if (!HuyaApplication.hadBuy() && !isExperience) {
-                finish();
-            } else {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
                 playVideo();
             }
-        }
+        });
     }
-
 
     private void initView() {
         if (!TextUtils.isEmpty(playlistName)) {
@@ -240,7 +212,8 @@ public class PlayVideoActivity extends BuyActivity {
         //翻页重新添加
         flPlayListContent.removeAllViews();
         for (int i = 0; i < playList.size(); i++) {
-            BeanUserPlayList.DataBean dataBean = playList.get(i);
+            ProgramInfoBase dataBean = playList.get(i);
+
             FrameLayout item = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.item_song_play_list, null);
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -252,16 +225,12 @@ public class PlayVideoActivity extends BuyActivity {
             TextView tvSongIndex = item.findViewById(R.id.tv_song_index);
             tvSongIndex.setText(i + 1 + "");
             TextView tvSongName = item.findViewById(R.id.tv_song_name);
-            tvSongName.setText(dataBean.getContentName());
+            tvSongName.setText(dataBean.getName());
 
             item.setOnClickListener(this);
             playListItem.add(item);
 
-            if (dataBean.getIsFree() == 1) {
-                item.findViewById(R.id.tv_free_tag).setVisibility(View.VISIBLE);
-            } else {
-                item.findViewById(R.id.tv_free_tag).setVisibility(View.GONE);
-            }
+            item.findViewById(R.id.tv_free_tag).setVisibility(dataBean.isFree() ? View.VISIBLE : View.INVISIBLE);
 
             if (i == (playList.size() - 1)) {
                 item.setNextFocusDownId(2000);
@@ -297,6 +266,63 @@ public class PlayVideoActivity extends BuyActivity {
         });
     }
 
+    /**
+     * 监听焦点之前将设置为不可聚焦
+     */
+    private void clearSomeFocusBeforeListen() {
+        tvProgressTag.setFocusable(false);
+        vvJingling.setFocusable(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isToShowBuy = false;
+        // startXiri();
+        if (hadCallBuyView) {
+            hadCallBuyView = false;
+            if (!HuyaApplication.hadBuy() && !isExperience) {
+                finish();
+            } else {
+                playVideo();
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        statusticsHandler.sendEmptyMessageDelayed(TagStartStatisticsPlay, 30 * 1000);
+    }
+
+    @Override
+    protected void onStop() {
+        try {
+            VideoView videoView = (VideoView) getHahaPlayer();
+            if (videoView != null) {
+                statisticsVideoPlay(videoView.getCurrentPosition() / 1000 + "",
+                        videoView.getCurrentPosition() / 1000 + "");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onStop();
+//        startStatisticsPlay();
+//        statusticsHandler.removeMessages(TagStartStatisticsPlay);
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(new ContextWrapper(newBase) {
+            @Override
+            public Object getSystemService(String name) {
+                if (Context.AUDIO_SERVICE.equals(name))
+                    return getApplicationContext().getSystemService(name);
+                return super.getSystemService(name);
+            }
+        });
+    }
+
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
@@ -311,7 +337,7 @@ public class PlayVideoActivity extends BuyActivity {
             }
             needQuickTime = hasFocus;
 
-        }else if (v.getId()==R.id.iv_collect) {
+        } else if (v.getId() == R.id.iv_collect) {
             //todo
         } else if (hasFocus) {
             tvProgressTag.setVisibility(View.GONE);
@@ -340,7 +366,7 @@ public class PlayVideoActivity extends BuyActivity {
         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
             if (!needBuy()) {
                 rlControl.setVisibility(View.VISIBLE);
-                if (fileType == 1) {
+                if (fileType == ConstantEnum.MediaType.video) {
                     videoPlayerProgress.requestFocus();
                 } else {
                     ivPlayerPlay.requestFocus();
@@ -358,18 +384,6 @@ public class PlayVideoActivity extends BuyActivity {
                     showBuy("");
                     return true;
                 }
-                /*
-                if (tools == null)
-                    tools = new HiFiDialogTools();
-                tools.showLeftRightTip(PlayVideoActivity.this, "提示", "您是否确定退出播放？", "确定", "取消", new MyDialogEnterListener() {
-                    @Override
-                    public void onClickEnter(Dialog dialog, Object object) {
-                        if (object.equals(0)) {
-                            PlayVideoActivity.this.finish();
-                        }
-                    }
-                });
-                */
                 if ((System.currentTimeMillis() - exitTime) > 2000) {
                     Toast.makeText(getApplicationContext(), "再按一次退出播放", Toast.LENGTH_SHORT).show();
                     exitTime = System.currentTimeMillis();
@@ -389,13 +403,109 @@ public class PlayVideoActivity extends BuyActivity {
         if (rlControl.getVisibility() == View.GONE) {
             rlControl.setVisibility(View.VISIBLE);
             //ivPlayerPlay.requestFocus();
-            if (fileType == 1) {
+            if (fileType == ConstantEnum.MediaType.video) {
                 videoPlayerProgress.requestFocus();
             } else {
                 ivPlayerPlay.requestFocus();
             }
         }
         return flag;
+    }
+
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()) {
+            case R.id.iv_player_list:
+                if (flPlayList.getVisibility() == View.GONE) {
+                    flPlayList.setVisibility(View.VISIBLE);
+                    setPlayListState();
+                } else {
+                    flPlayList.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.iv_collect:
+                collect();
+                break;
+            case R.id.iv_player_previous: {
+                if (playingIndex == 0) {
+                    playingIndex = this.playList.size();
+                }
+                playPre();
+                break;
+            }
+
+            case R.id.iv_player_play:
+                if (!needBuy()) {
+                    rlControl.setVisibility(View.VISIBLE);
+                    ivPlayerPlay.requestFocus();
+                    hahaPauseOrResumePlay();
+                }
+                break;
+
+            case R.id.iv_player_next: {
+                if (playingIndex == (playList.size() - 1)) {
+                    playingIndex = -1;
+                }
+                playNext();
+                break;
+            }
+            default:
+                if (playListItem.contains(view)) {
+                    playingIndex = playListItem.indexOf(view);
+                    playVideo();
+                    setPlayListState();
+                    flPlayList.setVisibility(View.GONE);
+                    ivPlayerPlay.requestFocus();
+                }
+                break;
+        }
+
+    }
+
+    void initPlayListWithMultisetType(final ProgramContent programContent)
+    {
+        playlistName = programContent.getName();
+        if (!TextUtils.isEmpty(playlistName)) {
+            tvPlayListName.setText(playlistName);
+        }
+        //翻页重新添加
+        flPlayListContent.removeAllViews();
+        for (int i = 0; i < playList.size(); i++) {
+            VideoInfo dataBean = programContent.getVideos().get(i);
+
+            FrameLayout item = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.item_song_play_list, null);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.topMargin = (int) getResources().getDimension(R.dimen.dp70) * i;
+            item.setLayoutParams(params);
+            item.setId(i + 2000);
+            flPlayListContent.addView(item);
+
+            TextView indexView = item.findViewById(R.id.tv_song_index);
+            indexView.setText(i + 1 + "");
+            TextView nameTextView = item.findViewById(R.id.tv_song_name);
+            nameTextView.setText(dataBean.getName());
+
+            item.setOnClickListener(this);
+            playListItem.add(item);
+
+            item.findViewById(R.id.tv_free_tag).setVisibility(dataBean.getIsFree() == 1 ? View.VISIBLE : View.INVISIBLE);
+
+            if (i == (playList.size() - 1)) {
+                item.setNextFocusDownId(2000);
+            }
+            item.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                        flPlayList.setVisibility(View.GONE);
+                        ivPlayerNext.requestFocus();
+                    }
+                    return false;
+                }
+            });
+        }
     }
 
     private void setPlayListState() {
@@ -429,195 +539,66 @@ public class PlayVideoActivity extends BuyActivity {
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        super.onClick(view);
-        switch (view.getId()) {
-            case R.id.iv_player_list:
-                if (flPlayList.getVisibility() == View.GONE) {
-                    flPlayList.setVisibility(View.VISIBLE);
-                    setPlayListState();
-                } else {
-                    flPlayList.setVisibility(View.GONE);
-                }
-                break;
-            case R.id.iv_collect:
-                collect();
-                break;
-            case R.id.iv_player_previous: {
-                if (playingIndex == 0) {
-                    ToastUtil.show(this, "当前播放是第一首");
-                } else {
-                    if (playMVBySong) {
-                        fileType = 0;
-                    }
-                    playPre();
-                }
-                break;
-            }
-            case R.id.iv_change_mv:
-                playMVBySong = true;
-                fileType = 1;
-                ivPlayerPlay.requestFocus();
-                playVideo();
-                break;
-            case R.id.iv_player_play:
-                if (!needBuy()) {
-                    rlControl.setVisibility(View.VISIBLE);
-                    ivPlayerPlay.requestFocus();
-                    hahaPauseOrResumePlay();
-                }
-                break;
-            case R.id.iv_player_next: {
-                if (playingIndex == (playList.size() - 1)) {
-                    ToastUtil.show(this, "当前播放已经是最后一首");
-                    return;
-                }
-                if (playMVBySong) {
-                    fileType = 0;
-                }
-                playNext();
-                break;
-            }
-            default:
-                if (playListItem.contains(view)) {
-                    if (playMVBySong) {
-                        fileType = 0;
-                    }
-                    playingIndex = playListItem.indexOf(view);
-                    playVideo();
-                    setPlayListState();
-                    flPlayList.setVisibility(View.GONE);
-                    ivPlayerPlay.requestFocus();
-                }
-                break;
-        }
-
-    }
-
     private void collect() {
+        final Context context = this;
+
         if (playingIndex < playList.size()) {
-            if (fileType == 1) {
-                if (mvDetail == null) {
-                    return;
-                }
-                BeanUserPlayList.DataBean bean = playList.get(playingIndex);
-                if("yes".equals(ifCollectton)){
-                asyncHttpRequest.deleteCollection(PlayVideoActivity.this, "1", String.valueOf(bean.getContentId()), this, this);
-                } else {
-                asyncHttpRequest.addCollection(PlayVideoActivity.this, "1", bean.getContentId(), bean.getMediaType(), new NetUtils.NetCallBack() {
-                    @Override
-                    public void netBack(int requestTag, Object object) {
-                        BeanBasic beanBasic = (BeanBasic) object;
-                        if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
-                            checkCollect();
-                            ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
-                            if (fileType == 1) {
-                                //  mvDetail.getMv().setIfCollection(1);
-                            } else {
-                                songDetail.getSong().setIfCollection(1);
-                            }
-                        } else {
-                            HiFiDialogTools.getInstance().showtips(getBaseContext()
-                                    , "收藏失败，请稍后重试", null);
-                        }
+            if (fileType == ConstantEnum.MediaType.video) {
+                if(playingIndex >= 0 && playingIndex < this.playList.size())
+                {
+                    final ProgramInfoBase programInfoBase = this.playList.get(playingIndex);
+                    if ("yes".equals(ifCollectton)) {
+                        NetworkService.defaultService().userDeleteFavor(context, "1", String.valueOf(programInfoBase.getPkId()),
+                                new JsonCallback<BaseResponse>() {
+                                    @Override
+                                    public void onSuccess(Response<BaseResponse> response) {
+                                        BaseResponse beanBasic = response.body();
+                                        if (beanBasic != null && beanBasic.isOk()) {
+                                            ivCollect.setImageResource(R.drawable.selector_player_collect_no);
+                                            programInfoBase.setFavor(false);
+                                        } else {
+                                            HiFiDialogTools.getInstance().showtips(context, "取消收藏失败，请稍后重试", null);
+                                        }
+                                    }
+                                });
+                    } else {
+                        NetworkService.defaultService().userAddFavor(context, "1",
+                                programInfoBase.getPkId(), programInfoBase.getChannelId(),
+                                new JsonCallback<BaseResponse>() {
+                                    @Override
+                                    public void onSuccess(Response<BaseResponse> response) {
+                                        BaseResponse bean = response.body();
+                                        if (bean != null && bean.isOk()) {
+                                            checkCollect();
+                                            ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
+                                            programInfoBase.setFavor(true);
+                                        } else {
+                                            HiFiDialogTools.getInstance().showtips(context
+                                                    , "收藏失败，请稍后重试", null);
+                                        }
+                                    }
+                                });
                     }
-                });
                 }
             }
         }
     }
 
-    private void checkCollect(){
-        asyncHttpRequest.checkCollect(this,String.valueOf(playList.get(playingIndex).getContentId()),"",this,this);
-    }
-
-    @Override
-    public void onSucceeded(String method, String key, Object object) throws Exception {
-        super.onSucceeded(method, key, object);
-        if(TextUtils.equals(method,"checkcollect.utvgo")){
-            BeanCheckCollect beanCheckCollect =(BeanCheckCollect) object;
-            ifCollectton=beanCheckCollect.getData().getIsCollect();
-            if ( "yes".equals(ifCollectton )) {
-                ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
-            } else {
-                ivCollect.setImageResource(R.drawable.selector_player_collect_no);
-            }
-        }
-        if (TextUtils.equals(method, "savecollect.utvgo")) {
-            BeanBasic beanBasic = (BeanBasic) object;
-            if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
-                ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
-                if (fileType == 1) {
-                    //  mvDetail.getMv().setIfCollection(1);
-                } else {
-                    songDetail.getSong().setIfCollection(1);
-                }
-            } else {
-                HiFiDialogTools.getInstance().showtips(this, "收藏失败，请稍后重试", null);
-            }
-        } else if (TextUtils.equals(method, "delcollect.utvgo")) {
-            BeanBasic beanBasic = (BeanBasic) object;
-            if (beanBasic != null && TextUtils.equals(beanBasic.getCode(), "1")) {
-                ivCollect.setImageResource(R.drawable.selector_player_collect_no);
-                if (fileType == 1) {
-                    //mvDetail.getMv().setIfCollection(0);
-                } else {
-                    songDetail.getSong().setIfCollection(0);
-                }
-            } else {
-                HiFiDialogTools.getInstance().showtips(this, "收藏失败，请稍后重试", null);
-            }
-        } else if (TextUtils.equals(method, "program_content.utvgo")) {
-            statisticsPlayId = "";
-            mvDetail = (BeanVideoDetailZero) object;
-            //mvDetail.getMv().setFreeTime(10);
-            startStatisticsPlay();
-            statisticsVideoPlay("0", "0");
-            checkCollect();
-            if (mvDetail != null && TextUtils.equals(mvDetail.getCode(), "1")) {
-                if ( "yes".equals(ifCollectton )) {
-                    ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
-                } else {
-                    ivCollect.setImageResource(R.drawable.selector_player_collect_no);
-                }
-
-                if (HuyaApplication.hadBuy() || (mvDetail.getData().getIfFree() == "1") || isExperience) {
-                    freeTime = -1;
-                    if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
-                        getHahaPlayerUrl(mvDetail.getData().getVodId());
+    private void checkCollect() {
+        NetworkService.defaultService().userCheckFavorStatus(this, this.currentProgramContent.getPkId() + "", new JsonCallback<BeanCheckCollect>() {
+            @Override
+            public void onSuccess(Response<BeanCheckCollect> response) {
+                BeanCheckCollect bean = response.body();
+                if (bean != null && bean.isOk()) {
+                    ifCollectton = bean.getData().getIsCollect();
+                    if ("yes".equals(ifCollectton)) {
+                        ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
                     } else {
-                        getHahaPlayerUrl(mvDetail.getData().getVideoUrlHigh());
-                    }
-                } else if (mvDetail.getData().getFreeSecond() > 0) {
-                    freeTime = mvDetail.getData().getFreeSecond();
-                    if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
-                        getHahaPlayerUrl(mvDetail.getData().getVodId());
-                    } else {
-                        getHahaPlayerUrl(mvDetail.getData().getVideoUrlHigh());
-                    }
-                } else {
-                    freeTime = -1;
-                    if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
-                        showBuy(mvDetail.getData().getVodId());
-                    } else {
-                        showBuy(mvDetail.getData().getVideoUrlHigh());
+                        ivCollect.setImageResource(R.drawable.selector_player_collect_no);
                     }
                 }
-                ivChangeMv.setVisibility(View.INVISIBLE);
-            } else {
-                HiFiDialogTools.getInstance().showtips(this, "获取信息失败，请稍后重试", null);
             }
-            // lrcView.setVisibility(View.GONE);
-            ivHead.setVisibility(View.GONE);
-
-            showViewByHandler(videoPlayerProgress);
-        } else if (TextUtils.equals(method, "statistics.utvgo")) {
-            BeanStatistics beanStatistics = (BeanStatistics) object;
-            if (beanStatistics != null && beanStatistics.getData() != null) {
-                statisticsPlayId = beanStatistics.getData().getId();
-            }
-        }
+        });
     }
 
     @Override
@@ -633,7 +614,6 @@ public class PlayVideoActivity extends BuyActivity {
         this.nowTime = nowTime;
         tvDurLeft.setText(Tools.secToTime(nowTime / 1000));
         tvDurRight.setText(Tools.secToTime(allTime / 1000));
-        tvBuyTip.setVisibility(View.GONE);
         if (!quickSeekNow) {
             videoPlayerProgress.setProgress((int) (nowTime * videoPlayerProgress.getMax() / allTime));
         }
@@ -645,16 +625,15 @@ public class PlayVideoActivity extends BuyActivity {
         XLog.d(String.format("needBuy %s,freeTime %d, isExperience %s", HuyaApplication.hadBuy() ? "hadBuy" : "noneBuy",
                 freeTime, isExperience ? "true" : "false"));
 
-        final boolean isPurchased = HuyaApplication.hadBuy();
+        final boolean isPurchased = DiffConfig.CurrentPurchase.isPurchased();
         if (freeTime >= 0) {
             if (nowTime / 1000 >= freeTime) {
-                    //tvBuyTip.setVisibility(View.VISIBLE);
-               if (TextUtils.isEmpty(mvDetail.getData().getVideoUrlHigh()) || TextUtils.equals("0", mvDetail.getData().getVideoUrlHigh())) {
-                   showBuy(mvDetail.getData().getVodId());
-               } else {
-                   showBuy(mvDetail.getData().getVideoUrlHigh());
-               }
-                return true;
+                ProgramInfoBase programInfoBase = getCurrentProgram();
+                if(programInfoBase != null)
+                {
+                    showBuy("" + programInfoBase.getPkId());
+                    return true;
+                }
             }
         }
         return false;
@@ -681,8 +660,7 @@ public class PlayVideoActivity extends BuyActivity {
 
     private void playNext() {
         playingIndex++;
-        if(playingIndex >= playList.size())
-        {
+        if (playingIndex >= playList.size()) {
             playingIndex = 0;
         }
         playVideo();
@@ -690,177 +668,100 @@ public class PlayVideoActivity extends BuyActivity {
 
     private void playPre() {
         playingIndex--;
-        if(playingIndex < 0)
-        {
+        if (playingIndex < 0) {
             playingIndex = playList.size() - 1;
         }
         playVideo();
     }
 
     private void playVideo() {
-//        if (!DiffHostConfig.validateDeviceKeyNO(this)) {
-//            return;
-//        }todo
-
-        if (playingIndex >= playList.size()) {
-            playingIndex = playList.size() - 1;
-            return;
+        if(this.isMultiSetType)
+        {
+            ProgramInfoBase programInfoBase = this.playList.get(0);
+            gifVideoLoad.setVisibility(View.VISIBLE);
+            tvTitle.setText(programInfoBase.getName());
+            fetchProgramContent(programInfoBase);
         }
-        if (playingIndex < 0) {
-            playingIndex = 0;
-            return;
-        }
+        else
+        {
+            if (playingIndex >= playList.size()) {
+                playingIndex = playList.size() - 1;
+            }
+            else if (playingIndex < 0) {
+                playingIndex = 0;
+            }
 
-        BeanUserPlayList.DataBean dataBean = playList.get(playingIndex);
-
-        gifVideoLoad.setVisibility(View.VISIBLE);
-        String mvMid = dataBean.getContentMid();
-        if (playMVBySong) {
-            mvMid = songDetail.getSong().getMvMid();
-        }
-        //String multiSetType, int pkgId,int channelId,
-
-        if(dataBean.getSingerMids().contains("http")){
-            getHahaPlayerUrl(dataBean.getSingerMids());
-
-        }else {
-            asyncHttpRequest.getMVDetail(PlayVideoActivity.this, dataBean.getContentType(), dataBean.getContentId(), dataBean.getMediaType(), this, this);
+            ProgramInfoBase programInfoBase = getCurrentProgram();
+            if(programInfoBase != null)
+            {
+                gifVideoLoad.setVisibility(View.VISIBLE);
+                tvTitle.setText(programInfoBase.getName());
+                fetchProgramContent(programInfoBase);
+            }
         }
 
-        tvTitle.setText(dataBean.getContentName());
-        tvSingerName.setText(dataBean.getSingerNames());
+    }
+
+    void playVideoJudge(final ProgramContent programContent)
+    {
+        if(programContent != null)
+        {
+            currentProgramContent = programContent;
+            startStatisticsPlay();
+
+            checkCollect();
+
+            boolean shouldPay = false;
+            freeTime = -1;
+            if(!DiffConfig.CurrentPurchase.isPurchased())
+            {
+                if(!currentProgramContent.isFree())
+                {
+                    freeTime = currentProgramContent.getFreeSecond();
+                    if(freeTime <= 0)
+                    {
+                        freeTime = -1;
+                        shouldPay = true;
+                    }
+
+                }
+            }
+            showViewByHandler(videoPlayerProgress);
+            if(shouldPay)
+            {
+                showBuy(currentProgramContent.getPkId() + "");
+            }
+            else
+            {
+                String mediaSourceUrl = currentProgramContent.getMediaSourceUrl();
+                if(this.isMultiSetType)
+                {
+                    VideoInfo videoInfo = currentProgramContent.getVideos().get(this.playingIndex);
+                    mediaSourceUrl = videoInfo.getMediaSourceUrl();
+                }
+                if(!TextUtils.isEmpty(mediaSourceUrl))
+                {
+                    getHahaPlayerUrl(mediaSourceUrl);
+                }
+                statisticsPlayId = "";
+                statisticsVideoPlay("0", "0");
+            }
+        }
     }
 
     @Override
     public void playStateChange(int state) {
         super.playStateChange(state);
-        if (fileType == 1) {
-            ivVideoBg.setVisibility(View.GONE);
-        } else {
-            ivVideoBg.setVisibility(View.VISIBLE);
-        }
-        if (state == PlayingStatePlaying) {
-            ivPlayerPlay.setImageResource(R.drawable.selector_player_stop);
-        } else {
-            ivPlayerPlay.setImageResource(R.drawable.selector_player_play);
-        }
+        ivPlayerPlay.setImageResource((state == PlayingStatePlaying) ? R.drawable.selector_player_stop : R.drawable.selector_player_play);
     }
 
     @Override
     public void hideInfoView() {
         super.hideInfoView();
-        if (fileType == 1) {
-            rlControl.setVisibility(View.GONE);
-            flPlayList.setVisibility(View.GONE);
-        }
+        rlControl.setVisibility(View.GONE);
+        flPlayList.setVisibility(View.GONE);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        statusticsHandler.sendEmptyMessageDelayed(TagStartStatisticsPlay, 30 * 1000);
-    }
-
-    @Override
-    protected void onStop() {
-        try {
-            VideoView videoView = (VideoView) getHahaPlayer();
-            if (videoView != null) {
-                statisticsVideoPlay(videoView.getCurrentPosition() / 1000 + "",
-                        videoView.getCurrentPosition() / 1000 + "");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onStop();
-//        startStatisticsPlay();
-//        statusticsHandler.removeMessages(TagStartStatisticsPlay);
-    }
-
-    private static final int TagStartStatisticsPlay = 10011;
-    private String statisticsPlayId = "";
-    private String statisticsVideoId = "";
-
-//    Handler statusticsHandler = new Handler(new Handler.Callback() {
-//        @Override
-//        public boolean handleMessage(Message message) {
-//            if (message.what == TagStartStatisticsPlay) {
-//                startStatisticsPlay();
-//                statusticsHandler.sendEmptyMessageDelayed(TagStartStatisticsPlay, 30 * 1000);
-//            }
-//            return false;
-//        }
-//    });
-
-
-    private void startStatisticsPlay() {
-        if (songDetail != null || mvDetail != null) {
-            try {
-                String programId = "";
-                String videoName = "";
-                String videoId = "";
-                String statName = "";
-                programId = mvDetail.getData().getPkId() + "";
-                videoName = mvDetail.getData().getName();
-                videoId = String.valueOf(mvDetail.getData().getVideoId());
-                statName = "视频播放-" + videoName;
-                stat(statName);
-            } catch (Exception o) {
-                o.printStackTrace();
-            }
-        }
-    }
-
-    private void statisticsVideoPlay(String playPoint, String playTime) {
-        String programId = "";
-        String programName = "";
-        String channelId = "1";
-        String channelName = "虎牙TV";
-        String spId = "1";
-        String spName = "虎牙TV";
-        String videoName = "";
-        String videoId = "";
-        String multiSetType="";
-        long totalTime = 0;
-        try {
-            totalTime = videoView.getDuration();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-        programId = mvDetail.getData().getPkId() + "";
-        videoName = mvDetail.getData().getName();
-        videoId = mvDetail.getData().getVideoId()+"";
-        programName = mvDetail.getData().getName();
-        channelId = mvDetail.getData().getChannelId()+"";
-        multiSetType=mvDetail.getData().getMultiSetType();
-        asyncHttpRequest.addToPlayListHistoy(this, playPoint, videoId, videoName, programId, programName, channelId, multiSetType, totalTime, new NetUtils.NetCallBack() {
-            @Override
-            public void netBack(int requestTag, Object object) {
-                if(object!=null){
-                    Log.d(TAG, "netBack: addToPlayListHistoy_success");
-                }
-            }
-        });
-
-        asyncHttpRequest.statisticsVideo(this, playPoint, videoId, videoName,
-                spId, spName,
-                programId, programName, channelId, channelName,
-                multiSetType, "0",  HuyaApplication.hadBuy()?"1":"0",
-                VIP_CODE, statisticsVideoId, playTime, totalTime, new NetUtils.NetCallBack() {
-                    @Override
-                    public void netBack(int requestTag, Object object) {
-                        if (object != null && (object instanceof BeanStatistics)) {
-                            BeanStatistics beanStatistics = (BeanStatistics) object;
-                            if (beanStatistics != null && beanStatistics.getData() != null) {
-                                statisticsVideoId = beanStatistics.getData().getId();
-                            }
-                        }
-                    }
-                });
-    }
     //进度条显示，快进快退，时间显示出来
     private void setTvTimeTagInfo(int progress) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp130),
@@ -877,15 +778,115 @@ public class PlayVideoActivity extends BuyActivity {
         tvProgressTag.setText(Tools.formatTime(time));
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(new ContextWrapper(newBase) {
-            @Override
-            public Object getSystemService(String name) {
-                if (Context.AUDIO_SERVICE.equals(name))
-                    return getApplicationContext().getSystemService(name);
-                return super.getSystemService(name);
+    ProgramInfoBase getCurrentProgram()
+    {
+        if(this.isMultiSetType)
+        {
+            return this.playList.get(0);
+        }
+        else
+        {
+            if(playingIndex >= 0 && playingIndex < this.playList.size()) {
+                return this.playList.get(playingIndex);
             }
-        });
+        }
+        return null;
+    }
+
+    //stat
+    private void startStatisticsPlay() {
+        final ProgramContent programContent = this.currentProgramContent;
+        if (programContent != null) {
+            try {
+                String programId = "";
+                String videoName = "";
+                String videoId = "";
+                String statName = "";
+                programId = programContent.getPkId() + "";
+                videoName = programContent.getName();
+                videoId = String.valueOf(programContent.getVideoId());
+                statName = "视频播放-" + videoName;
+                stat(statName);
+            } catch (Exception o) {
+                o.printStackTrace();
+            }
+        }
+    }
+    private void statisticsVideoPlay(String playPoint, String playTime) {
+        if(this.currentProgramContent == null)
+        {
+            XLog.e(getLocalClassName(), "currentProgramContent is null");
+            return;
+        }
+
+        String programId = "";
+        String programName = "";
+        String channelId = "1";
+        String channelName = AppConfig.AppName;
+        String spId = "1";
+        String spName = AppConfig.AppName;
+        String videoName = "";
+        String videoId = "";
+        String multiSetType = "";
+        long totalTime = 0;
+        try {
+            totalTime = videoView.getDuration();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final ProgramContent programContent = this.currentProgramContent;
+        programId = programContent.getPkId() + "";
+        videoName = programContent.getName();
+        videoId = programContent.getVideoId() + "";
+        programName = programContent.getName();
+        channelId = programContent.getChannelId() + "";
+        multiSetType = programContent.getMultiSetType();
+
+        try{
+            NetworkService.defaultService().userPlayRecord(this, playPoint, videoId, videoName, programId, programName, channelId, multiSetType, totalTime);
+            NetworkService.defaultService().statisticsVideo(this, playPoint, videoId, videoName,
+                    spId, spName,
+                    programId, programName, channelId, channelName,
+                    multiSetType, "0", DiffConfig.CurrentPurchase.isPurchased() ? "1" : "0",
+                    AppConfig.VipCode, statisticsVideoId, playTime, totalTime, new JsonCallback<BaseResponse<BeanStatistics>>() {
+                        @Override
+                        public void onSuccess(Response<BaseResponse<BeanStatistics>> response) {
+                            BaseResponse<BeanStatistics> beanStatistics = response.body();
+                            if (beanStatistics != null && beanStatistics.isOk()) {
+                                statisticsVideoId = beanStatistics.getData().getId();
+                            }
+                        }
+                    });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    *** network
+     */
+    void fetchProgramContent(final ProgramInfoBase programInfoBase)
+    {
+        NetworkService.defaultService().fetchProgramContent(this, programInfoBase.getPkId(), programInfoBase.getMultiSetType(), programInfoBase.getChannelId(),
+                new JsonCallback<BaseResponse<ProgramContent>>() {
+                    @Override
+                    public void onSuccess(Response<BaseResponse<ProgramContent>> response) {
+                        BaseResponse<ProgramContent> data = response.body();
+                        if(data.isOk())
+                        {
+                            final ProgramContent programContent = data.getData();
+                            if(programContent.getMultiSetType().equalsIgnoreCase("4"))
+                            {
+                                initPlayListWithMultisetType(programContent);
+                            }
+                            playVideoJudge(programContent);
+                        }
+                        else
+                        {
+                            playNext();
+                        }
+                    }
+                });
     }
 }

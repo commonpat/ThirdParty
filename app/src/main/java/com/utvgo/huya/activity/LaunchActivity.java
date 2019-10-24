@@ -1,18 +1,14 @@
 package com.utvgo.huya.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.utvgo.huya.HuyaApplication;
-import com.utvgo.huya.utils.ApkUtil;
-
-public class LaunchActivity extends Activity {
+public class LaunchActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(this,MainActivity. class);
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         finish();
     }

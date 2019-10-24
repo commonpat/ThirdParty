@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/btn_hadbuy" android:state_focused="false"/>
-    <item android:drawable="@mipmap/btn_hadbuy_focus" android:state_focused="true"/>
-</selector>

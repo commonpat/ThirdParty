@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg">
+
+    <ImageView
+        android:id="@+id/iv_home_logo"
+        android:layout_width="325dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="20dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/logo"/>
+
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerHorizontal="true"
+                  android:layout_marginTop="100dp">
+
+        <Button android:id="@+id/btn_tab_1"
+                style="@style/MainNav"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/nav_bg1"
+                android:onClick="onClick"/>
+        <Button android:id="@+id/btn_tab_2"
+                style="@style/MainNav"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/nav_bg2"
+                android:onClick="onClick"/>
+        <Button android:id="@+id/btn_tab_3"
+                style="@style/MainNav"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/nav_bg3"
+                android:nextFocusDown="@+id/btn_fl_5"
+                android:onClick="onClick"/>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/fl_1"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerHorizontal="true"
+                  android:layout_marginTop="168dp">
+        android:orientation="horizontal">
+        <RelativeLayout android:id="@+id/fl_item_0"
+                        style="@style/CategoryItem">
+            <ImageView android:id="@+id/image_view_fl_0"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/place_holder_default"/>
+            <Button
+                android:id="@+id/btn_fl_0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_common_button"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/fl_item_1"
+                        style="@style/CategoryItem"
+                        android:layout_marginLeft="16dp">
+            <ImageView android:id="@+id/image_view_fl_1"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/place_holder_default"/>
+            <Button
+                android:id="@+id/btn_fl_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_common_button"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/fl_item_2"
+                        style="@style/CategoryItem"
+                        android:layout_marginLeft="16dp">
+            <ImageView android:id="@+id/image_view_fl_2"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/place_holder_default"/>
+            <Button
+                android:id="@+id/btn_fl_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_common_button"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/fl_item_3"
+                        style="@style/CategoryItem"
+                        android:layout_marginLeft="16dp">
+            <ImageView android:id="@+id/image_view_fl_3"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/place_holder_default"/>
+            <Button
+                android:id="@+id/btn_fl_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_common_button"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@+id/fl_1"
+                  android:id="@+id/fl_2"
+                  android:layout_centerHorizontal="true"
+                  android:layout_marginTop="16dp">
+        android:orientation="horizontal">
+        <RelativeLayout android:id="@+id/fl_item_4"
+                        style="@style/CategoryItem">
+            <ImageView android:id="@+id/image_view_fl_4"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/place_holder_default"/>
+            <Button
+                android:id="@+id/btn_fl_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_common_button"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/fl_item_5"
+                        style="@style/CategoryItem"
+                        android:layout_marginLeft="16dp">
+            <ImageView android:id="@+id/image_view_fl_5"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/place_holder_default"/>
+            <Button
+                android:id="@+id/btn_fl_5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_common_button"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/fl_item_6"
+                        style="@style/CategoryItem"
+                        android:layout_marginLeft="16dp">
+            <ImageView android:id="@+id/image_view_fl_6"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/place_holder_default"/>
+            <Button
+                android:id="@+id/btn_fl_6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_common_button"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/fl_item_7"
+                        style="@style/CategoryItem"
+                        android:layout_marginLeft="16dp">
+            <ImageView android:id="@+id/image_view_fl_7"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/place_holder_default"/>
+            <Button
+                android:id="@+id/btn_fl_7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_common_button"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp"
+        android:textSize="22sp"
+        android:text=""
+        android:gravity="center"
+        android:maxLines="1"
+        android:layout_below="@id/fl_2"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

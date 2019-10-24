@@ -6,7 +6,7 @@ import java.util.List;
  * Created by oo on 2018/4/9.
  */
 
-public class BeanAlbum {
+public class BeanAlbum  extends BaseResponse {
 
 
     /**
@@ -15,32 +15,12 @@ public class BeanAlbum {
      * message : success
      */
 
-    private String code;
     private AlbumBean album;
-    private String message;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public AlbumBean getAlbum() {
         return album;
     }
-
     public void setAlbum(AlbumBean album) {
         this.album = album;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public static class AlbumBean {

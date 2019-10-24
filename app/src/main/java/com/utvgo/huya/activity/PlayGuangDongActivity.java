@@ -1,6 +1,5 @@
 package com.utvgo.huya.activity;
 
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -10,7 +9,7 @@ import android.view.View;
 import android.widget.VideoView;
 
 import com.utvgo.huya.interfaces.PlayerInterface;
-import com.utvgo.huya.utils.XLog;
+import com.utvgo.handsome.utils.XLog;
 //import com.utvgo.qqmusic.interfaces.PlayerInterface;
 //import com.utvgo.qqmusic.utils.XLog;
 //

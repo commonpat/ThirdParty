@@ -15,6 +15,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.GetRequest;
 import com.lzy.okgo.request.PostRequest;
+import com.utvgo.handsome.utils.XLog;
 
 import org.json.JSONObject;
 
