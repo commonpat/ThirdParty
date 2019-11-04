@@ -31,7 +31,7 @@ public class GDPurchase extends IPurchase {
             public void onSuccess(Response<BeanGuangDongVipAuth> response) {
                 try{
                     BeanGuangDongVipAuth vipAuth = response.body();
-                    if(vipAuth.getStatus() == 1)
+                    if(vipAuth.getStatus() == 0)
                     {
                         setPurchased();
                     }

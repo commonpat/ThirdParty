@@ -16,6 +16,7 @@ public abstract class IPurchase {
     }
 
     protected void setPurchased() {
+
         setOrderStatus(0);
     }
 

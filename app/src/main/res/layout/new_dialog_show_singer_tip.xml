@@ -44,7 +44,7 @@
                 android:text="确定"
                 android:id="@+id/sure"
                 android:gravity="center"
-                android:textColor="#FF05fb8a"
+                android:textColor="@color/yellow"
                 android:textSize="@dimen/sp30"
                 />
         </LinearLayout>

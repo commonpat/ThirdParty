@@ -33,7 +33,7 @@ public class DiffConfig {
     public static VoiceAssistant voiceAssistant = new VoiceAssistant();
 
     //修改平台即可
-    public static Platform CurrentPlatform = Platform.gcable;
+    public static Platform CurrentPlatform = Platform.gzbn;
 
     static Boolean LocalTest = false;
 
@@ -69,6 +69,12 @@ public class DiffConfig {
                 CurrentTVBox = new HNTVBox();
                 CurrentPurchase = new HNTVPurchase();
                 break;
+            }
+            case gzbn:
+            {
+                GlobalEnv = new GZBNEnv();
+                CurrentTVBox = new GZBNBox();
+                CurrentPurchase = new GZBNPurchase();
             }
         }
 
@@ -119,6 +125,8 @@ public class DiffConfig {
             case gztv:
                 return "广州";
 
+            case gzbn :
+                return "贵州";
             default:
                 return "";
         }

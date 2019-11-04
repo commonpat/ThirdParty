@@ -8,22 +8,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.diff.IPurchase;
+import com.utvgo.handsome.diff.ITVBox;
+import com.utvgo.handsome.diff.Platform;
 import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.handsome.utils.XLog;
 import com.utvgo.handsome.views.CustomVideoView;
 import com.utvgo.huya.BuildConfig;
+import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanExitPage;
 import com.utvgo.huya.beans.OpItem;
+import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.TypesBean;
 import com.utvgo.huya.listeners.MyDialogEnterListener;
@@ -31,6 +41,9 @@ import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.StringUtils;
 import com.utvgo.huya.utils.ToastUtil;
+import com.vod.VPlayer;
+import com.vod.event.IPlayerEvent;
+import com.vod.listener.PlayerEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,14 +53,16 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BuyActivity {
 
     @BindView(R.id.btn_tab_0)
     Button mainTabButton1;
 
     @BindView(R.id.vv_small)
     CustomVideoView videoView;
+
+    @BindView(R.id.sv_video)
+    SurfaceView svVideo;
 
     final int flContentIdArray[] = {R.id.bits_1, R.id.bits_2, R.id.bits_3, R.id.bits_4, R.id.bits_5,
             R.id.bits_6, R.id.bits_7, R.id.bits_8, R.id.bits_9, R.id.bits_10};
@@ -65,6 +80,8 @@ public class HomeActivity extends BaseActivity {
 
     int currentPlayingIndex = 0;
     String assetUrlArray[] = null;
+    public VPlayer vvp;
+
 
     final View.OnClickListener itemOnClickListener = new View.OnClickListener() {
         @Override
@@ -86,11 +103,26 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        if(DiffConfig.CurrentPlatform==Platform.gzbn){
+            if(platfromUtils.isFuMuLe2()){
+                setContentView(R.layout.activity_gzfml2_home);;
+            }else {
+                setContentView(R.layout.activity_home);}
+        }else {
+            setContentView(R.layout.activity_home);
+        }
+
         ButterKnife.bind(this);
-
         initView();
-
+        stat("首页","");
+        DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
+            @Override
+            public void onFinished(String message) {
+                if(BuildConfig.DEBUG){
+                    Toast.makeText(HomeActivity.this, "HomePage auth finished: " + (DiffConfig.CurrentPurchase.isPurchased() ? "is Purchased" : "not Purchased"), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -120,6 +152,9 @@ public class HomeActivity extends BaseActivity {
     public void onClick(View v) {
         final Context context = this;
         final int viewId = v.getId();
+        if(DiffConfig.CurrentPlatform == Platform.gzbn && platfromUtils.isFuMuLe2()){
+            vvp.destroy();
+        }
         switch (viewId) {
             case R.id.btn_main_order: {
                 DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
@@ -147,7 +182,11 @@ public class HomeActivity extends BaseActivity {
                 break;
             }
             case R.id.btn_main_introduction: {
-                startActivity(new Intent(this, IntroduceActivity.class));
+                if (DiffConfig.UseWebIntroduction) {
+                    QWebViewActivity.navigateUrl(this, DiffConfig.IntroduceUrl, null);
+                } else {
+                    startActivity(new Intent(this, IntroduceActivity.class));
+                }
                 break;
             }
             case R.id.btn_main_user_center: {
@@ -182,6 +221,7 @@ public class HomeActivity extends BaseActivity {
             default:
             {
                 int index = Arrays.binarySearch(flContentButtonIdArray, viewId);
+                if(viewId==R.id.btn_fl_10){index = 9;}
                 if (index >= 0 && index < this.pageOpData.size()) {
                     final OpItem bean = this.pageOpData.get(index);
                     actionOnOp(bean);
@@ -189,6 +229,7 @@ public class HomeActivity extends BaseActivity {
             }
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -200,13 +241,24 @@ public class HomeActivity extends BaseActivity {
 
     public void turnHome() {
         finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(0);
+        if(DiffConfig.CurrentPlatform==Platform.gzbn){
+            if (platfromUtils.isFML1()) {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                startActivity(intent);}
+        }else {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//        System.exit(0);
     }
 
     @Override
     public void onBackPressed() {
-        if (endPushContentBean != null) {
+        //endPushContentBean != null
+        Log.d(TAG, "onBackPressed: "+HuyaApplication.hadBuy());
+        if (!HuyaApplication.hadBuy()) {
             showQuitRecommend();
         } else {
             alertForQuit();
@@ -217,6 +269,8 @@ public class HomeActivity extends BaseActivity {
     protected void onPause() {
         if (videoView != null) {
             videoView.pause();
+        }else if(vvp != null){
+            vvp.pause();
         }
         super.onPause();
     }
@@ -224,20 +278,34 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (videoView != null) {
-            videoView.resume();
+//        if (videoView != null) {
+//            videoView.resume();
+//        }else if(vvp!=null){
+//           vvp.resume();
+//        }
+        if (!DiffConfig.validateDeviceKeyNO(this)) {
+            return;
+        }
+        if (platfromUtils.isFuMuLe2()){
+            svVideo.setVisibility(View.VISIBLE);
+            fmlPlayVideo();
+        }else {
+            playVideo();
         }
     }
-
     @Override
     protected void onDestroy() {
-        if (videoView != null) {
+
+        if(platfromUtils.isFuMuLe2()){
+            vvp.destroy();
+        }else{
             videoView.stopPlayback();
         }
+        svVideo.setVisibility(View.GONE);
         super.onDestroy();
     }
 
-    void alertForQuit() {
+    private void alertForQuit() {
         HiFiDialogTools.getInstance().showLeftRightTip(HomeActivity.this, "温馨提示", "确认退出" +
                 getResources().getString(R.string.app_name), "确认", "取消", new MyDialogEnterListener() {
             @Override
@@ -251,17 +319,14 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
-    void showQuitRecommend() {
+   private void showQuitRecommend() {
         Intent intent = new Intent(HomeActivity.this, ExitActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtra("bgUrl", endPushContentBean.get(0).getBgImgUrl());
-        intent.putExtra("contentMid", endPushContentBean.get(0).getTypeId());
-        intent.putExtra("recommendType", "exit");
+
         startActivityForResult(intent, ExitActivity.TAGRecommendExit);
     }
 
 
-    void showPageData(final String imagePrefix, final List<OpItem> list) {
+   private void showPageData(final String imagePrefix, final List<OpItem> list) {
         if (list == null || list.isEmpty()) {
             return;
         }
@@ -273,11 +338,11 @@ public class HomeActivity extends BaseActivity {
             if (i < flContentImageViewArray.length) {
                 OpItem bean = list.get(i);
                 boolean isVideo = "1".equalsIgnoreCase(bean.getIsVideo());
-                if (BuildConfig.DEBUG) {
-                    if (i == 3) {
+
+                 if (i == 3) {
                         isVideo = true;
-                    }
-                }
+                  }
+
                 if (isVideo) {
                     videoData = bean;
                     hasVideo = true;
@@ -290,65 +355,119 @@ public class HomeActivity extends BaseActivity {
 
                 if (!isVideo) {
                     ImageView imageView = flContentImageViewArray[i];
-                    loadImage(imageView, bean.getImgUrl());
+                    Glide.with(this).load(imagePrefix+bean.getImgUrl()).into(imageView);
+                    //loadImage(imageView, bean.getImgUrl());
                 }
             }
         }
         if (hasVideo) {
-            initMediaPlayer();
-            play();
+
+            if(DiffConfig.CurrentPlatform== Platform.gzbn){
+                if (platfromUtils.isFuMuLe2()){
+                    svVideo.setVisibility(View.VISIBLE);
+                    fmlPlayVideo();
+                }else {
+                    setHahaPlayer(videoView);
+                    playVideo();
+                }
+
+            }else {
+                setHahaPlayer(videoView);
+                playVideo();
+            }
         }
     }
 
-    //
-    void initMediaPlayer() {
-        videoView.setVisibility(View.VISIBLE);
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                // playEnd(0.1f);
-                mp.setDisplay(null);
-                mp.reset();
-                mp.setDisplay(videoView.getHolder());
-
-                XLog.d(getLocalClassName(), "Video player onCompletion: 播放结束");
-                playVideo(currentPlayingIndex + 1);
-            }
-        });
-
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                videoView.start();
-            }
-        });
-
-        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                XLog.e(getLocalClassName(), "Video player error: what " + what + "  extra " + extra);
-                playVideo(currentPlayingIndex + 1);
-                return true;
-            }
-        });
+    @Override
+    public void onDuration(long l) {
+        super.onDuration(l);
+//        if("gzbn".equals(DiffConfig.CurrentPlatform.name())){
+//            if (platfromUtils.isFuMuLe2()) {
+//                setHahaPlayerSize((int) getResources().getDimension(R.dimen.dp270), (int) getResources().getDimension(R.dimen.dp178),
+//                        (int) getResources().getDimension(R.dimen.dp545), (int) getResources().getDimension(R.dimen.dp305));
+//            }
+//        }
     }
 
-    void play() {
+
+    public void hahaPlayEnd() {
+        if (platfromUtils.isFuMuLe2()){
+            svVideo.setVisibility(View.VISIBLE);
+            fmlPlayVideo();
+        }else {
+            playVideo();
+        }
+    }
+//二代
+    public void fmlPlayVideo() {
+        String fmlVodId="HuYaSeriesIDhuya0001test";
         if (this.assetUrlArray != null) {
             int index = new Random().nextInt(this.assetUrlArray.length);
-            playVideo(index);
-        }
-    }
-
-    void playVideo(final int index) {
-        if (this.assetUrlArray != null) {
             final String array[] = this.assetUrlArray;
             int playIndex = 0;
             if (index < 0 || index >= array.length) {
                 playIndex = 0;
             }
             if (playIndex >= 0 && playIndex < array.length) {
-                playUrl(array[playIndex]);
+                // playUrl(array[playIndex]);
+
+                if( array[playIndex].startsWith("http")&&DiffConfig.CurrentPlatform==Platform.gzbn) {
+                    array[playIndex] = "HuYaSeriesIDhuya0001test";
+                }
+                fmlVodId=array[playIndex];
+            }
+        }
+
+        DiffConfig.CurrentTVBox.fetchUrlByVODAssetId(this, fmlVodId, new ITVBox.FetchUrlByVODAssetIdCallBack() {
+            @Override
+            public void onReceivedUrl(String vodId, String url) {
+
+
+                vvp = new VPlayer(getBaseContext(), (int) getResources().getDimension(R.dimen.dp270), (int) getResources().getDimension(R.dimen.dp178), (int) getResources().getDimension(R.dimen.dp545), (int) getResources().getDimension(R.dimen.dp305));
+
+                if (vvp != null && (vvp.getState() == 2 || vvp.getState() == 3)) {
+                    vvp.stop();
+                }
+
+                vvp.play(url, 0);
+                vvp.setPlayerEventListener(new PlayerEventListener() {
+                    @Override
+                    public void OnPlayerEvent(IPlayerEvent iPlayerEvent) {
+                        Log.d("PlayGuizhouActivity", "OnPlayerEvent: type:" + iPlayerEvent.getType()
+                                + "  reason:" + iPlayerEvent.getReason() + "  errorType:" + iPlayerEvent.getErrorType()
+                                + "  errorReason:" + iPlayerEvent.getErrorReason());
+                        if (iPlayerEvent.getType() == IPlayerEvent.TYPE_RTSP_PLAYER_PLAY_SUCCESS) {
+                           //onDuration((long) vvp.getDuration() * 1000);
+                           Log.d(TAG, "run: "+ vvp.getDuration());
+
+                        }
+                        if(iPlayerEvent.getType() == IPlayerEvent.TYPE_PLAYER_FRONT_STOP ||iPlayerEvent.getType() == IPlayerEvent.TYPE_PLAYER_END_OF_STREAM){
+                            hahaPlayEnd();
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+
+    private void playVideo() {
+
+        if (this.assetUrlArray != null) {
+            int index = new Random().nextInt(this.assetUrlArray.length);
+            final String array[] = this.assetUrlArray;
+            int playIndex = index;
+            if (index < 0 || index >= array.length) {
+                playIndex = 0;
+            }
+            if (playIndex >= 0 && playIndex < array.length) {
+               // playUrl(array[playIndex]);
+
+                if( array[playIndex].startsWith("http")&&DiffConfig.CurrentPlatform==Platform.gzbn) {
+                    array[playIndex] = "HuYaSeriesIDhuya0001test";
+                }
+                getHahaPlayerUrl(array[playIndex]);
             }
         }
     }
@@ -357,14 +476,14 @@ public class HomeActivity extends BaseActivity {
         videoView.setVideoURI(Uri.parse(assetUrl));
     }
 
-    void gotoMediaPlayer()
+  private   void gotoMediaPlayer()
     {
         if(this.videoData != null)
         {
             String array[] = this.videoData.getHref().split(",");
             if (array == null || array.length <= 1) {
-                array = this.videoData.getVideoUrl().split("\\|");
-            }
+            array = this.videoData.getVideoUrl().split("\\|");
+        }
             int index = currentPlayingIndex;
             if(index >= 0 && index < array.length)
             {
@@ -387,7 +506,7 @@ public class HomeActivity extends BaseActivity {
     /*
      **** network service
      */
-    void loadData() {
+    private void loadData() {
         NetworkService.defaultService().fetchHomePageData(this, new JsonCallback<BaseResponse<List<OpItem>>>() {
             @Override
             public void onSuccess(Response<BaseResponse<List<OpItem>>> response) {
@@ -421,5 +540,49 @@ public class HomeActivity extends BaseActivity {
                 }
             }
         });
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(vvp != null){ ;
+            vvp=null;
+        }
+        timeHandler.removeMessages(PLAY_TIME);
+        svVideo.setVisibility(View.GONE);
+    }
+
+    public  void  checkIntentData(){
+
+        String programId = getIntent().getStringExtra("pkId");
+        String multisetType = getIntent().getStringExtra("multisetType");
+        String channelId = getIntent().getStringExtra("channelId");
+
+        String albumId = getIntent().getStringExtra("pkId");
+
+        String topicId = getIntent().getStringExtra("themId");
+        String styleId = getIntent().getStringExtra("styleId");
+        Log.d(TAG, "checkIntentData:"+"programId"+programId+"multisetType"+multisetType+"channelId"+channelId+"albumId"+albumId+"topicId"+topicId+"styleId"+styleId);
+
+        if(programId!=null && multisetType!=null && channelId!=null) {
+
+            NetworkService.defaultService().fetchProgramContent(this, StringUtils.intValueOfString(programId),
+                    multisetType, StringUtils.intValueOfString(channelId), new JsonCallback<BaseResponse<ProgramContent>>() {
+                        @Override
+                        public void onSuccess(Response<BaseResponse<ProgramContent>> response) {
+                            BaseResponse<ProgramContent> data = response.body();
+                            if (data.isOk()) {
+                                ArrayList<ProgramInfoBase> list = new ArrayList<>();
+                                list.add(data.getData());
+                                PlayVideoActivity.play(getBaseContext(), list, 0, false);
+                            }
+                        }
+                    });
+        }
+        if(albumId != null) {
+            MediaAlbumActivity.show(this, StringUtils.intValueOfString(albumId));
+        }
+       if(topicId != null && styleId != null)
+            TopicActivity.show(this, topicId, styleId);
+
     }
 }

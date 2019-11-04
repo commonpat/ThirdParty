@@ -26,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.Platform;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.HuyaApplication;
@@ -42,6 +43,7 @@ import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.ToastUtil;
 import com.utvgo.huya.utils.Tools;
+import com.vod.VPlayer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -298,11 +300,18 @@ public class PlayVideoActivity extends BuyActivity {
     @Override
     protected void onStop() {
         try {
+            if(vp != null){
+                VPlayer vPlayer=(VPlayer) getHahaPlayer();
+                if (vPlayer != null) {
+                    statisticsVideoPlay(vPlayer.getCurrent()+ "",
+                            vPlayer.getCurrent() + "");
+                }
+            }else {
             VideoView videoView = (VideoView) getHahaPlayer();
             if (videoView != null) {
                 statisticsVideoPlay(videoView.getCurrentPosition() / 1000 + "",
                         videoView.getCurrentPosition() / 1000 + "");
-            }
+            }}
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -388,7 +397,11 @@ public class PlayVideoActivity extends BuyActivity {
                     Toast.makeText(getApplicationContext(), "再按一次退出播放", Toast.LENGTH_SHORT).show();
                     exitTime = System.currentTimeMillis();
                 } else {
-                    finish();
+                    PlayVideoActivity.this.finish();
+                    if(vp != null){
+                        vp.destroy();
+                    }
+
                 }
             }
             return true;
@@ -515,8 +528,8 @@ public class PlayVideoActivity extends BuyActivity {
                 TextView tvIndex = (TextView) itemView.findViewById(R.id.tv_song_index);
                 TextView tvName = (TextView) itemView.findViewById(R.id.tv_song_name);
                 if (playingIndex == i) {
-                    tvIndex.setTextColor(getResources().getColor(R.color.green));
-                    tvName.setTextColor(getResources().getColor(R.color.green));
+                    tvIndex.setTextColor(getResources().getColor(R.color.yellow));
+                    tvName.setTextColor(getResources().getColor(R.color.yellow));
 
                     itemView.requestFocus();
                 } else {
@@ -527,8 +540,8 @@ public class PlayVideoActivity extends BuyActivity {
                 TextView tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
                 TextView tvSingerName = (TextView) itemView.findViewById(R.id.tv_singer_name);
                 if (playingIndex == i) {
-                    tvTitle.setTextColor(getResources().getColor(R.color.green));
-                    tvSingerName.setTextColor(getResources().getColor(R.color.green));
+                    tvTitle.setTextColor(getResources().getColor(R.color.yellow));
+                    tvSingerName.setTextColor(getResources().getColor(R.color.yellow));
 
                     itemView.requestFocus();
                 } else {
@@ -554,6 +567,7 @@ public class PlayVideoActivity extends BuyActivity {
                                     public void onSuccess(Response<BaseResponse> response) {
                                         BaseResponse beanBasic = response.body();
                                         if (beanBasic != null && beanBasic.isOk()) {
+                                            ifCollectton="no";
                                             ivCollect.setImageResource(R.drawable.selector_player_collect_no);
                                             programInfoBase.setFavor(false);
                                         } else {
@@ -568,8 +582,8 @@ public class PlayVideoActivity extends BuyActivity {
                                     @Override
                                     public void onSuccess(Response<BaseResponse> response) {
                                         BaseResponse bean = response.body();
-                                        if (bean != null && bean.isOk()) {
-                                            checkCollect();
+                                        if (bean != null && "success".equals(bean.getMessage())) {
+                                            ifCollectton="yes";
                                             ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
                                             programInfoBase.setFavor(true);
                                         } else {
@@ -589,7 +603,7 @@ public class PlayVideoActivity extends BuyActivity {
             @Override
             public void onSuccess(Response<BeanCheckCollect> response) {
                 BeanCheckCollect bean = response.body();
-                if (bean != null && bean.isOk()) {
+                if (bean != null && "1".equals(bean.getCode())) {
                     ifCollectton = bean.getData().getIsCollect();
                     if ("yes".equals(ifCollectton)) {
                         ivCollect.setImageResource(R.drawable.selector_player_collect_yes);
@@ -603,7 +617,14 @@ public class PlayVideoActivity extends BuyActivity {
 
     @Override
     public void getHahaPlayerUrl(String vodID) {
-        setHahaPlayer(vvJingling);
+        if (DiffConfig.CurrentPlatform== Platform.gzbn){
+            if (platfromUtils.isFuMuLe2()){
+                //donothing
+            }else {
+                setHahaPlayer(vvJingling);}
+        }else {
+            setHahaPlayer(vvJingling);
+        }
         //String asset = DiffHostConfig.getMediaAsset((mvDetail != null ) ? mvDetail.getData(): null, (songDetail != null) ? songDetail.getSong() : null);
         super.getHahaPlayerUrl(vodID);
     }
@@ -738,8 +759,9 @@ public class PlayVideoActivity extends BuyActivity {
                 {
                     VideoInfo videoInfo = currentProgramContent.getVideos().get(this.playingIndex);
                     mediaSourceUrl = videoInfo.getMediaSourceUrl();
+
                 }
-                if(!TextUtils.isEmpty(mediaSourceUrl))
+                if(!TextUtils.isEmpty(mediaSourceUrl+""))
                 {
                     getHahaPlayerUrl(mediaSourceUrl);
                 }
@@ -830,7 +852,16 @@ public class PlayVideoActivity extends BuyActivity {
         String multiSetType = "";
         long totalTime = 0;
         try {
-            totalTime = videoView.getDuration();
+            try {
+                if (vp != null){
+                    totalTime = (long) vp.getDuration();
+                }else {
+                    totalTime = (long)videoView.getDuration();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

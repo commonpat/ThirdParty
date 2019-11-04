@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.huya.R;
 import com.utvgo.huya.activity.TopicActivity;
 import com.utvgo.huya.beans.BeanTopic;
@@ -78,12 +79,7 @@ public class Topic5 {
                 activity.finish();
             }
         });
-        moreFocusImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                activity.finish();
-            }
-        });
+        moreFocusImage.setOnClickListener(activity);
     }
 
     public void addContent(BeanTopic topic) {
@@ -93,8 +89,8 @@ public class Topic5 {
         List<OpItem> utvgoSubjectRecordList = topic.getUtvgoSubjectRecordList();
         if (utvgoSubjectRecordList == null)
             return;
-        for (int i = 0; i < utvgoSubjectRecordList.size(); i++) {
-            //ImageTool.loadImageWithUrl(activity, DiffHostConfig.generateImageUrl(utvgoSubjectRecordList.get(i).getImgUrl()), imageViews.get(i));
+        for (int i = 0; i < imageViews.size(); i++) {
+            ImageTool.loadImageWithUrl(activity, DiffConfig.generateImageUrl(utvgoSubjectRecordList.get(i).getImgUrl()), imageViews.get(i));
             imageViews.get(i).setOnClickListener(activity);
             final int d = i;
             imageViews.get(i).setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -111,9 +107,9 @@ public class Topic5 {
                 imageViews.get(i).requestFocus();
             }
         }
-        //ImageTool.loadImageWithUrl(activity, DiffHostConfig.generateImageUrl(topic.getData().getImgUrl1()), moreFocusImage);
-        //ImageTool.loadImageWithUrl(activity, DiffHostConfig.generateImageUrl(topic.getData().getImgUrl2()), moreImage);
-        //ImageTool.loadImageWithUrl(activity, DiffHostConfig.generateImageUrl(topic.getData().getImgUrl3()), backFocusImage);
-        //ImageTool.loadImageWithUrl(activity, DiffHostConfig.generateImageUrl(topic.getData().getImgUrl4()), backImage);
+        ImageTool.loadImageWithUrl(activity, DiffConfig.generateImageUrl(utvgoSubjectRecordList.get(6).getImgUrl()), moreFocusImage);
+        ImageTool.loadImageWithUrl(activity, DiffConfig.generateImageUrl(utvgoSubjectRecordList.get(7).getImgUrl()), moreImage);
+        ImageTool.loadImageWithUrl(activity, DiffConfig.generateImageUrl(utvgoSubjectRecordList.get(8).getImgUrl()), backFocusImage);
+        ImageTool.loadImageWithUrl(activity, DiffConfig.generateImageUrl(utvgoSubjectRecordList.get(9).getImgUrl()), backImage);
     }
 }

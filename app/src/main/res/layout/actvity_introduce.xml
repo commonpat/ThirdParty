@@ -12,6 +12,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="200dp"
         android:layout_marginRight="320dp"
+        android:visibility="gone"
         android:background="@mipmap/btn_introduction_purchase_focus"
         android:onClick="onClick"/>
 

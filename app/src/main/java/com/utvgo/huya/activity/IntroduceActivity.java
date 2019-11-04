@@ -26,34 +26,34 @@ public class IntroduceActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actvity_introduce);
         ButterKnife.bind(this);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showViewByHandler(btnOrder);
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                showViewByHandler(btnOrder);
+//            }
+//        });
     }
 
-    public void onClick(View view){
-            if (view == btnOrder){
-                DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
-                    @Override
-                    public void onFinished(String message) {
-                        if (HuyaApplication.hadBuy()) {
-                            ToastUtil.show(getBaseContext(), "您已经是 " + getResources().getString(R.string.app_name) + " 尊贵会员");
-                        } else {
-                            if (!TextUtils.isEmpty(message)) {
-                                ToastUtil.show(getBaseContext(), message);
-                            }
-                            DiffConfig.CurrentPurchase.pay(getBaseContext(), new CommonCallback() {
-                                @Override
-                                public void onFinished(Context context) {
-
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-    }
+//    public void onClick(View view){
+//            if (view == btnOrder){
+//                DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
+//                    @Override
+//                    public void onFinished(String message) {
+//                        if (HuyaApplication.hadBuy()) {
+//                            ToastUtil.show(getBaseContext(), "您已经是 " + getResources().getString(R.string.app_name) + " 尊贵会员");
+//                        } else {
+//                            if (!TextUtils.isEmpty(message)) {
+//                                ToastUtil.show(getBaseContext(), message);
+//                            }
+//                            DiffConfig.CurrentPurchase.pay(getBaseContext(), new CommonCallback() {
+//                                @Override
+//                                public void onFinished(Context context) {
+//
+//                                }
+//                            });
+//                        }
+//                    }
+//                });
+//            }
+//    }
 }

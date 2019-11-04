@@ -2,105 +2,110 @@ package com.utvgo.huya.beans;
 
 import java.util.List;
 
-public class BeanExitPage extends BaseResponse {
-    private List<Data> data;
-    private String imageProfix;
+public class BeanExitPage {
+            private String code;
 
-    public void setData(List<Data> data) {
-        this.data = data;
-    }
+            private List<Data> data;
 
-    public List<Data> getData() {
-        return this.data;
-    }
+            private String message;
 
-    public void setImageProfix(String imageProfix) {
-        this.imageProfix = imageProfix;
-    }
+            private String imageProfix;
 
-    public String getImageProfix() {
-        return this.imageProfix;
-    }
+            public void setCode(String code) {
+                this.code = code;
+            }
 
-    public static class Data {
-        private String imgUrl;
+            public String getCode() {
+                return this.code;
+            }
 
-        private int number;
+            public void setData(List<Data> data) {
+                this.data = data;
+            }
 
-        private String videoUrl;
+            public List<Data> getData() {
+                return this.data;
+            }
 
-        private String bgImgUrl;
+            public void setMessage(String message) {
+                this.message = message;
+            }
 
-        private String isVideo;
+            public String getMessage() {
+                return this.message;
+            }
 
-        private int typeId;
+            public void setImageProfix(String imageProfix) {
+                this.imageProfix = imageProfix;
+            }
 
-        private String hrefType;
+            public String getImageProfix() {
+                return this.imageProfix;
+            }
+            public static class Data {
+                private String imgUrl;
 
-        private String href;
+                private int number;
 
-        public void setImgUrl(String imgUrl) {
-            this.imgUrl = imgUrl;
+                private String videoUrl;
+
+                private String bgImgUrl;
+
+                private String isVideo;
+
+                private int typeId;
+
+                private String hrefType;
+
+                private String href;
+
+                public void setImgUrl(String imgUrl){
+                    this.imgUrl = imgUrl;
+                }
+                public String getImgUrl(){
+                    return this.imgUrl;
+                }
+                public void setNumber(int number){
+                    this.number = number;
+                }
+                public int getNumber(){
+                    return this.number;
+                }
+                public void setVideoUrl(String videoUrl){
+                    this.videoUrl = videoUrl;
+                }
+                public String getVideoUrl(){
+                    return this.videoUrl;
+                }
+                public void setBgImgUrl(String bgImgUrl){
+                    this.bgImgUrl = bgImgUrl;
+                }
+                public String getBgImgUrl(){
+                    return this.bgImgUrl;
+                }
+                public void setIsVideo(String isVideo){
+                    this.isVideo = isVideo;
+                }
+                public String getIsVideo(){
+                    return this.isVideo;
+                }
+                public void setTypeId(int typeId){
+                    this.typeId = typeId;
+                }
+                public int getTypeId(){
+                    return this.typeId;
+                }
+                public void setHrefType(String hrefType){
+                    this.hrefType = hrefType;
+                }
+                public String getHrefType(){
+                    return this.hrefType;
+                }
+                public void setHref(String href){
+                    this.href = href;
+                }
+                public String getHref(){
+                    return this.href;
+                }
+            }
         }
-
-        public String getImgUrl() {
-            return this.imgUrl;
-        }
-
-        public void setNumber(int number) {
-            this.number = number;
-        }
-
-        public int getNumber() {
-            return this.number;
-        }
-
-        public void setVideoUrl(String videoUrl) {
-            this.videoUrl = videoUrl;
-        }
-
-        public String getVideoUrl() {
-            return this.videoUrl;
-        }
-
-        public void setBgImgUrl(String bgImgUrl) {
-            this.bgImgUrl = bgImgUrl;
-        }
-
-        public String getBgImgUrl() {
-            return this.bgImgUrl;
-        }
-
-        public void setIsVideo(String isVideo) {
-            this.isVideo = isVideo;
-        }
-
-        public String getIsVideo() {
-            return this.isVideo;
-        }
-
-        public void setTypeId(int typeId) {
-            this.typeId = typeId;
-        }
-
-        public int getTypeId() {
-            return this.typeId;
-        }
-
-        public void setHrefType(String hrefType) {
-            this.hrefType = hrefType;
-        }
-
-        public String getHrefType() {
-            return this.hrefType;
-        }
-
-        public void setHref(String href) {
-            this.href = href;
-        }
-
-        public String getHref() {
-            return this.href;
-        }
-    }
-}

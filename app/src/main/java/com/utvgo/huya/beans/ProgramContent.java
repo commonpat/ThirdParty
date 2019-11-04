@@ -2,6 +2,10 @@ package com.utvgo.huya.beans;
 
 import android.text.TextUtils;
 
+import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.Platform;
+import com.utvgo.huya.BuildConfig;
+
 import java.util.List;
 
 public class ProgramContent extends ProgramInfoBase {
@@ -64,14 +68,22 @@ public class ProgramContent extends ProgramInfoBase {
     //
     public String getMediaSourceUrl()
     {
+
         if(!TextUtils.isEmpty(this.videoUrlHigh))
         {
+            if( DiffConfig.CurrentPlatform== Platform.gzbn && (this.videoUrlHigh.startsWith("http"))){
+                return "HuYaSeriesIDhuya0001test";
+            }
             return this.videoUrlHigh;
         }
         if(!TextUtils.isEmpty(this.videoUrlFluency))
         {
+            if( DiffConfig.CurrentPlatform== Platform.gzbn && (this.videoUrlFluency.startsWith("http"))){
+                return "HuYaSeriesIDhuya0001test";
+            }
             return this.videoUrlFluency;
         }
-        return "";
+
+        return "HuYaSeriesIDhuya0001test";
     }
 }

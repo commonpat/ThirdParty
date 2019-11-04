@@ -7,8 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -18,7 +21,11 @@ import android.widget.VideoView;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.ITVBox;
+import com.utvgo.handsome.diff.Platform;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.huya.BuildConfig;
+import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanStatistics;
@@ -28,10 +35,14 @@ import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.TPageData;
 import com.utvgo.huya.beans.VideoInfo;
 import com.utvgo.huya.net.NetworkService;
+import com.vod.VPlayer;
+import com.vod.event.IPlayerEvent;
+import com.vod.listener.PlayerEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +62,8 @@ public class MediaAlbumActivity extends BuyActivity {
     ImageView leftImageView;
     @BindView(R.id.icon_right_narrow)
     ImageView rightImageView;
+    @BindView(R.id.sv_video)
+    SurfaceView svVideo;
 
     private String showType = "";
     private boolean isExperience;
@@ -72,6 +85,7 @@ public class MediaAlbumActivity extends BuyActivity {
     private ProgramContent albumData = null;
 
     long currentMediaDuration = 0;
+    public VPlayer albumPlayer;
 
     public static void show(final Context context, final int albumId)
     {
@@ -96,8 +110,14 @@ public class MediaAlbumActivity extends BuyActivity {
         {
             this.itemViewArray.add((RelativeLayout)findViewById(array[i]));
         }
+        if(DiffConfig.CurrentPlatform == Platform.gzbn){
+            if(platfromUtils.isFuMuLe2()){
+                svVideo.setVisibility(View.VISIBLE);
+            }else {
+                setHahaPlayer(video);
+            }
+        }else {setHahaPlayer(video);}
 
-        setHahaPlayer(video);
 
         loadData();
     }
@@ -105,7 +125,16 @@ public class MediaAlbumActivity extends BuyActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        video.resume();
+        if (videoView != null) {
+            videoView.resume();
+        }else if(albumPlayer != null){
+            playMedia(playIndex);
+//            albumPlayer.resize((int) getResources().getDimension(R.dimen.dp238), (int) getResources().getDimension(R.dimen.dp53),
+//                   (int) getResources().getDimension(R.dimen.dp804), (int) getResources().getDimension(R.dimen.dp454));
+//            //playMedia(playIndex);
+//            setHahaPlayerSize((int) getResources().getDimension(R.dimen.dp238), (int) getResources().getDimension(R.dimen.dp53),
+//                    (int) getResources().getDimension(R.dimen.dp804), (int) getResources().getDimension(R.dimen.dp454));
+        }
         /*
         if (hadCallBuyView  && !isExperience) {
             hadCallBuyView = false;
@@ -126,13 +155,21 @@ public class MediaAlbumActivity extends BuyActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        if(albumPlayer != null){
+            albumPlayer.stop();
+        }
+
         startStatisticsPlay(this.currentMediaDuration);
         statusticsHandler.removeMessages(TagStartStatisticsPlay);
     }
 
     @Override
     protected void onPause() {
-        video.pause();
+        if (videoView != null) {
+            videoView.pause();
+        }else if(albumPlayer != null){
+            albumPlayer.pause();
+        }
         super.onPause();
     }
 
@@ -199,9 +236,58 @@ public class MediaAlbumActivity extends BuyActivity {
             statisticsPlayId = "";
             this.playIndex = index;
             VideoInfo videoBean = this.albumData.getVideos().get(this.playIndex);
-            hahaPlayUrl(videoBean.getMediaSourceUrl());
+            //hahaPlayUrl(videoBean.getMediaSourceUrl());
+            if(platfromUtils.isFuMuLe2()){
+                fmlPlayVideo(videoBean.getMediaSourceUrl());
+            }else {
+                getHahaPlayerUrl(videoBean.getMediaSourceUrl());
+            }
         }
     }
+    @Override
+    public void getHahaPlayerUrl(String vodID) {
+        VideoInfo videoBean = this.albumData.getVideos().get(this.playIndex);
+        super.getHahaPlayerUrl(videoBean.getMediaSourceUrl());
+    }
+
+    private void fmlPlayVideo(String fmlVodId) {
+
+
+        DiffConfig.CurrentTVBox.fetchUrlByVODAssetId(this, fmlVodId, new ITVBox.FetchUrlByVODAssetIdCallBack() {
+            @Override
+            public void onReceivedUrl(String vodId, String url) {
+                if(albumPlayer == null) {
+                    albumPlayer = new VPlayer(getBaseContext(), (int) getResources().getDimension(R.dimen.dp238), (int) getResources().getDimension(R.dimen.dp53), (int) getResources().getDimension(R.dimen.dp804), (int) getResources().getDimension(R.dimen.dp454));
+                }
+                if (albumPlayer != null && (albumPlayer.getState() == 2 || albumPlayer.getState() == 3)) {
+                    albumPlayer.stop();
+                }
+
+                albumPlayer.play(url, 0000000000);
+                albumPlayer.setPlayerEventListener(new PlayerEventListener() {
+                    @Override
+                    public void OnPlayerEvent(IPlayerEvent iPlayerEvent) {
+                        Log.d("PlayGuizhouActivity", "OnPlayerEvent: type:" + iPlayerEvent.getType()
+                                + "  reason:" + iPlayerEvent.getReason() + "  errorType:" + iPlayerEvent.getErrorType()
+                                + "  errorReason:" + iPlayerEvent.getErrorReason());
+                        if (iPlayerEvent.getType() == IPlayerEvent.TYPE_RTSP_PLAYER_PLAY_SUCCESS) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                   // onDuration((long) albumPlayer.getDuration() * 1000);
+                                    Log.d(TAG, "run: "+ albumPlayer.getDuration());
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -258,11 +344,7 @@ public class MediaAlbumActivity extends BuyActivity {
     }
 
 
-    @Override
-    public void getHahaPlayerUrl(String vodID) {
-        VideoInfo videoBean = this.albumData.getVideos().get(this.playIndex);
-        hahaPlayUrl(videoBean.getMediaSourceUrl());
-    }
+
 
     @Override
     public void hahaPlayEnd(float v) {
@@ -275,6 +357,12 @@ public class MediaAlbumActivity extends BuyActivity {
         this.currentMediaDuration = l;
         startStatisticsPlay(this.currentMediaDuration);
         super.onDuration(l);
+        if("gzbn".equals(DiffConfig.CurrentPlatform.name())){
+            if (platfromUtils.isFuMuLe2()) {
+                setHahaPlayerSize((int) getResources().getDimension(R.dimen.dp238), (int) getResources().getDimension(R.dimen.dp53),
+                        (int) getResources().getDimension(R.dimen.dp804), (int) getResources().getDimension(R.dimen.dp454));
+            }
+        }
     }
 
     @Override
@@ -343,12 +431,18 @@ public class MediaAlbumActivity extends BuyActivity {
             isExperience = false;
             showBuy("");
         } else {
-            super.onBackPressed();
+            if(platfromUtils.isFuMuLe2()){
+                albumPlayer.destroy();
+            }
+            finish();
         }
     }
 
-    void updateAlbumBackground(final String imageUrl)
+    void updateAlbumBackground(String imageUrl)
     {
+        if(this.albumId == 63483){
+            imageUrl = "";
+        }
         if(TextUtils.isEmpty(imageUrl))
         {
             bgImageView.setImageResource(R.mipmap.bg_album);
@@ -388,6 +482,9 @@ public class MediaAlbumActivity extends BuyActivity {
                         ImageView imageView = (ImageView)view;
                         String posterUrl = DiffConfig.generateImageUrl(videoBean.getPoster());
                         loadImage(imageView, posterUrl);
+                    }
+                    if(view instanceof Button){
+                        continue;
                     }
                     if(view instanceof TextView)
                     {
@@ -445,7 +542,10 @@ public class MediaAlbumActivity extends BuyActivity {
 
         if(this.albumData.getVideos().size() > 0)
         {
+
             playMedia(0);
         }
     }
+
+
 }

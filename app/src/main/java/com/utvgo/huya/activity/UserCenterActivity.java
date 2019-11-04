@@ -26,6 +26,7 @@ import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.AppUtils;
+import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.views.FocusView;
 import com.utvgo.huya.utils.ToastUtil;
 
@@ -65,6 +66,8 @@ public class UserCenterActivity extends BuyActivity {
     TextView tvKeyNo;
     @BindView(R.id.tv_area)
     TextView tvArea;
+    @BindView(R.id.tv_orderState)
+    TextView tvOrderState;
 
     private String code = "";
     FocusView focus;
@@ -79,7 +82,7 @@ public class UserCenterActivity extends BuyActivity {
         ButterKnife.bind(this);
 
 
-        String areaName = "";//Appconfig.getRegionCode(this);
+        String areaName = DiffConfig.getRegion(this);//Appconfig.getRegionCode(this);
 
         tvUserName.setText("户 主 ：***");
         tvArea.setText("地 区 ：" + areaName);
@@ -87,7 +90,9 @@ public class UserCenterActivity extends BuyActivity {
 
         String keyNO = DiffConfig.getCA(this);
         tvKeyNo.setText("卡 号 ：" + keyNO);
-
+        if(HuyaApplication.hadBuy()){
+            tvOrderState.setText("订购状态：已订购");
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -137,6 +142,10 @@ public class UserCenterActivity extends BuyActivity {
     }
 
     public void clickRecItem(final int viewId) {
+        if(!HuyaApplication.hadBuy()){
+            HiFiDialogTools.getInstance().showtips(this,"你还不是虎牙TV的会员，请先订购！",null);
+            return;
+        }
         OpItem opItem = opData.get(viewId);
         if(opItem != null)
         {

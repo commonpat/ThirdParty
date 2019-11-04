@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
@@ -42,6 +43,14 @@ public class CategoryListActivity extends BaseActivity {
 
     @BindView(R.id.tv_count)
     TextView tvCount;
+    @BindView(R.id.check_btn_tab_1)
+    ImageView  checkBtnTab1;
+    @BindView(R.id.check_btn_tab_2)
+    ImageView  checkBtnTab2;
+    @BindView(R.id.check_btn_tab_3)
+    ImageView  checkBtnTab3;
+
+
 
     private String showType = "";
     private boolean isExperience;
@@ -59,12 +68,19 @@ public class CategoryListActivity extends BaseActivity {
 
     private int pkId = 156, currentPage = 0, totalPage = 0;
     BeanTopic data = null;
+    private int checkId=R.id.btn_tab_1;
 
     public static void show(final Context context, final int pkId)
     {
         Intent intent = new Intent(context, CategoryListActivity.class);
         intent.putExtra("pkId", pkId);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showCheck(checkId);
     }
 
     @Override
@@ -89,15 +105,20 @@ public class CategoryListActivity extends BaseActivity {
             @Override
             public void run() {
                 if(pkId == 156)
-                {
+                {    checkId=R.id.btn_tab_1;
+                    showCheck(R.id.btn_tab_1);
                     findViewById(R.id.btn_tab_1).requestFocus();
                 }
                 else if(pkId == 157)
                 {
+                    checkId=R.id.btn_tab_2;
+                    showCheck(R.id.btn_tab_2);
                     findViewById(R.id.btn_tab_2).requestFocus();
                 }
                 else if(pkId == 158)
                 {
+                    checkId=R.id.btn_tab_3;
+                    showCheck(R.id.btn_tab_3);
                     findViewById(R.id.btn_tab_3).requestFocus();
                 }
                 loadData();
@@ -164,10 +185,13 @@ public class CategoryListActivity extends BaseActivity {
     @Override
     public void onClick(View view) {
         final int viewId = view.getId();
+
+        showCheck(viewId);
         switch (viewId)
         {
             case R.id.btn_tab_1:
             {
+                this.checkId=R.id.btn_tab_1;
                 this.pkId = 156;
                 loadData();
                 break;
@@ -175,6 +199,7 @@ public class CategoryListActivity extends BaseActivity {
 
             case R.id.btn_tab_2:
             {
+                this.checkId=R.id.btn_tab_2;
                 this.pkId = 157;
                 loadData();
                 break;
@@ -182,6 +207,7 @@ public class CategoryListActivity extends BaseActivity {
 
             case R.id.btn_tab_3:
             {
+                this.checkId=R.id.btn_tab_3;
                 this.pkId = 158;
                 loadData();
                 break;
@@ -207,6 +233,12 @@ public class CategoryListActivity extends BaseActivity {
         }
     }
 
+    private void showCheck(int viewId) {
+        checkBtnTab1.setVisibility((viewId==R.id.btn_tab_1)? View.VISIBLE:View.INVISIBLE);
+        checkBtnTab2.setVisibility((viewId==R.id.btn_tab_2)?View.VISIBLE:View.INVISIBLE);
+        checkBtnTab3.setVisibility((viewId==R.id.btn_tab_3)?View.VISIBLE:View.INVISIBLE);
+    }
+
     public void acitonAt(final int index) {
         OpItem opItem = this.subjectRecordListBeen.get(index);
         Uri uri = Uri.parse(opItem.getHref());
@@ -229,6 +261,7 @@ public class CategoryListActivity extends BaseActivity {
         for(int j = 0; j < itemViewArray.size(); j++)
         {
             RelativeLayout itemLayout = this.itemViewArray.get(j);
+
             int contentIndex = this.currentPage*pageSize + j;
             if(contentIndex < this.subjectRecordListBeen.size())
             {
@@ -240,8 +273,10 @@ public class CategoryListActivity extends BaseActivity {
                     if(view instanceof ImageView)
                     {
                         ImageView imageView = (ImageView)view;
-                        String posterUrl = DiffConfig.generateImageUrl(bean.getImgUrl());
-                        loadImage(imageView, posterUrl);
+                       // String posterUrl = DiffConfig.generateImageUrl(bean.getImgUrl());
+                        String posterUrl=DiffConfig.imageHost+bean.getImgUrl();
+                        Glide.with(this).load(posterUrl).into(imageView);
+                        //loadImage(imageView, posterUrl);
                     }
                 }
             }
@@ -250,7 +285,11 @@ public class CategoryListActivity extends BaseActivity {
                 itemLayout.setVisibility(View.INVISIBLE);
             }
         }
-        findViewById(R.id.btn_fl_0).requestFocus();
+        findViewById(R.id.btn_fl_0).setNextFocusUpId(checkId);
+        findViewById(R.id.btn_fl_1).setNextFocusUpId(checkId);
+        findViewById(R.id.btn_fl_2).setNextFocusUpId(checkId);
+        findViewById(R.id.btn_fl_3).setNextFocusUpId(checkId);
+
     }
 
 
@@ -292,5 +331,27 @@ public class CategoryListActivity extends BaseActivity {
 
         updateItemCount();
         updateItemContent();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+//        if(event.getKeyCode()==KeyEvent.KEYCODE_DPAD_UP){
+//            if(getCurrentFocus().getId()==R.id.btn_fl_0||getCurrentFocus().getId()==R.id.btn_fl_1||
+//                    getCurrentFocus().getId()==R.id.btn_fl_3||getCurrentFocus().getId()==R.id.btn_fl_4){
+//
+//                switch (pkId) {
+//                    case 156:
+//                        getCurrentFocus().setNextFocusUpId(R.id.btn_tab_1);
+//                       break;
+//                    case 157:
+//                        getCurrentFocus().setNextFocusUpId(R.id.btn_tab_2);
+//                        break;
+//                    case 158:
+//                        getCurrentFocus().setNextFocusUpId(R.id.btn_tab_3);
+//                        break;
+//                }
+//            }
+//        }
+        return super.dispatchKeyEvent(event);
     }
 }

@@ -5,7 +5,7 @@
     <!-- 描边，边框 -->
     <stroke
         android:width="@dimen/dp2"
-        android:color="@color/green"/>
+        android:color="@color/yellow"/>
 
     <!-- 设置圆角半径 -->
     <corners android:bottomRightRadius="@dimen/dp10"/>

@@ -28,10 +28,6 @@
             <!--android:resource="@xml/actions" />-->
 
         <activity android:name=".activity.LaunchActivity">
-
-        </activity>
-
-        <activity android:name=".activity.HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="com.utvgo.huya.action.MAIN" />
@@ -39,6 +35,18 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activity.HomeActivity" >
+
+        </activity>
+        <receiver android:name="com.utvgo.handsome.receiver.GuizhouPayReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action   android:name="com.gzgd.webapp.pay.result"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.BuyActivity" />
@@ -77,6 +85,10 @@
         <activity android:name=".activity.CategoryListActivity" >
         </activity>
 
+        <activity android:name=".activity.GZBNPayContinuityUnifiedActivity" >
+        </activity>
+
     </application>
+
 
 </manifest>

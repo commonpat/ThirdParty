@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,10 @@ import com.utvgo.huya.beans.LabelInfo;
 import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.ProgramListData;
 import com.utvgo.huya.net.NetworkService;
+import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.ImageTool;
 import com.utvgo.huya.utils.StringUtils;
+import com.utvgo.huya.utils.Tools;
 import com.utvgo.huya.views.SmoothHorizontalScrollView;
 
 import java.util.ArrayList;
@@ -210,10 +213,12 @@ public class MediaListActivity extends BasePageActivity {
     View.OnClickListener labelOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            defaultSelectedLabelIndex = cbList.indexOf(view);
-            layoutWithLabels();
+            int newIndex= cbList.indexOf(view);
+           // layoutWithLabels();
+            pageNo=1;
+            updateLabelsStatus(newIndex);
             XLog.d("fetchProgramListWithLabel 1");
-            fetchProgramListWithLabel(defaultSelectedLabelIndex);
+            fetchProgramListWithLabel(newIndex);
         }
     };
 
@@ -224,6 +229,7 @@ public class MediaListActivity extends BasePageActivity {
             String name = labelInfo.getName();
             CheckBox cb = (CheckBox) LayoutInflater.from(this).inflate(R.layout.item_top_title, null);
             cb.setText(name);
+            cb.setId(10000+i);
             cb.setTag(i);
             cb.setOnClickListener(labelOnClickListener);
             TextPaint textPaint = cb.getPaint();
@@ -253,7 +259,7 @@ public class MediaListActivity extends BasePageActivity {
             runText(itemList[i], false);
             ProgramInfoBase dataBean = list.get(i);
             tvList[i].setText(dataBean.getName());
-            ImageTool.loadImageWithUrl(this, DiffConfig.generateImageUrl(dataBean.getImageSmall()), ivList[i]);
+            ImageTool.loadImageWithUrl(this, DiffConfig.imageHost+dataBean.getImageSmall(), ivList[i]);
         }
 
         for (int n = list.size(); n < itemList.length; n++) {
@@ -308,6 +314,7 @@ public class MediaListActivity extends BasePageActivity {
     private void setItemUpFocusId(int upFocusId) {
         for (int i = 0; i < 4 && i < itemList.length; i++) {
             itemList[i].setNextFocusUpId(upFocusId);
+            Log.d(TAG, "setItemUpFocusId: "+upFocusId);
         }
     }
 
@@ -362,9 +369,12 @@ public class MediaListActivity extends BasePageActivity {
             oldView.setTextColor(getResources().getColor(R.color.white));
 
             CheckBox view = cbList.get(index);
-            view.setTextColor(getResources().getColor(R.color.theme));
+            view.setTextColor(getResources().getColor(R.color.yellow));
 
             defaultSelectedLabelIndex = index;
+        }else {
+            CheckBox  v= cbList.get(index);
+            v.setTextColor(getResources().getColor(R.color.yellow));
         }
     }
 
@@ -392,8 +402,12 @@ public class MediaListActivity extends BasePageActivity {
             @Override
             public void onSuccess(Response<BaseResponse<List<LabelInfo>>> response) {
                 BaseResponse<List<LabelInfo>> data = response.body();
+                if(data.getData()==null||data.getData().size()==0){
+                    HiFiDialogTools.getInstance().showtips(MediaListActivity.this, "没有配置数据", null);
+                    return;
+                }
                 if (data.isOk()) {
-                    initLabels(data.getData());
+                    initLabels(data.getData());//标题栏
                     int index = -1;
                     for(int i = 0; i < data.getData().size(); i++)
                     {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +25,8 @@ import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.handsome.receiver.GuizhouPayReceiver;
+import com.utvgo.handsome.utils.PlatfromUtils;
 import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
@@ -62,18 +65,25 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     public boolean hadCallBuyView = false;
     public boolean needBringFront = true;
     private boolean needTransition = true;
+    public PlatfromUtils platfromUtils;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DensityUtil.init(this, 1280);
         super.onCreate(savedInstanceState);
+        registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        registerMessageReceiver();
+        platfromUtils = new PlatfromUtils();
+
+
     }
 
     @Override
     protected void onDestroy() {
         try {
             unregisterReceiver(mHomeKeyEventReceiver);
+            unregisterReceiver(mMessageReceiver);
         } catch (Exception e) {
             //TODO
         }
@@ -322,6 +332,14 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
             }
         }
     };
+    public GuizhouPayReceiver mMessageReceiver;
+    public void registerMessageReceiver() {
+        mMessageReceiver = new GuizhouPayReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.gzgd.webapp.pay.result");
+        Log.d(TAG, "registerMessageReceiver: 注册支付广播");
+        registerReceiver(mMessageReceiver, filter);
+    }
 
 
     //

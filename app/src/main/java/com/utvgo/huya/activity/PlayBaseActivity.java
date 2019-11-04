@@ -34,7 +34,7 @@ public class PlayBaseActivity extends BaseActivity {
     public boolean needQuickTime = false;
     public boolean quickNoPlayTime = false;
     public boolean needFinish;
-    public final static long timeStep = 200;
+    public final static long timeStep = 1000;
     public Handler timeHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {

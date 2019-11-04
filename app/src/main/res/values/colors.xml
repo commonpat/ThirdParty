@@ -68,7 +68,7 @@
 
 
     <color name="play_default">#6D6D79</color>
-    <color name="play_progress">#27C576</color>
+    <color name="play_progress">#FFFF00</color>
     <color name="orange">#FFFF8E02</color>
     <color name="theme">#FFFF8E02</color>
 </resources>

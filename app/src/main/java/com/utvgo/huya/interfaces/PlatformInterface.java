@@ -24,4 +24,6 @@ public interface PlatformInterface {
 
     boolean isZJSM();
 
+    boolean isHN();
+
 }

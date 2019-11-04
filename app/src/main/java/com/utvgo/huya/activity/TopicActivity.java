@@ -24,6 +24,7 @@ import android.widget.VideoView;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanTopic;
@@ -195,13 +196,46 @@ public class TopicActivity extends BuyActivity {
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        int playIndex = view.getId();
-        OpItem selectBean = subjectRecordListBeen.get(playIndex);
-        if(!actionOnOp(selectBean))
-        {
-            playVideoFullScreen(playIndex);
+        switch (view.getId()){
+
+            case R.id.back_focus:
+                finish();
+                break;
+            case R.id.more_focus:
+                int moreFocusIndex=6;
+                final int defaultSelectedLabelId = -1;
+                OpItem selectBeanMore = subjectRecordListBeen.get(moreFocusIndex);
+
+                try{
+//                    if(BuildConfig.DEBUG){
+//                    int channelId=35;
+//                    int packageId=29;
+//                    MediaListActivity.show(this, channelId,null,packageId ,defaultSelectedLabelId);
+//                }
+                if(selectBeanMore.getHref()!= null||!"".equals(selectBeanMore.getHref())) {
+                    Uri uri = Uri.parse(selectBeanMore.getHref());
+                    String  channelId = uri.getQueryParameter("channelId");
+                    String  packageId = uri.getQueryParameter("pkId");
+                    if(channelId==null||"".equals(channelId)){ channelId="35";}
+                    if(packageId==null||"".equals(packageId)){packageId="29";}
+                    MediaListActivity.show(TopicActivity.this, Integer.valueOf(channelId), null, Integer.valueOf(packageId), defaultSelectedLabelId);
+                }}catch (Exception e){
+                    e.printStackTrace();
+                }
+                break;
+
+            default:
+                int playIndex = view.getId();
+                OpItem selectBean = subjectRecordListBeen.get(playIndex);
+
+                if(!actionOnOp(selectBean))
+                {
+                    playVideoFullScreen(playIndex);
+                }
+                break;
         }
     }
+
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {

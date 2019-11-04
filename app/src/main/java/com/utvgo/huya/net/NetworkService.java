@@ -1,6 +1,7 @@
 package com.utvgo.huya.net;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
@@ -10,6 +11,7 @@ import com.utvgo.handsome.utils.NetworkUtils;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanArryPage;
 import com.utvgo.huya.beans.BeanCheckCollect;
+import com.utvgo.huya.beans.BeanExitPage;
 import com.utvgo.huya.beans.UserFavoriteData;
 import com.utvgo.huya.beans.UserPlayHistoryData;
 import com.utvgo.huya.beans.BeanStatistics;
@@ -19,6 +21,7 @@ import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramListData;
 import com.utvgo.huya.beans.TypesBean;
+import com.utvgo.huya.utils.NetUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -108,13 +111,16 @@ public class NetworkService {
     }
 
     public void userAddFavor(final Context context, String collectionType, int assetId, int channelId, final JsonCallback<BaseResponse> callback) {
-        String url = path2ApiUrl("/utvgo-user/collect/savecollect.utvgo?programId=" + assetId + "&channelId=" + channelId);
-        NetworkUtils.get(context, url, callback);
+        String url = path2ApiUrl("/utvgo-user/collect/savecollect.utvgo?programId=" + assetId + "&channelId=" + channelId+"&keyNo="+DiffConfig.getCA(context));
+        String params="keyNo="+DiffConfig.getCA(context)+"&programId=" + assetId + "&channelId=" + channelId;
+        NetworkUtils.post(context,url,params,callback);
+        //NetUtils.postData(context,url,1,params,BaseResponse.class,callback);
+        //NetworkUtils.get(context, url, callback);
     }
 
     public void userDeleteFavor(final Context context, String collectionType, String assetIdString, final JsonCallback<BaseResponse> callback) {
         String url = path2ApiUrl("/utvgo-user/collect/delcollect.utvgo?idStr=" + assetIdString);
-        NetworkUtils.get(context, url, callback);
+        NetworkUtils.post(context, url,null, callback);
     }
 
     public void userPlayRecord(final Context context, String playPoint,
@@ -125,11 +131,32 @@ public class NetworkService {
                                     long totalTime) {
         String url = path2ApiUrl("/utvgo-user/video/playhistory.utvgo?playPoint=" + playPoint + "&videoId=" + videoId +
                 "&videoName=" + videoName+ "&multiSetType=" + multiSetType +
-                "&channelId=" + channelId + "&programId=" + programId + "&programName=" + programName  + "&totalTime=" + totalTime);
-        NetworkUtils.get(context, url, new JsonCallback<BaseResponse>() {
+                "&channelId=" + channelId + "&programId=" + programId + "&programName=" + programName  + "&totalTime=" + totalTime
+                +"&keyNo=" + DiffConfig.getCA(context) + "&regionCode=" + DiffConfig.getRegionCode(context) + "&vipCode=" + AppConfig.VipCode);
+//        NetworkUtils.get(context, url, new JsonCallback<BaseResponse>() {
+//            @Override
+//            public void onSuccess(Response<BaseResponse> response) {
+//                Log.d("userPlayRecord", "onSuccess: "+response.toString());
+//            }
+//        });
+        String params = "playPoint=" + playPoint + "&videoId=" + videoId +
+        "&videoName=" + videoName+ "&multiSetType=" + multiSetType +
+                "&channelId=" + channelId + "&programId=" + programId + "&programName=" + programName  + "&totalTime=" + totalTime
+                +"&keyNo=" + DiffConfig.getCA(context) + "&regionCode=" + DiffConfig.getRegionCode(context) + "&vipCode=" + AppConfig.VipCode;
+        NetworkUtils.post(context, url, params, new JsonCallback<BaseResponse>() {
             @Override
             public void onSuccess(Response<BaseResponse> response) {
+                Log.d("userPlayRecord", "onSuccess: "+response.toString());
+            }
 
+            @Override
+            public void onError(Response<BaseResponse> response) {
+                Log.d("userPlayRecord", "onSuccess: "+response.toString());
+            }
+
+            @Override
+            public void onFinish() {
+                Log.d("userPlayRecord", "onSuccess: hhhhhhhhhhh");
             }
         });
     }
@@ -168,5 +195,10 @@ public class NetworkService {
                 "&playTime=" + playTime + "&videoName=" + videoName + "&spId=" + spId + "&id=" + id + "&vipCode=" + vipCode + "&isBase=" + isBase + "&multiSetType=" + multiSetType +
                 "&channelId=" + channelId + "&channelName=" + channelName + "&programId=" + programId + "&spName=" + spName + "&programName=" + programName + "&orderStatus=" + orderStatus + "&totalTime=" + totalTime;
         NetworkUtils.get(context, url, callback);
+    }
+
+    public  void fetchExitPage(Context context,String typeId,final JsonCallback<BeanExitPage> callback){
+        String url=DiffConfig.baseHost+"/utvgo-tv-mvc/ui/vip/index/page.utvgo?typeId=72";
+        NetworkUtils.get(context,url,callback);
     }
 }

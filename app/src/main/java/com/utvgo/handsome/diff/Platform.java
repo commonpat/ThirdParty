@@ -6,7 +6,8 @@ public enum Platform {
     gztv,
     hncatv,
     gacs,
-    gahb;
+    gahb,
+    gzbn;
 
     public String toAreaString()
     {
@@ -20,6 +21,9 @@ public enum Platform {
 
             case hncatv:
                 return "湖南";
+
+            case gzbn:
+                return "贵州";
 
                 default:
                     return "";

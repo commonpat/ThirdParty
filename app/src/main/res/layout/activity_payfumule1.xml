@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center"
+    android:background="@mipmap/bg_introduction"
+    android:descendantFocusability="afterDescendants"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_buy_now"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg_introduction">
+
+        <Button
+            android:id="@+id/btn_qiandai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp180"
+            android:layout_marginLeft="@dimen/dp680"
+            android:background="@drawable/selector_gz_buy_now"
+            android:onClick="onClick" />
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/dp120"
+            android:layout_height="@dimen/dp120"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="@drawable/selector_gz_back"
+            android:onClick="onClick" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_buy_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gz_buy_success_bg"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <FrameLayout
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp60"
+            android:layout_marginBottom="@dimen/dp100"
+            android:layout_width="@dimen/dp550"
+            android:layout_height="@dimen/dp275"
+            android:background="@drawable/gz_bug_success_tip_bg">
+
+            <LinearLayout
+                android:id="@+id/ll_wx_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_paywx"
+                    style="@style/focusAndSetTag"
+                    android:layout_width="@dimen/dp200"
+                    android:layout_height="@dimen/dp200"
+                    android:background="@drawable/selector_play_list_mv_item_bg"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/default_small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:text="微信支付"
+                    android:textColor="@color/white"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/ll_buySuccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone">
+
+                <ImageView
+                    style="@style/setEnableFocusNO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/gz_bug_success_tip" />
+
+                <Button
+                    android:id="@+id/btn_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp110"
+                    android:background="@drawable/selector_gz_home"
+                    android:onClick="onClick" />
+
+            </FrameLayout>
+
+        </FrameLayout>
+    </RelativeLayout>
+
+
+</FrameLayout>

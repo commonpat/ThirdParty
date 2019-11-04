@@ -8,7 +8,7 @@
         android:id="@+id/exitRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/bg_second" />
+        android:background="@mipmap/bg" />
 
     <ImageView
         android:id="@+id/iv_img0"
@@ -16,7 +16,7 @@
         android:layout_height="140dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="40dp"
-        android:src="@drawable/default_small"
+        android:src="@drawable/place_holder_default"
         android:scaleType="fitXY"
         style="@style/setEnableFocusYES"
         />
@@ -26,7 +26,7 @@
         android:layout_height="140dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="190dp"
-        android:src="@drawable/default_small"
+        android:src="@drawable/place_holder_default"
         android:scaleType="fitXY"
         style="@style/setEnableFocusYES"
         />
@@ -36,7 +36,7 @@
         android:layout_height="140dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="340dp"
-        android:src="@drawable/default_small"
+        android:src="@drawable/place_holder_default"
         android:scaleType="fitXY"
         style="@style/setEnableFocusYES"
         />
@@ -46,7 +46,7 @@
         android:layout_height="140dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="490dp"
-        android:src="@drawable/default_small"
+        android:src="@drawable/place_holder_default"
         android:scaleType="fitXY"
         style="@style/setEnableFocusYES"
         />
