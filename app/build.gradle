@@ -65,10 +65,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation files('libs/XiriScene.jar')
     implementation files('libs/XiriFeedback.jar')
-    implementation files('libs/classes.jar')
-    implementation 'com.android.support:multidex:1.0.1'
-    implementation files('libs\\vod2-release.aar')
-    implementation files('libs\\WsUpdateSdk_release_v1.0.0.aar')
+    implementation(name:'paymanager',ext:'aar')
+
 
 
 }

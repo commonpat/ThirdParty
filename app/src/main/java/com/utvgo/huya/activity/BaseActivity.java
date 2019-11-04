@@ -25,9 +25,6 @@ import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.interfaces.JsonCallback;
-import com.utvgo.handsome.receiver.GuizhouPayReceiver;
-import com.utvgo.handsome.utils.PlatfromUtils;
-import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
@@ -42,7 +39,6 @@ import com.utvgo.huya.utils.StringUtils;
 import com.utvgo.huya.views.FocusBorderView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BaseActivity extends RooterActivity implements View.OnFocusChangeListener,
         AdapterView.OnItemSelectedListener,
@@ -65,7 +61,6 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     public boolean hadCallBuyView = false;
     public boolean needBringFront = true;
     private boolean needTransition = true;
-    public PlatfromUtils platfromUtils;
 
 
     @Override
@@ -73,20 +68,12 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         DensityUtil.init(this, 1280);
         super.onCreate(savedInstanceState);
         registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-        registerMessageReceiver();
-        platfromUtils = new PlatfromUtils();
 
 
     }
 
     @Override
     protected void onDestroy() {
-        try {
-            unregisterReceiver(mHomeKeyEventReceiver);
-            unregisterReceiver(mMessageReceiver);
-        } catch (Exception e) {
-            //TODO
-        }
         // LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
         borderView = null;
         hiFiDialogTools = null;
@@ -332,17 +319,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
             }
         }
     };
-    public GuizhouPayReceiver mMessageReceiver;
-    public void registerMessageReceiver() {
-        mMessageReceiver = new GuizhouPayReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.gzgd.webapp.pay.result");
-        Log.d(TAG, "registerMessageReceiver: 注册支付广播");
-        registerReceiver(mMessageReceiver, filter);
-    }
 
-
-    //
     public void netBack(int requestTag, Object object) {
 
     }

@@ -12,6 +12,8 @@ import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.base.Request;
 //import com.sh.module.payment.bean.PayInfo;
 //import com.sh.module.payment.utils.MyPay;
+import com.sh.module.payment.bean.PayInfo;
+import com.sh.module.payment.utils.MyPay;
 import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.handsome.utils.XLog;
@@ -26,7 +28,7 @@ public class GZTVPurchase extends IPurchase {
 
     public static final int RequestCode = 6566;
 
-    static final String ProductCategoryId = "1325";
+    static final String ProductCategoryId = "1234";
 
     static final String AuthApiUrl = "http://portal.candytime.com.cn/user/authtication";
 
@@ -148,7 +150,6 @@ public class GZTVPurchase extends IPurchase {
 
     @Override
     public void pay(final Context context, final CommonCallback callback) {
-        /*
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
             MyPay mPay = MyPay.instance;
@@ -171,7 +172,6 @@ public class GZTVPurchase extends IPurchase {
                 }
             });
         }
-        */
     }
 
     @Override

@@ -43,7 +43,6 @@ import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.ToastUtil;
 import com.utvgo.huya.utils.Tools;
-import com.vod.VPlayer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -300,13 +299,7 @@ public class PlayVideoActivity extends BuyActivity {
     @Override
     protected void onStop() {
         try {
-            if(vp != null){
-                VPlayer vPlayer=(VPlayer) getHahaPlayer();
-                if (vPlayer != null) {
-                    statisticsVideoPlay(vPlayer.getCurrent()+ "",
-                            vPlayer.getCurrent() + "");
-                }
-            }else {
+           {
             VideoView videoView = (VideoView) getHahaPlayer();
             if (videoView != null) {
                 statisticsVideoPlay(videoView.getCurrentPosition() / 1000 + "",
@@ -398,9 +391,6 @@ public class PlayVideoActivity extends BuyActivity {
                     exitTime = System.currentTimeMillis();
                 } else {
                     PlayVideoActivity.this.finish();
-                    if(vp != null){
-                        vp.destroy();
-                    }
 
                 }
             }
@@ -617,14 +607,8 @@ public class PlayVideoActivity extends BuyActivity {
 
     @Override
     public void getHahaPlayerUrl(String vodID) {
-        if (DiffConfig.CurrentPlatform== Platform.gzbn){
-            if (platfromUtils.isFuMuLe2()){
-                //donothing
-            }else {
-                setHahaPlayer(vvJingling);}
-        }else {
-            setHahaPlayer(vvJingling);
-        }
+
+        setHahaPlayer(vvJingling);
         //String asset = DiffHostConfig.getMediaAsset((mvDetail != null ) ? mvDetail.getData(): null, (songDetail != null) ? songDetail.getSong() : null);
         super.getHahaPlayerUrl(vodID);
     }
@@ -853,12 +837,7 @@ public class PlayVideoActivity extends BuyActivity {
         long totalTime = 0;
         try {
             try {
-                if (vp != null){
-                    totalTime = (long) vp.getDuration();
-                }else {
-                    totalTime = (long)videoView.getDuration();
-                }
-
+                totalTime = (long)videoView.getDuration();
             } catch (Exception e) {
                 e.printStackTrace();
             }

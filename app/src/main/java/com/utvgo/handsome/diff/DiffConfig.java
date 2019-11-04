@@ -33,7 +33,7 @@ public class DiffConfig {
     public static VoiceAssistant voiceAssistant = new VoiceAssistant();
 
     //修改平台即可
-    public static Platform CurrentPlatform = Platform.gzbn;
+    public static Platform CurrentPlatform = Platform.gcable;
 
     static Boolean LocalTest = false;
 
@@ -70,12 +70,12 @@ public class DiffConfig {
                 CurrentPurchase = new HNTVPurchase();
                 break;
             }
-            case gzbn:
-            {
-                GlobalEnv = new GZBNEnv();
-                CurrentTVBox = new GZBNBox();
-                CurrentPurchase = new GZBNPurchase();
-            }
+//            case gzbn:
+//            {
+//                GlobalEnv = new GZBNEnv();
+//                CurrentTVBox = new GZBNBox();
+//                CurrentPurchase = new GZBNPurchase();
+//            }
         }
 
         if(GlobalEnv != null)

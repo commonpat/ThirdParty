@@ -17,9 +17,7 @@ import com.utvgo.handsome.diff.Platform;
 import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.interfaces.PlayerInterface;
 import com.utvgo.handsome.utils.XLog;
-import com.vod.VPlayer;
-import com.vod.event.IPlayerEvent;
-import com.vod.listener.PlayerEventListener;
+
 //import com.utvgo.qqmusic.interfaces.PlayerInterface;
 //import com.utvgo.qqmusic.utils.XLog;
 //
@@ -35,7 +33,6 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
     //private final String TAG = "PlayGuizhouActivity";
     protected VideoView videoView;
     private boolean isPlayer = false;
-    public VPlayer vp;
 
     @Override
     public void  hahaPlayUrl(String playUrl) {
@@ -43,9 +40,6 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
         String assetId = playUrl;
         vodPayingTime = 0;
 
-        if (DiffConfig.CurrentPlatform == Platform.gzbn) {
-            isPlayer = platfromUtils.isFuMuLe2();
-        }
         if(!isPlayer) {
             Log.d(TAG, "hahaPlayUrl: videoview");
             videoView.setVisibility(View.VISIBLE);
@@ -81,7 +75,7 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
             });
 
         } else if (isPlayer) {
-            Log.d(TAG, "hahaPlayUrl: vpplayer");
+            /*Log.d(TAG, "hahaPlayUrl: vpplayer");
             if (vp == null) {
                 DisplayMetrics dm = new DisplayMetrics();
                 //取得窗口属性
@@ -112,7 +106,7 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
                         });
                     }
                 }
-            });
+            });*/
         }
     }
 
@@ -124,12 +118,6 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
                 videoView.pause();
             } else if (playingState == PlayingStatePause) {
                 videoView.start();
-            }
-        }else if (vp != null){
-            if (playingState == PlayingStatePlaying) {
-                vp.pause();
-            } else if (playingState == PlayingStatePause) {
-                vp.resume();
             }
         }
         if (playingState == PlayingStatePlaying) {
@@ -146,9 +134,7 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
 
     @Override
     public void hahaPlayEnd(float v) {
-        if (vp != null) {
-            vp.stop();
-        } else if (videoView != null) {
+        if (videoView != null) {
             videoView.stopPlayback();
         }
         super.hahaPlayEnd(v);
@@ -156,9 +142,7 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
 
     @Override
     public void hahaPausePlay() {
-        if (vp != null) {
-            vp.pause();
-        } else if (videoView != null) {
+        if (videoView != null) {
             videoView.pause();
         }
         playingState = PlayingStatePause;
@@ -174,50 +158,30 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
         timeHandler.removeMessages(PLAY_TIME);
         timeHandler.sendEmptyMessage(PLAY_TIME);
         vodPayingTime = time / timeStep;
-        if (vp != null) {
-            vp.seekTo(vodPayingTime);
-        }else if (videoView != null) {
+        if (videoView != null) {
             videoView.seekTo((int) (vodPayingTime * timeStep));
         }
     }
 
     @Override
     public void setHahaPlayerSize(int x, int y, int w, int h) {
-            vp.resize(x,y,w,h);
+        //    vp.resize(x,y,w,h);
     }
 
     @Override
     public void setHahaPlayer(Object player) {
-        if(DiffConfig.CurrentPlatform== Platform.gzbn) {
-            if (platfromUtils.isFML1() || platfromUtils.isGuangDianJingLing()) {
-                videoView = (VideoView) player;
-            } else {
-                //FML2
-            }
-        } else {
-            videoView = (VideoView) player;
-        }
+
+         videoView = (VideoView) player;
+
     }
 
     @Override
     public Object getHahaPlayer() {
-
-        if(DiffConfig.CurrentPlatform == Platform.gzbn){
-            if (platfromUtils.isFML1()||platfromUtils.isGuangDianJingLing()){
-                return videoView;
-            }else {
-                return vp;
-            }
-        }else{
-        return videoView;}
+        return videoView;
     }
 
     @Override
     public void getHahaPlayerUrl(final String vodId) {
-        if (vp != null){
-            vp.destroy();
-            vp = null;
-        }
         if(vodId.indexOf("http") >= 0)
         {
             String assetId = vodId;

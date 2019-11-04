@@ -35,9 +35,7 @@ import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.TPageData;
 import com.utvgo.huya.beans.VideoInfo;
 import com.utvgo.huya.net.NetworkService;
-import com.vod.VPlayer;
-import com.vod.event.IPlayerEvent;
-import com.vod.listener.PlayerEventListener;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,7 +83,7 @@ public class MediaAlbumActivity extends BuyActivity {
     private ProgramContent albumData = null;
 
     long currentMediaDuration = 0;
-    public VPlayer albumPlayer;
+
 
     public static void show(final Context context, final int albumId)
     {
@@ -110,14 +108,7 @@ public class MediaAlbumActivity extends BuyActivity {
         {
             this.itemViewArray.add((RelativeLayout)findViewById(array[i]));
         }
-        if(DiffConfig.CurrentPlatform == Platform.gzbn){
-            if(platfromUtils.isFuMuLe2()){
-                svVideo.setVisibility(View.VISIBLE);
-            }else {
-                setHahaPlayer(video);
-            }
-        }else {setHahaPlayer(video);}
-
+       setHahaPlayer(video);
 
         loadData();
     }
@@ -127,13 +118,6 @@ public class MediaAlbumActivity extends BuyActivity {
         super.onResume();
         if (videoView != null) {
             videoView.resume();
-        }else if(albumPlayer != null){
-            playMedia(playIndex);
-//            albumPlayer.resize((int) getResources().getDimension(R.dimen.dp238), (int) getResources().getDimension(R.dimen.dp53),
-//                   (int) getResources().getDimension(R.dimen.dp804), (int) getResources().getDimension(R.dimen.dp454));
-//            //playMedia(playIndex);
-//            setHahaPlayerSize((int) getResources().getDimension(R.dimen.dp238), (int) getResources().getDimension(R.dimen.dp53),
-//                    (int) getResources().getDimension(R.dimen.dp804), (int) getResources().getDimension(R.dimen.dp454));
         }
         /*
         if (hadCallBuyView  && !isExperience) {
@@ -155,9 +139,6 @@ public class MediaAlbumActivity extends BuyActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(albumPlayer != null){
-            albumPlayer.stop();
-        }
 
         startStatisticsPlay(this.currentMediaDuration);
         statusticsHandler.removeMessages(TagStartStatisticsPlay);
@@ -167,8 +148,6 @@ public class MediaAlbumActivity extends BuyActivity {
     protected void onPause() {
         if (videoView != null) {
             videoView.pause();
-        }else if(albumPlayer != null){
-            albumPlayer.pause();
         }
         super.onPause();
     }
@@ -237,11 +216,8 @@ public class MediaAlbumActivity extends BuyActivity {
             this.playIndex = index;
             VideoInfo videoBean = this.albumData.getVideos().get(this.playIndex);
             //hahaPlayUrl(videoBean.getMediaSourceUrl());
-            if(platfromUtils.isFuMuLe2()){
-                fmlPlayVideo(videoBean.getMediaSourceUrl());
-            }else {
-                getHahaPlayerUrl(videoBean.getMediaSourceUrl());
-            }
+            getHahaPlayerUrl(videoBean.getMediaSourceUrl());
+
         }
     }
     @Override
@@ -249,45 +225,6 @@ public class MediaAlbumActivity extends BuyActivity {
         VideoInfo videoBean = this.albumData.getVideos().get(this.playIndex);
         super.getHahaPlayerUrl(videoBean.getMediaSourceUrl());
     }
-
-    private void fmlPlayVideo(String fmlVodId) {
-
-
-        DiffConfig.CurrentTVBox.fetchUrlByVODAssetId(this, fmlVodId, new ITVBox.FetchUrlByVODAssetIdCallBack() {
-            @Override
-            public void onReceivedUrl(String vodId, String url) {
-                if(albumPlayer == null) {
-                    albumPlayer = new VPlayer(getBaseContext(), (int) getResources().getDimension(R.dimen.dp238), (int) getResources().getDimension(R.dimen.dp53), (int) getResources().getDimension(R.dimen.dp804), (int) getResources().getDimension(R.dimen.dp454));
-                }
-                if (albumPlayer != null && (albumPlayer.getState() == 2 || albumPlayer.getState() == 3)) {
-                    albumPlayer.stop();
-                }
-
-                albumPlayer.play(url, 0000000000);
-                albumPlayer.setPlayerEventListener(new PlayerEventListener() {
-                    @Override
-                    public void OnPlayerEvent(IPlayerEvent iPlayerEvent) {
-                        Log.d("PlayGuizhouActivity", "OnPlayerEvent: type:" + iPlayerEvent.getType()
-                                + "  reason:" + iPlayerEvent.getReason() + "  errorType:" + iPlayerEvent.getErrorType()
-                                + "  errorReason:" + iPlayerEvent.getErrorReason());
-                        if (iPlayerEvent.getType() == IPlayerEvent.TYPE_RTSP_PLAYER_PLAY_SUCCESS) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                   // onDuration((long) albumPlayer.getDuration() * 1000);
-                                    Log.d(TAG, "run: "+ albumPlayer.getDuration());
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        });
-
-    }
-
-
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -357,12 +294,6 @@ public class MediaAlbumActivity extends BuyActivity {
         this.currentMediaDuration = l;
         startStatisticsPlay(this.currentMediaDuration);
         super.onDuration(l);
-        if("gzbn".equals(DiffConfig.CurrentPlatform.name())){
-            if (platfromUtils.isFuMuLe2()) {
-                setHahaPlayerSize((int) getResources().getDimension(R.dimen.dp238), (int) getResources().getDimension(R.dimen.dp53),
-                        (int) getResources().getDimension(R.dimen.dp804), (int) getResources().getDimension(R.dimen.dp454));
-            }
-        }
     }
 
     @Override
@@ -431,9 +362,6 @@ public class MediaAlbumActivity extends BuyActivity {
             isExperience = false;
             showBuy("");
         } else {
-            if(platfromUtils.isFuMuLe2()){
-                albumPlayer.destroy();
-            }
             finish();
         }
     }

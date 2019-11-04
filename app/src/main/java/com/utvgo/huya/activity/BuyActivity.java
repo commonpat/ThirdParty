@@ -9,23 +9,15 @@ package com.utvgo.huya.activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.utvgo.handsome.utils.GuizhouUtils;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.diff.IPurchase;
 import com.utvgo.huya.interfaces.BuyInterface;
 import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.huya.utils.HiFiDialogTools;
-import com.utvgo.huya.utils.NetUtils;
 import com.utvgo.huya.utils.ToastUtil;
-import com.utvgo.huya.utils.Tools;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-import static com.utvgo.handsome.diff.GZBNPurchase.selectProducts;
 
 
 public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
@@ -108,18 +100,7 @@ public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
         String uuid = UUID.randomUUID().toString();
         return uuid;
     }
-    public void callBackPayBuy() {
-        String user_id = Tools.getStringPreference(BuyActivity.this, GuizhouUtils.TagGuizhouUid);
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", user_id);
-        params.put("productsId", selectProducts);
-        params.put("sourceType", "0");
-        params.put("session_id", "");
-        params.put("state", "0");
-        params.put("reason", "");
-        NetUtils.getData(BuyActivity.this, GuizhouUtils.callbackSaveAuthorizeUrl,
-                GuizhouUtils.GetGuizhouCallbackSaveAuthorize, params, null, null, null);
-    }
+
 
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
