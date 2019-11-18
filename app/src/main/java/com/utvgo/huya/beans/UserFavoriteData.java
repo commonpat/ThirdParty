@@ -95,6 +95,7 @@ public class UserFavoriteData implements Serializable {
             programInfoBase.setPkId(this.programId);
             programInfoBase.setName(this.programName);
             programInfoBase.setChannelId(this.channelId);
+            programInfoBase.setMultiSetType(this.multiSetType);
             return programInfoBase;
         }
     }

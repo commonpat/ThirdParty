@@ -131,6 +131,7 @@ public class PlayVideoActivity extends BuyActivity {
     private static final int TagStartStatisticsPlay = 10011;
     private String statisticsPlayId = "";
     private String statisticsVideoId = "";
+    private boolean isFree = false;
     final Handler statHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
@@ -474,7 +475,7 @@ public class PlayVideoActivity extends BuyActivity {
         }
         //翻页重新添加
         flPlayListContent.removeAllViews();
-        for (int i = 0; i < playList.size(); i++) {
+        for (int i = 0; i < programContent.getVideos().size(); i++) {
             VideoInfo dataBean = programContent.getVideos().get(i);
 
             FrameLayout item = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.item_song_play_list, null);
@@ -720,13 +721,26 @@ public class PlayVideoActivity extends BuyActivity {
             freeTime = -1;
             if(!DiffConfig.CurrentPurchase.isPurchased())
             {
+                isFree = currentProgramContent.isFree();
                 if(!currentProgramContent.isFree())
-                {
-                    freeTime = currentProgramContent.getFreeSecond();
+                {  try{
+                    if(this.isMultiSetType) {
+                        if(this.playingIndex>currentProgramContent.getVideos().size()){
+                            this.playingIndex = 0;
+                        }
+                        freeTime = currentProgramContent.getVideos().get(this.playingIndex).getFreeSecond();
+                    }else {
+                        freeTime = currentProgramContent.getFreeSecond();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
                     if(freeTime <= 0)
                     {
                         freeTime = -1;
                         shouldPay = true;
+
                     }
 
                 }
@@ -741,6 +755,9 @@ public class PlayVideoActivity extends BuyActivity {
                 String mediaSourceUrl = currentProgramContent.getMediaSourceUrl();
                 if(this.isMultiSetType)
                 {
+                    if(this.playingIndex>currentProgramContent.getVideos().size()){
+                    this.playingIndex = 0;
+                    }
                     VideoInfo videoInfo = currentProgramContent.getVideos().get(this.playingIndex);
                     mediaSourceUrl = videoInfo.getMediaSourceUrl();
 
@@ -748,6 +765,16 @@ public class PlayVideoActivity extends BuyActivity {
                 if(!TextUtils.isEmpty(mediaSourceUrl+""))
                 {
                     getHahaPlayerUrl(mediaSourceUrl);
+                }else {
+                    if(this.playingIndex>currentProgramContent.getVideos().size()){
+                        this.playingIndex = 0;
+                    }
+                    VideoInfo videoInfo = currentProgramContent.getVideos().get(this.playingIndex);
+                    mediaSourceUrl = videoInfo.getMediaSourceUrl();
+                    if(!TextUtils.isEmpty(mediaSourceUrl)){
+                        getHahaPlayerUrl(mediaSourceUrl);
+                    }
+
                 }
                 statisticsPlayId = "";
                 statisticsVideoPlay("0", "0");
@@ -883,18 +910,22 @@ public class PlayVideoActivity extends BuyActivity {
                     @Override
                     public void onSuccess(Response<BaseResponse<ProgramContent>> response) {
                         BaseResponse<ProgramContent> data = response.body();
-                        if(data.isOk())
-                        {
-                            final ProgramContent programContent = data.getData();
-                            if(programContent.getMultiSetType().equalsIgnoreCase("4"))
-                            {
-                                initPlayListWithMultisetType(programContent);
+                        try {
+                            if (data.isOk()) {
+                                final ProgramContent programContent = data.getData();
+                                if (programContent.getMultiSetType().equalsIgnoreCase("4")) {
+                                    isMultiSetType = true;
+                                    initPlayListWithMultisetType(programContent);
+                                }
+                                if(programContent.getVideos()!=null&&programContent.getVideos().size()>0){
+                                    isMultiSetType = true;
+                                }
+                                playVideoJudge(programContent);
+                            } else {
+                                playNext();
                             }
-                            playVideoJudge(programContent);
-                        }
-                        else
-                        {
-                            playNext();
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
                 });

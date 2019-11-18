@@ -19,19 +19,19 @@
         <ImageView
             android:id="@+id/fra_had_left"
             style="@style/setEnableFocusNO"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp370"
+            android:layout_width="30dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="@dimen/dp30"
+            android:layout_marginTop="385dp"
             android:background="@drawable/had_left"
             android:visibility="visible"/>
         <ImageView
             android:id="@+id/fra_had_right"
             style="@style/setEnableFocusNO"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="45dp"
             android:layout_marginLeft="1220dp"
-            android:layout_marginTop="370dp"
+            android:layout_marginTop="385dp"
             android:background="@drawable/had_right"
             android:visibility="visible"/>
     </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.utvgo.huya.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,16 +18,19 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.GZTVPurchase;
 import com.utvgo.handsome.diff.IPurchase;
 import com.utvgo.handsome.diff.Platform;
 import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.handsome.utils.XLog;
 import com.utvgo.handsome.views.CustomVideoView;
 import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanExitPage;
+import com.utvgo.huya.beans.BeanInitData;
 import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
@@ -34,6 +38,8 @@ import com.utvgo.huya.beans.TypesBean;
 import com.utvgo.huya.listeners.MyDialogEnterListener;
 import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.HiFiDialogTools;
+import com.utvgo.huya.utils.ImageTool;
+import com.utvgo.huya.utils.NetUtils;
 import com.utvgo.huya.utils.StringUtils;
 import com.utvgo.huya.utils.ToastUtil;
 import java.util.ArrayList;
@@ -47,6 +53,9 @@ public class HomeActivity extends BuyActivity {
 
     @BindView(R.id.btn_tab_0)
     Button mainTabButton1;
+
+    @BindView(R.id.btn_fl_1)
+    Button btn1;
 
     @BindView(R.id.vv_small)
     CustomVideoView videoView;
@@ -67,6 +76,7 @@ public class HomeActivity extends BuyActivity {
     TypesBean typesBean = new TypesBean();
     BeanExitPage beanExitPage;
     List<BeanExitPage.Data> endPushContentBean;
+    public boolean needEnterRecommend = true;
 
     int currentPlayingIndex = 0;
     String assetUrlArray[] = null;
@@ -103,6 +113,7 @@ public class HomeActivity extends BuyActivity {
                 if(BuildConfig.DEBUG){
                     Toast.makeText(HomeActivity.this, "HomePage auth finished: " + (DiffConfig.CurrentPurchase.isPurchased() ? "is Purchased" : "not Purchased"), Toast.LENGTH_LONG).show();
                 }
+                getInitData();
             }
         });
         runOnUiThread(new Runnable() {
@@ -110,8 +121,35 @@ public class HomeActivity extends BuyActivity {
             public void run() {
                 loadData();
                 stat("首页","");
+
             }
         });
+
+        /*if(!DiffConfig.CurrentPurchase.isPurchased())
+        {
+            if(DiffConfig.CurrentPurchase instanceof GZTVPurchase)
+            {
+                final Context context = this;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        GZTVPurchase purchase = (GZTVPurchase)DiffConfig.CurrentPurchase;
+                        purchase.tryBest(context, new GZTVPurchase.TryBestCallback() {
+                            @Override
+                            public void d(String s) {
+                                final String msg = s;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        XLog.d(msg);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }).start();
+            }
+        }*/
     }
 
 
@@ -233,7 +271,34 @@ public class HomeActivity extends BuyActivity {
         //endPushContentBean != null
         Log.d(TAG, "onBackPressed: "+HuyaApplication.hadBuy());
         if (!HuyaApplication.hadBuy()) {
+
+            if(DiffConfig.CurrentPurchase instanceof  GZTVPurchase) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        GZTVPurchase purchase = (GZTVPurchase) DiffConfig.CurrentPurchase;
+                        purchase.tryBest(HomeActivity.this, new GZTVPurchase.TryBestCallback() {
+                            @Override
+                            public void d(String s) {
+
+                            }
+
+                            @Override
+                            public void success(String s) {
+
+                            }
+
+                            @Override
+                            public void fail(String s) {
+
+                            }
+                        });
+
+                    }
+                }).start();
+            }
             showQuitRecommend();
+
         } else {
             alertForQuit();
         }
@@ -314,7 +379,7 @@ public class HomeActivity extends BuyActivity {
 
                 if (!isVideo) {
                     ImageView imageView = flContentImageViewArray[i];
-                    Glide.with(this).load(imagePrefix+bean.getImgUrl()).into(imageView);
+                    Glide.with(this).load(DiffConfig.generateImageUrl(bean.getImgUrl())).into(imageView);
                     //loadImage(imageView, bean.getImgUrl());
                 }
             }
@@ -330,11 +395,12 @@ public class HomeActivity extends BuyActivity {
         super.onDuration(l);
     }
 
-
-    public void hahaPlayEnd() {
-
+    @Override
+    public void hahaPlayEnd(float v) {
+        super.hahaPlayEnd(v);
         playVideo();
     }
+
 
     private void playVideo() {
 
@@ -346,7 +412,7 @@ public class HomeActivity extends BuyActivity {
                 playIndex = 0;
             }
             if (playIndex >= 0 && playIndex < array.length) {
-
+                currentPlayingIndex=playIndex;
                 getHahaPlayerUrl(array[playIndex]);
             }
         }
@@ -430,12 +496,12 @@ public class HomeActivity extends BuyActivity {
 
         String albumId = getIntent().getStringExtra("pkId");
 
-        String topicId = getIntent().getStringExtra("themId");
+        String topicId = getIntent().getStringExtra("topicId");
         String styleId = getIntent().getStringExtra("styleId");
         Log.d(TAG, "checkIntentData:"+"programId"+programId+"multisetType"+multisetType+"channelId"+channelId+"albumId"+albumId+"topicId"+topicId+"styleId"+styleId);
 
         if(programId!=null && multisetType!=null && channelId!=null) {
-
+            needEnterRecommend = false;
             NetworkService.defaultService().fetchProgramContent(this, StringUtils.intValueOfString(programId),
                     multisetType, StringUtils.intValueOfString(channelId), new JsonCallback<BaseResponse<ProgramContent>>() {
                         @Override
@@ -450,10 +516,51 @@ public class HomeActivity extends BuyActivity {
                     });
         }
         if(albumId != null) {
+            needEnterRecommend = false;
             MediaAlbumActivity.show(this, StringUtils.intValueOfString(albumId));
         }
-       if(topicId != null && styleId != null)
-            TopicActivity.show(this, topicId, styleId);
+       if(topicId != null ) {
+           needEnterRecommend = false;
+           TopicActivity.show(this, topicId, styleId);
+       }
 
     }
+    private void getInitData() {
+
+        String path = DiffConfig.baseHost + "/huya-activity-client-web/activity/androidActivityController/getPushContent.utvgo?regionCode="
+                + DiffConfig.getRegionCode(this);
+        try{
+        NetUtils.getData(this, path, null, BeanInitData.class, new NetUtils.NetCallBack() {
+            @Override
+            public void netBack(int requestTag, Object object) {
+                if (object != null) {
+                    XLog.d("logom"+object);
+                    BeanInitData beanInitData = (BeanInitData) object;
+                    if (beanInitData != null) {
+                        String bgImageUrl = DiffConfig.generateImageUrl(beanInitData.getHomePageResource().getImagUrl());
+                        String logoImageUrl = DiffConfig.generateImageUrl(beanInitData.getHomePageResource().getLogoUrl());
+                        XLog.d("logoImageUrl:"+logoImageUrl);
+                        if (HuyaApplication.hadBuy()) {
+                            //会员不弹活动
+                            return;
+                        }
+                        if (beanInitData.getStartPushContent() != null && needEnterRecommend) {
+
+                                if (!TextUtils.isEmpty(beanInitData.getStartPushContent().getHref())&&(beanInitData.getStartPushContent().getHref() != null )) {
+                                    QWebViewActivity.navigateUrl(HomeActivity.this,beanInitData.getStartPushContent().getHref(),null);
+                                } else {
+                                    Intent intent = new Intent(HomeActivity.this, ActivityActivity.class);
+                                    intent.putExtra("bgImageUrl",bgImageUrl);
+                                    startActivity(intent);
+                                }
+
+                        }
+                    }
+                }
+            }
+        });}catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }

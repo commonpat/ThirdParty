@@ -16,5 +16,7 @@ public class GDTVEnv implements IEnv {
 
         DiffConfig.TestVideoUrl = "http://172.16.146.70:17553/QQMusic/mv/blue_ray/g0022q7z0um_blue_ray.mp4";
         DiffConfig.TestAudioUrl = "http://172.16.146.70:17553/QQMusic/cn0/0000QHSk0ruY3Y/000j8Tfr0wGFXi.m4a";
+        DiffConfig.UseWebIntroduction = true;
+        DiffConfig.IntroduceUrl = "http://172.16.146.56/huyaTV/activity.html";
     }
 }

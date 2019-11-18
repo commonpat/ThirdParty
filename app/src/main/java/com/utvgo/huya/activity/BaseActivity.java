@@ -36,6 +36,7 @@ import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.DensityUtil;
 import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.StringUtils;
+import com.utvgo.huya.utils.ToastUtil;
 import com.utvgo.huya.views.FocusBorderView;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     protected void onCreate(Bundle savedInstanceState) {
         DensityUtil.init(this, 1280);
         super.onCreate(savedInstanceState);
-        registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+      //  registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
 
     }
@@ -405,17 +406,29 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
 
                 case topic:{
                     String topicId = uri.getQueryParameter("themId");
-                    String styleId = uri.getQueryParameter("styleId");
+                    String styleId = uri.getQueryParameter("styleID");
                     TopicActivity.show(this, topicId, styleId);
                     break;
                 }
-
+                case activity:{
+                    if (HuyaApplication.hadBuy()) {
+                        //会员不弹活动
+                        ToastUtil.showLong(BaseActivity.this,"你已是虎牙TV的会员");
+                        break;
+                    } else{
+                        QWebViewActivity.navigateUrl(this, opItem.getHref(), null);
+                    }
+//                    Intent intent = new Intent(BaseActivity.this, ActivityActivity.class);
+//                    intent.putExtra("bgImageUrl",DiffConfig.generateImageUrl(opItem.getImgUrl()));
+//                    startActivity(intent);
+                    break;
+                }
                 case topicPage:
                 case topicCollection:
                 case albumList:
                 case more:
                 case back:
-                case activity:
+
                         default:
                 {
                     ret = false;

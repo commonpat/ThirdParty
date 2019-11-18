@@ -48,7 +48,7 @@ public class NetworkService {
 
     public void fetchHomePageData(final Context context, final JsonCallback<BaseResponse<List<OpItem>>> callback)
     {
-        final int typeId = 71;
+        final int typeId = 74;
         String url = path2ApiUrl("/utvgo-tv-mvc/ui/vip/index/page.utvgo?typeId=" + typeId);
         NetworkUtils.get(context, url, callback);
     }
@@ -101,7 +101,7 @@ public class NetworkService {
 
     public void fetchUserCenterOpData(final Context context, final JsonCallback<BaseResponse<List<List<OpItem>>>> callback)
     {
-        String url = path2ApiUrl("/utvgo-tv-mvc/ui/vip/index/arryPage.utvgo?typeId=73");
+        String url = path2ApiUrl("/utvgo-tv-mvc/ui/vip/index/arryPage.utvgo?typeId=76");
         NetworkUtils.get(context, url, callback);
     }
 

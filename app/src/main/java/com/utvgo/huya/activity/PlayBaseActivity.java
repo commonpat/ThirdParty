@@ -1,5 +1,6 @@
 package com.utvgo.huya.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,7 +35,7 @@ public class PlayBaseActivity extends BaseActivity {
     public boolean needQuickTime = false;
     public boolean quickNoPlayTime = false;
     public boolean needFinish;
-    public final static long timeStep = 1000;
+    public final static long timeStep = 200;
     public Handler timeHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
@@ -114,6 +115,7 @@ public class PlayBaseActivity extends BaseActivity {
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         //Log.d("dispatchKeyEvent ", " dispatchKeyEvent " + event.getKeyCode());

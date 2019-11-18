@@ -71,19 +71,23 @@ public class ProgramContent extends ProgramInfoBase {
 
         if(!TextUtils.isEmpty(this.videoUrlHigh))
         {
-            if( DiffConfig.CurrentPlatform== Platform.gzbn && (this.videoUrlHigh.startsWith("http"))){
-                return "HuYaSeriesIDhuya0001test";
+            if(this.videoUrlHigh.startsWith("http")){
+                return this.videoUrlHigh;
+            }else {
+                this.videoUrlHigh = DiffConfig.playHost+videoUrlHigh;
+                return this.videoUrlHigh;
             }
-            return this.videoUrlHigh;
         }
         if(!TextUtils.isEmpty(this.videoUrlFluency))
         {
-            if( DiffConfig.CurrentPlatform== Platform.gzbn && (this.videoUrlFluency.startsWith("http"))){
-                return "HuYaSeriesIDhuya0001test";
+            if(this.videoUrlFluency.startsWith("http")){
+                return this.videoUrlFluency;
+            }else {
+                this.videoUrlFluency = DiffConfig.playHost+videoUrlFluency;
+                return this.videoUrlFluency;
             }
-            return this.videoUrlFluency;
         }
 
-        return "HuYaSeriesIDhuya0001test";
+        return "";
     }
 }

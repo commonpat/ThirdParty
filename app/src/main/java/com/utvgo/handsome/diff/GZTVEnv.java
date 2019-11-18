@@ -20,18 +20,23 @@ public class GZTVEnv implements IEnv {
 //
 //        DiffConfig.UseWebIntroduction = true;
 //        DiffConfig.IntroduceUrl = "http://192.168.44.73/app/introduce.html";
-
-
+/*
+    数据接口：http://192.168.44.73/utvgo-tv-mvc/
+    订购：http://192.168.44.73/huya-order-web/
+    收藏：http://192.168.44.73/utvgo-user/
+    采集：http://192.168.44.76/utvgo-statistics/
+    图片：http://192.168.44.76:81/cms/uploadFile/image/*/
 
 
         DiffConfig.baseHost = "http://192.168.44.73";
-        DiffConfig.imageHost = "http://192.168.44.73:81/cms/uploadFile/image/";  //正式
+        DiffConfig.imageHost = "http://192.168.44.76:81/cms/uploadFile/image/";  //正式
         DiffConfig.authHost = "http://192.168.44.73";
-        DiffConfig.statisticsHost = "http://192.168.44.73:81/";
-
+        DiffConfig.statisticsHost = "http://192.168.44.76";
         DiffConfig.activityHost = DiffConfig.baseHost;
-        DiffConfig.orderHost = DiffConfig.authHost + "/cq-order-web/";
-//        DiffConfig.UseWebIntroduction = true;
-//        DiffConfig.IntroduceUrl = "http://192.168.44.73/app/introduce.html";
+        DiffConfig.orderHost = DiffConfig.authHost + "/huya-order-web/";
+        DiffConfig.playHost = "http://192.168.44.73:17553/EG/huya/";
+
+        DiffConfig.UseWebIntroduction = true;
+        DiffConfig.IntroduceUrl = "http://192.168.44.73/huya/introduce.html";
     }
 }

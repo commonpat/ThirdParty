@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+//用于生成时间
+def releaseTime() {
+    def date = new Date()
+    //yy年 MM月 dd日 HH小时 mm分钟 ss秒
+    def formattedDate = date.format('yyMMddHHmmss')
+    return formattedDate
+}
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -9,7 +16,6 @@ android {
         versionCode 100
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
     buildTypes {
             release {
@@ -38,6 +44,24 @@ android {
             aidl.srcDirs = ['src/main/aidl']
         }
     }
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == 'release') {
+            variant.assemble.doLast {
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "huya_${variant.buildType.name}_${android.defaultConfig.versionName}_${releaseTime()}"
+                        def outputPath = "../build/release"
+                        copy {
+                            from outputFile
+                            into outputPath
+                            rename { fileName + ".apk" }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -58,7 +82,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.lzy.net:okserver:2.0.5'
@@ -66,6 +90,8 @@ dependencies {
     implementation files('libs/XiriScene.jar')
     implementation files('libs/XiriFeedback.jar')
     implementation(name:'paymanager',ext:'aar')
+    implementation 'com.google.zxing:core:3.3.2'
+
 
 
 

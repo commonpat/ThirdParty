@@ -63,9 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -115,9 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -166,9 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -217,9 +211,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -268,9 +260,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -319,9 +309,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -370,9 +358,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -421,9 +407,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -472,9 +456,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>
@@ -523,9 +505,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@drawable/shape_bg_free"
                     android:padding="@dimen/dp4"
-                    android:text="免费"
                     android:textSize="@dimen/sp14" />
 
             </LinearLayout>

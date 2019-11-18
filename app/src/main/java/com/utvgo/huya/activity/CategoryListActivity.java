@@ -1,5 +1,6 @@
 package com.utvgo.huya.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanStatistics;
@@ -29,6 +31,7 @@ import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.TPageData;
 import com.utvgo.huya.beans.VideoInfo;
+import com.utvgo.huya.constant.ConstantEnum;
 import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.StringUtils;
 
@@ -242,10 +245,17 @@ public class CategoryListActivity extends BaseActivity {
     public void acitonAt(final int index) {
         OpItem opItem = this.subjectRecordListBeen.get(index);
         Uri uri = Uri.parse(opItem.getHref());
-        String channelId = uri.getQueryParameter("channelId");
-        MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
-                opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+        if(opItem.getHref().contains("albumPlayer.html")){
+            String albumId = uri.getQueryParameter("pkId");
+            MediaAlbumActivity.show(this, StringUtils.intValueOfString(albumId));
+        }else {
+            String channelId = uri.getQueryParameter("channelId");
+            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
+                    opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+        }
+
     }
+
 
     void updateItemCount()
     {
@@ -333,6 +343,7 @@ public class CategoryListActivity extends BaseActivity {
         updateItemContent();
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
 //        if(event.getKeyCode()==KeyEvent.KEYCODE_DPAD_UP){

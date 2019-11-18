@@ -35,6 +35,7 @@ import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.TPageData;
 import com.utvgo.huya.beans.VideoInfo;
 import com.utvgo.huya.net.NetworkService;
+import com.utvgo.huya.utils.HiFiDialogTools;
 
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class MediaAlbumActivity extends BuyActivity {
 
     private int albumId, channelId, multisetType, currentPage = 0, totalPage = 0;
     private ProgramContent albumData = null;
-
+    private  boolean isFree = false;
     long currentMediaDuration = 0;
 
 
@@ -118,6 +119,7 @@ public class MediaAlbumActivity extends BuyActivity {
         super.onResume();
         if (videoView != null) {
             videoView.resume();
+            this.freeTime = (int) (nowTime/1000+10);
         }
         /*
         if (hadCallBuyView  && !isExperience) {
@@ -216,6 +218,7 @@ public class MediaAlbumActivity extends BuyActivity {
             this.playIndex = index;
             VideoInfo videoBean = this.albumData.getVideos().get(this.playIndex);
             //hahaPlayUrl(videoBean.getMediaSourceUrl());
+            this.freeTime = videoBean.getFreeSecond();
             getHahaPlayerUrl(videoBean.getMediaSourceUrl());
 
         }
@@ -304,10 +307,14 @@ public class MediaAlbumActivity extends BuyActivity {
     }
 
     private boolean needBuy() {
-        if (freeTime != -1 && !isExperience) {
-            if (nowTime / 1000 > freeTime) {
-                //showBuy(mvDetail.getMv().getVodId());
-                return true;
+        if(!HuyaApplication.hadBuy()){
+            if(!isFree) {
+                if (freeTime != -1 && !isExperience) {
+                    if (nowTime / 1000 > freeTime) {
+                        showBuy(albumMid);
+                        return true;
+                    }
+                }
             }
         }
         return false;
@@ -358,12 +365,8 @@ public class MediaAlbumActivity extends BuyActivity {
 
     @Override
     public void onBackPressed() {
-        if (isExperience) {
-            isExperience = false;
-            showBuy("");
-        } else {
+
             finish();
-        }
     }
 
     void updateAlbumBackground(String imageUrl)
@@ -386,8 +389,8 @@ public class MediaAlbumActivity extends BuyActivity {
         String text = String.format("< %d/%d >", Math.min(this.currentPage + 1, this.totalPage), this.totalPage);
         tvCount.setText(text);
 
-        leftImageView.setImageResource((this.currentPage > 0)?R.mipmap.icon_previous:R.mipmap.icon_previous_disavle);
-        rightImageView.setImageResource(((this.currentPage + 1) >= (this.totalPage))?R.mipmap.icon_next_disable:R.mipmap.icon_next);
+        leftImageView.setImageResource((this.currentPage > 0)?R.mipmap.icon_previous_disavle:R.mipmap.icon_previous);
+        rightImageView.setImageResource(((this.currentPage + 1) >= (this.totalPage))?R.mipmap.icon_next:R.mipmap.icon_next_disable);
     }
 
     void updateItemContent()
@@ -442,7 +445,12 @@ public class MediaAlbumActivity extends BuyActivity {
                 if(data.isOk())
                 {
                     layout(data.getData());
+                    try{
                     stat("专辑播放-" + data.getData().getName());
+                    }catch (Exception e){
+                        HiFiDialogTools.getInstance().showtips(MediaAlbumActivity.this, "获取数据失败，请稍后重试", null);
+
+                    }
                 }
             }
         });
@@ -469,8 +477,8 @@ public class MediaAlbumActivity extends BuyActivity {
         updateItemContent();
 
         if(this.albumData.getVideos().size() > 0)
-        {
-
+        {   this.isFree = this.albumData.isFree();
+            this.freeTime =this.albumData.getVideos().get(0).getFreeSecond();
             playMedia(0);
         }
     }

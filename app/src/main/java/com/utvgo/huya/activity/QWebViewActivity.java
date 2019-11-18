@@ -14,6 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.utils.URLBuilder;
@@ -23,6 +24,7 @@ import com.utvgo.huya.net.QJSInterface;
 public class QWebViewActivity extends BaseActivity {
 
     long timeStamp = 0;
+    private long exitTime=0;
 
     public enum RequestType {
         get, post
@@ -168,6 +170,11 @@ public class QWebViewActivity extends BaseActivity {
                 super.onPageFinished(view, url);
                 hideBar();
             }
+
+            @Override
+            public void onScaleChanged(WebView view, float oldScale, float newScale) {
+                super.onScaleChanged(view, oldScale, newScale);
+            }
         });
     }
 
@@ -178,24 +185,17 @@ public class QWebViewActivity extends BaseActivity {
         webView.clearCache(true);
     }
 
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            /*
-            if(timeStamp > 0)
-            {
-                if(System.currentTimeMillis() < (timeStamp + 3000))
-                {
-                    finish();
-                    return true;
-                }
+
+        //改写物理返回键的逻辑
+        if(keyCode==KeyEvent.KEYCODE_BACK) {
+            if(webView.canGoBack()) {
+                webView.goBack();//返回上一页面
+                return true;
+            } else {
+               this.finish();
             }
-
-            timeStamp = System.currentTimeMillis();
-            webView.loadUrl("javascript:doBackKey()");
-            */
-            this.finish();
-
-            return true;
         }
         return super.onKeyDown(keyCode, event);
     }

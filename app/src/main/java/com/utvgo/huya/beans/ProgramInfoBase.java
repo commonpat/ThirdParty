@@ -196,6 +196,6 @@ public class ProgramInfoBase implements Serializable {
 
     public boolean isFree()
     {
-        return "0".equalsIgnoreCase(this.isFree);
+        return "-1".equalsIgnoreCase(this.isFree);
     }
 }

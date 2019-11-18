@@ -33,7 +33,7 @@ public class DiffConfig {
     public static VoiceAssistant voiceAssistant = new VoiceAssistant();
 
     //修改平台即可
-    public static Platform CurrentPlatform = Platform.gcable;
+    public static Platform CurrentPlatform = Platform.gztv;
 
     static Boolean LocalTest = false;
 
