@@ -2,6 +2,8 @@ package com.utvgo.huya.activity;
 
 import android.os.Bundle;
 
+import com.utvgo.huya.R;
+
 public class LaunchActivity extends HomeActivity {
     private boolean isBindBoxService = false;
     @Override
@@ -13,6 +15,8 @@ public class LaunchActivity extends HomeActivity {
 
 
     }
+
+
 
     @Override
     protected void onDestroy() {

@@ -48,11 +48,26 @@ public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
                     if(needShowBuy)
                     {
                         hahaPausePlay();
-
+                        stat("播放进入订购页");
                         DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
                             @Override
                             public void onFinished(Context context) {
                                 DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
+                            }
+
+                            @Override
+                            public int hashCode() {
+                                return super.hashCode();
+                            }
+
+                            @Override
+                            public void onSuccess(Context context) {
+
+                            }
+
+                            @Override
+                            public void onFail(Context context) {
+
                             }
                         });
                     }

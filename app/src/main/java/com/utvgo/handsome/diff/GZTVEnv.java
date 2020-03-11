@@ -29,6 +29,7 @@ public class GZTVEnv implements IEnv {
 
 
         DiffConfig.baseHost = "http://192.168.44.73";
+        DiffConfig.dataHost = "http://192.168.44.73/utvgo-tv-mvc/";
         DiffConfig.imageHost = "http://192.168.44.76:81/cms/uploadFile/image/";  //正式
         DiffConfig.authHost = "http://192.168.44.73";
         DiffConfig.statisticsHost = "http://192.168.44.76";
@@ -38,5 +39,6 @@ public class GZTVEnv implements IEnv {
 
         DiffConfig.UseWebIntroduction = true;
         DiffConfig.IntroduceUrl = "http://192.168.44.73/huya/introduce.html";
+        GZTVPurchase.getProductInfo(this);
     }
 }

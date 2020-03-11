@@ -114,6 +114,7 @@ public class UserCenterActivity extends BuyActivity {
             startActivity(intent);
 
         } else if (i == R.id.btn_order) {
+            stat("个人中心订购页");
             DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
                 @Override
                 public void onFinished(String message) {
@@ -126,6 +127,21 @@ public class UserCenterActivity extends BuyActivity {
                         DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
                             @Override
                             public void onFinished(Context context) {
+
+                            }
+
+                            @Override
+                            public int hashCode() {
+                                return super.hashCode();
+                            }
+
+                            @Override
+                            public void onSuccess(Context context) {
+
+                            }
+
+                            @Override
+                            public void onFail(Context context) {
 
                             }
                         });

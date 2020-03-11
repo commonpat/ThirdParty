@@ -53,9 +53,9 @@
 
     <Button
         android:id="@+id/btn_back"
-        android:layout_width="@dimen/dp150"
-        android:layout_height="@dimen/dp60"
-        android:layout_marginLeft="@dimen/dp720"
+        android:layout_width="@dimen/dp300"
+        android:layout_height="@dimen/dp109"
+        android:layout_marginLeft="@dimen/dp620"
         android:layout_marginTop="@dimen/dp550"
         android:background="@drawable/change_button_lock_bg_select1"
         android:gravity="center"
@@ -64,9 +64,9 @@
 
     <Button
         android:id="@+id/btn_exit"
-        android:layout_width="@dimen/dp150"
-        android:layout_height="@dimen/dp60"
-        android:layout_marginLeft="900dp"
+        android:layout_width="@dimen/dp300"
+        android:layout_height="@dimen/dp110"
+        android:layout_marginLeft="950dp"
         android:layout_marginTop="@dimen/dp550"
         android:background="@drawable/change_button_lock_bg_select"
         android:gravity="center"

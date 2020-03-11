@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Config;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,14 +25,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
+import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
+import com.utvgo.huya.beans.TypesBean;
 import com.utvgo.huya.constant.ConstantEnum;
 import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.DensityUtil;
@@ -62,20 +67,21 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     public boolean hadCallBuyView = false;
     public boolean needBringFront = true;
     private boolean needTransition = true;
+    TypesBean typesBean = new TypesBean();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DensityUtil.init(this, 1280);
         super.onCreate(savedInstanceState);
-      //  registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
 
     }
 
     @Override
     protected void onDestroy() {
-        // LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
+         unregisterReceiver(mHomeKeyEventReceiver);
         borderView = null;
         hiFiDialogTools = null;
         focusView = null;
@@ -315,6 +321,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                     HuyaApplication.beanActivity = null;
                     //表示按了home键,程序到了后台
                     finish();
+                    android.os.Process.killProcess(android.os.Process.myPid());
 //                    Process.killProcess(Process.myPid());
                 }
             }
@@ -367,13 +374,17 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         {
             ret = true;
             final Context context = this;
+            //if (BuildConfig.DEBUG){opItem.setHrefType("0");}
             ConstantEnum.OpType opType = ConstantEnum.OpType.fromTypeString(opItem.getHrefType());
             String href = opItem.getHref();
             Uri uri = Uri.parse(href);
             switch (opType)
             {
                 case web:
-                {
+                {   if(!href.startsWith("http:")){
+                        href=DiffConfig.WebUrlBase+href;
+                     }
+                     if(BuildConfig.DEBUG){href="http://172.16.146.56/huyaTV/activityHalf.html";}
                     QWebViewActivity.navigateUrl(this, href);
                     break;
                 }
@@ -416,7 +427,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                         ToastUtil.showLong(BaseActivity.this,"你已是虎牙TV的会员");
                         break;
                     } else{
-                        QWebViewActivity.navigateUrl(this, opItem.getHref(), null);
+                        QWebViewActivity.navigateUrl(this, opItem.getHref(), null,null);
                     }
 //                    Intent intent = new Intent(BaseActivity.this, ActivityActivity.class);
 //                    intent.putExtra("bgImageUrl",DiffConfig.generateImageUrl(opItem.getImgUrl()));
@@ -437,5 +448,10 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
             }
         }
         return ret;
+    }
+    public  void actionProgram(String channelId,String name){
+        ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
+                name, StringUtils.intValueOfString(AppConfig.PackageId), 0);
+
     }
 }

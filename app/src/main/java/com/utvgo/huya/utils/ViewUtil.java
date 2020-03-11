@@ -16,8 +16,8 @@ public class ViewUtil {
             //View
             if (rootLayout instanceof TextView) {
                 TextView textView = (TextView) rootLayout;
-                textView.setSingleLine();
-                textView.setMarqueeRepeatLimit(1);
+                //textView.setSingleLine();
+                //textView.setMarqueeRepeatLimit(1);
                 if (isRunning) {
                     textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
                     textView.setFocusable(true);

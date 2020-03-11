@@ -28,6 +28,7 @@
     <dimen name="dp154">231.px</dimen>
     <dimen name="dp158">237.px</dimen>
     <dimen name="dp160">240.px</dimen>
+    <dimen name="dp165">250.px</dimen>
     <dimen name="dp170">255.px</dimen>
     <dimen name="dp174">261.px</dimen>
     <dimen name="dp175">262.px</dimen>

@@ -22,12 +22,16 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
         <!--<meta-data-->
             <!--android:name="com.google.android.actions"-->
             <!--android:resource="@xml/actions" />-->
 
-        <activity android:name=".activity.LaunchActivity">
+        <activity android:name=".activity.LaunchActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="com.utvgo.huya.action.MAIN" />
@@ -47,7 +51,7 @@
 
         </activity>
 
-        <activity android:name=".activity.QWebViewActivity" />
+        <activity android:name=".activity.QWebViewActivity" android:hardwareAccelerated="true"/>
 
         <activity android:name=".activity.TopicActivity" >
 
@@ -78,6 +82,10 @@
         </activity>
 
         <activity android:name=".activity.ActivityActivity" >
+        </activity>
+        <activity android:name=".activity.ProgramListActivity" >
+        </activity>
+        <activity android:name=".activity.ExitNewActivity" >
         </activity>
 
     </application>

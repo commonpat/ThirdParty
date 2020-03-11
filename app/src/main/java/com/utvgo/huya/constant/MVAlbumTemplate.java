@@ -11,4 +11,11 @@ public interface MVAlbumTemplate {
     String ONE = "202";
     String TWO = "203";
     String THREE = "204";
+    String FOUR = "205";
+    String FIVE = "206";
+    public static final String NOMAL="0";
+    public static final String BACK="2";
+    public static final String MORE="1";
+    public static final String VIDEOFOCUS="3";
+
 }

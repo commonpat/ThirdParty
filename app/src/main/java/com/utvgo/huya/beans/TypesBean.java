@@ -4,7 +4,7 @@ package com.utvgo.huya.beans;
 import java.io.Serializable;
 import java.util.List;
 
-public class TypesBean extends BaseResponse {
+public class TypesBean implements Serializable {
 
     /**
      * code : 1
@@ -28,7 +28,30 @@ public class TypesBean extends BaseResponse {
      * }
      */
 
-    private DataBean data;
+    private String code;
+    private String message;
+
+    private  DataBean data;
+
+    //optional
+    private String imageProfix;
+
+    private int totalPage;
+    private int count;
+    private int currentPage;
+
+    public String getCode() {
+        return code;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public DataBean getData() {
         return data;
@@ -38,6 +61,43 @@ public class TypesBean extends BaseResponse {
         this.data = data;
     }
 
+    //public
+    public boolean isOk()
+    {
+        return "1".equalsIgnoreCase(getCode());
+    }
+
+    //optional
+    public String getImageProfix() {
+        return imageProfix;
+    }
+    public void setImageProfix(String imageProfix) {
+        this.imageProfix = imageProfix;
+    }
+
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
+    }
+
+    public int getTotalPage() {
+        return this.totalPage;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getCount() {
+        return this.count;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getCurrentPage() {
+        return this.currentPage;
+    }
     public static class DataBean implements Serializable {
         /**
          * typeName : 全部

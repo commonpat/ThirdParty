@@ -27,7 +27,7 @@ public class PlayBaseActivity extends BaseActivity {
     public long vodDur = 10 * 60 * 60 * 1000, vodPayingTime = 0;
     public long vodDurQQ = 0; //自己数据库中的播放时长，如果获取到的时长比这个短   则取这个时长
     boolean buySingle = false;
-
+    public String buySingleName = "";
     private static final int HIDE_INFO_VIEW = 7;
     public static final int QUICK_NO_PLAYTIME = 8;
     public static final int PLAY_TIME = 9;

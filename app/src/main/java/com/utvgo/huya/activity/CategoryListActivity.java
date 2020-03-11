@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
@@ -30,6 +32,7 @@ import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.TPageData;
+import com.utvgo.huya.beans.TypesBean;
 import com.utvgo.huya.beans.VideoInfo;
 import com.utvgo.huya.constant.ConstantEnum;
 import com.utvgo.huya.net.NetworkService;
@@ -46,12 +49,12 @@ public class CategoryListActivity extends BaseActivity {
 
     @BindView(R.id.tv_count)
     TextView tvCount;
-    @BindView(R.id.check_btn_tab_1)
-    ImageView  checkBtnTab1;
-    @BindView(R.id.check_btn_tab_2)
-    ImageView  checkBtnTab2;
-    @BindView(R.id.check_btn_tab_3)
-    ImageView  checkBtnTab3;
+    @BindView(R.id.check_btn_tab_4)
+    ImageView  checkBtnTab4;
+    @BindView(R.id.check_btn_tab_5)
+    ImageView  checkBtnTab5;
+    @BindView(R.id.check_btn_tab_6)
+    ImageView  checkBtnTab6;
 
 
 
@@ -72,10 +75,12 @@ public class CategoryListActivity extends BaseActivity {
     private int pkId = 156, currentPage = 0, totalPage = 0;
     BeanTopic data = null;
     private int checkId=R.id.btn_tab_1;
+    private String typeString;
 
-    public static void show(final Context context, final int pkId)
+    public static void show(final Context context, final int pkId, String typesBean)
     {
         Intent intent = new Intent(context, CategoryListActivity.class);
+        intent.putExtra("typesBean",typesBean);
         intent.putExtra("pkId", pkId);
         context.startActivity(intent);
     }
@@ -94,6 +99,8 @@ public class CategoryListActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         this.pkId = getIntent().getIntExtra("pkId", pkId);
+        typeString = getIntent().getStringExtra("typesBean");
+        typesBean = JSON.parseObject(typeString,new TypeReference<TypesBean>(){});
 
         final int array[] = {R.id.fl_item_0, R.id.fl_item_1, R.id.fl_item_2, R.id.fl_item_3, R.id.fl_item_4, R.id.fl_item_5,
                 R.id.fl_item_6, R.id.fl_item_7};
@@ -108,21 +115,21 @@ public class CategoryListActivity extends BaseActivity {
             @Override
             public void run() {
                 if(pkId == 156)
-                {    checkId=R.id.btn_tab_1;
-                    showCheck(R.id.btn_tab_1);
-                    findViewById(R.id.btn_tab_1).requestFocus();
+                {    checkId=R.id.btn_tab_4;
+                    showCheck(R.id.btn_tab_4);
+                    findViewById(R.id.btn_tab_4).requestFocus();
                 }
                 else if(pkId == 157)
                 {
-                    checkId=R.id.btn_tab_2;
-                    showCheck(R.id.btn_tab_2);
-                    findViewById(R.id.btn_tab_2).requestFocus();
+                    checkId=R.id.btn_tab_5;
+                    showCheck(R.id.btn_tab_5);
+                    findViewById(R.id.btn_tab_5).requestFocus();
                 }
                 else if(pkId == 158)
                 {
-                    checkId=R.id.btn_tab_3;
-                    showCheck(R.id.btn_tab_3);
-                    findViewById(R.id.btn_tab_3).requestFocus();
+                    checkId=R.id.btn_tab_6;
+                    showCheck(R.id.btn_tab_6);
+                    findViewById(R.id.btn_tab_6).requestFocus();
                 }
                 loadData();
             }
@@ -195,22 +202,48 @@ public class CategoryListActivity extends BaseActivity {
             case R.id.btn_tab_1:
             {
                 this.checkId=R.id.btn_tab_1;
-                this.pkId = 156;
-                loadData();
+                String channelId = Uri.parse(typesBean.getData().getNavigationBar().get(0).getHref()).getQueryParameter("channelId");
+                //typesBean.getData().getNavigationBar().get(2).getColumnName()
+                actionProgram(channelId,typesBean.getData().getNavigationBar().get(2).getColumnName());
                 break;
             }
 
             case R.id.btn_tab_2:
             {
                 this.checkId=R.id.btn_tab_2;
-                this.pkId = 157;
-                loadData();
+                String channelId = Uri.parse(typesBean.getData().getNavigationBar().get(0).getHref()).getQueryParameter("channelId");
+                //typesBean.getData().getNavigationBar().get(2).getColumnName()
+                actionProgram(channelId,typesBean.getData().getNavigationBar().get(2).getColumnName());
                 break;
             }
 
             case R.id.btn_tab_3:
             {
                 this.checkId=R.id.btn_tab_3;
+                String channelId = Uri.parse(typesBean.getData().getNavigationBar().get(0).getHref()).getQueryParameter("channelId");
+                //typesBean.getData().getNavigationBar().get(2).getColumnName()
+                actionProgram(channelId,typesBean.getData().getNavigationBar().get(2).getColumnName());
+                break;
+            }
+            case R.id.btn_tab_4:
+            {
+                this.checkId=R.id.btn_tab_4;
+                this.pkId = 156;
+                loadData();
+                break;
+            }
+
+            case R.id.btn_tab_5:
+            {
+                this.checkId=R.id.btn_tab_5;
+                this.pkId = 157;
+                loadData();
+                break;
+            }
+
+            case R.id.btn_tab_6:
+            {
+                this.checkId=R.id.btn_tab_6;
                 this.pkId = 158;
                 loadData();
                 break;
@@ -237,9 +270,9 @@ public class CategoryListActivity extends BaseActivity {
     }
 
     private void showCheck(int viewId) {
-        checkBtnTab1.setVisibility((viewId==R.id.btn_tab_1)? View.VISIBLE:View.INVISIBLE);
-        checkBtnTab2.setVisibility((viewId==R.id.btn_tab_2)?View.VISIBLE:View.INVISIBLE);
-        checkBtnTab3.setVisibility((viewId==R.id.btn_tab_3)?View.VISIBLE:View.INVISIBLE);
+        checkBtnTab4.setVisibility((viewId==R.id.btn_tab_4)? View.VISIBLE:View.INVISIBLE);
+        checkBtnTab5.setVisibility((viewId==R.id.btn_tab_5)?View.VISIBLE:View.INVISIBLE);
+        checkBtnTab6.setVisibility((viewId==R.id.btn_tab_6)?View.VISIBLE:View.INVISIBLE);
     }
 
     public void acitonAt(final int index) {
@@ -250,7 +283,9 @@ public class CategoryListActivity extends BaseActivity {
             MediaAlbumActivity.show(this, StringUtils.intValueOfString(albumId));
         }else {
             String channelId = uri.getQueryParameter("channelId");
-            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
+//            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
+//                    opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+            ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
                     opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
         }
 

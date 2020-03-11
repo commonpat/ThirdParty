@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/iv_home_logo"
-        android:layout_width="141dp"
-        android:layout_height="50dp"
+        android:layout_width="277dp"
+        android:layout_height="53dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="30dp"
         android:scaleType="fitXY"

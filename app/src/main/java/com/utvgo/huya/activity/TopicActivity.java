@@ -247,7 +247,7 @@ public class TopicActivity extends BuyActivity {
                     && subjectRecordListBeen != null && subjectRecordListBeen.size() > 0) {
                 page.setText(v.getId() + 1 + "/" + subjectRecordListBeen.size());
                 if (v.getParent().equals(flTopicContent)) {
-                    borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp5), (int) getResources().getDimension(R.dimen.dp13));
+                    borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, -10, 0);
                 }
             }
 

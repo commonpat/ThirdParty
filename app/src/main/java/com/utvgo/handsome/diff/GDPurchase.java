@@ -16,7 +16,7 @@ public class GDPurchase extends IPurchase {
 
     @Override
     public void pay(final Context context, final CommonCallback callback) {
-        String url = DiffConfig.authHost +  "TVMaiShiOrderController/order.utvgo?"+
+        String url = DiffConfig.orderHost +  "TVMaiShiOrderController/order.utvgo?"+
                 "keyNo=" + DiffConfig.getCA(context) +"&vipCode=" + AppConfig.VipCode + "&contentMid=&backUrl=http://" + QWebViewActivity.QuitScheme;
         QWebViewActivity.navigateUrl(context, url);
     }

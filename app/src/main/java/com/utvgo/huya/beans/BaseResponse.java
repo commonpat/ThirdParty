@@ -6,7 +6,8 @@ public class BaseResponse<T> implements Serializable {
 
     private String code;
     private String message;
-    private T data;
+
+    private  T data;
 
     //optional
     private String imageProfix;

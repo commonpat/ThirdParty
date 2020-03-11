@@ -16,6 +16,15 @@ public class ProgramContent extends ProgramInfoBase {
     private int videoId;
 
     private String albumBackground;
+    private String showType;
+
+    public String getShowType() {
+        return showType;
+    }
+
+    public void setShowType(String showType) {
+        this.showType = showType;
+    }
 
     public String getAlbumBackground() {
         return albumBackground;

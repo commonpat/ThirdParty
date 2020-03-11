@@ -14,6 +14,7 @@ import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BeanExitPage;
+import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.views.FocusView;
 
@@ -115,19 +116,27 @@ public class ExitActivity extends BaseActivity {
         //Log.d(TAG, "clickRecItem: " +beanArryPage.getData().get(index).get(0));
         BeanExitPage.Data selectBean = beanExitPage.getData().get(index);
         String href=selectBean.getHref();
-        if(href.indexOf("albumPlayer.html") >= 0)
+        OpItem opItem = new OpItem();
+        opItem.setHrefType(selectBean.getHrefType());
+        opItem.setHref(href);
+
+//        if(href.indexOf("albumPlayer.html") >= 0)
+//        {
+//            Intent intent = new Intent(this, MediaAlbumActivity.class);
+//            intent.putExtra("albumMid", Uri.parse(href).getQueryParameter("pkId"));
+//            startActivity(intent);
+//        }
+//        else
+        if(href.indexOf("listPage.html") >= 0)
         {
-            Intent intent = new Intent(this, MediaAlbumActivity.class);
-            intent.putExtra("albumMid", Uri.parse(href).getQueryParameter("pkId"));
-            startActivity(intent);
-        }
-        else if(href.indexOf("listPage.html") >= 0)
-        {
-            String channelId=Uri.parse(selectBean.getHref()).getQueryParameter("channelId");
-            String channelName;
-            int packageId=29;
-            final int defaultSelectedLabelId = -1;
-            MediaListActivity.show(this, Integer.valueOf(channelId),null,packageId ,defaultSelectedLabelId);
+              String channelId=Uri.parse(selectBean.getHref()).getQueryParameter("channelId");
+//            String channelName;
+//            int packageId=29;
+//            final int defaultSelectedLabelId = -1;
+//            ProgramListActivity.show(this, Integer.valueOf(channelId),null,packageId ,defaultSelectedLabelId);
+            actionProgram(channelId,null);
+        }else {
+            actionOnOp(opItem);
         }
 
     }

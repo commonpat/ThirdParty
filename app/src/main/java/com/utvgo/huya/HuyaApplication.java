@@ -7,6 +7,8 @@ import com.utvgo.handsome.diff.DiffConfig;
 
 public class HuyaApplication extends Application {
     public static BeanActivity beanActivity;
+    public static String ProductCategoryId;
+    public static String TryBestCmbId;
 
     @Override
     public void onCreate() {

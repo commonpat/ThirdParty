@@ -2,9 +2,11 @@ package com.utvgo.huya.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,12 +14,14 @@ import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
@@ -34,6 +38,7 @@ import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.TPageData;
 import com.utvgo.huya.beans.VideoInfo;
+import com.utvgo.huya.constant.MVAlbumTemplate;
 import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.HiFiDialogTools;
 
@@ -46,6 +51,10 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.utvgo.huya.constant.MVAlbumTemplate.BACK;
+import static com.utvgo.huya.constant.MVAlbumTemplate.MORE;
+import static com.utvgo.huya.constant.MVAlbumTemplate.VIDEOFOCUS;
+
 public class MediaAlbumActivity extends BuyActivity {
 
     @BindView(R.id.tv_count)
@@ -53,6 +62,8 @@ public class MediaAlbumActivity extends BuyActivity {
 
     @BindView(R.id.video)
     VideoView video;
+    @BindView(R.id.video5)
+    VideoView video5;
 
     @BindView(R.id.bg)
     ImageView bgImageView;
@@ -63,6 +74,10 @@ public class MediaAlbumActivity extends BuyActivity {
     ImageView rightImageView;
     @BindView(R.id.sv_video)
     SurfaceView svVideo;
+    @BindView(R.id.activity_album_default)
+    FrameLayout albumDefault;
+    @BindView(R.id.activity_album_five)
+    FrameLayout albumFive;
 
     private String showType = "";
     private boolean isExperience;
@@ -73,7 +88,7 @@ public class MediaAlbumActivity extends BuyActivity {
     private String albumMid;
     public TPageData beanWLAblumData;
     public List<OpItem> subjectRecordListBeen = new ArrayList<>();
-
+    private long timesmap =0;
 
     private int pageIndex = 0;
     final int pageSize = 4;
@@ -336,12 +351,17 @@ public class MediaAlbumActivity extends BuyActivity {
             case R.id.btn_fl_item3:
             case R.id.btn_fl_item4:
             {
-                final int array[] = {R.id.btn_fl_item1, R.id.btn_fl_item2, R.id.btn_fl_item3, R.id.btn_fl_item4};
-                int index = Arrays.binarySearch(array, viewId);
-                if(index >= 0)
-                {
-                    int playIndex = this.currentPage*pageSize + index;
-                    playMedia(playIndex);
+                if(System.currentTimeMillis() > (timesmap + 2000)) {
+                    timesmap = System.currentTimeMillis();
+                    final int array[] = {R.id.btn_fl_item1, R.id.btn_fl_item2, R.id.btn_fl_item3, R.id.btn_fl_item4};
+                    int index = Arrays.binarySearch(array, viewId);
+                    if (index >= 0) {
+                        int playIndex = this.currentPage * pageSize + index;
+                        this.playIndex = index;
+                        playMedia(playIndex);
+                    }
+                }else {
+                    playVideoFullScreen();
                 }
             }
         }
@@ -432,6 +452,53 @@ public class MediaAlbumActivity extends BuyActivity {
         findViewById(flag ? R.id.btn_fl_item1 : R.id.btn_fl_video).requestFocus();
     }
 
+    private void updateFiveItemContent() {
+        FrameLayout album_five = albumFive.findViewById(R.id.album_5_list);
+        ImageView albumBg = albumFive.findViewById(R.id.album_5_bg);
+        ImageView vif = albumFive.findViewById(R.id.vif);
+        ImageView btnBack = albumFive.findViewById(R.id.btn_back);
+        ImageView btnMore = albumFive.findViewById(R.id.btn_more);
+        loadImage(albumBg,this.albumData.getAlbumBackground());
+        for(int i=0;i<this.albumData.getVideos().size();i++) {
+            if(VIDEOFOCUS.equals(this.albumData.getVideos().get(i).getHrefType())){
+                vif.setId(i);
+                vif.setOnClickListener(this);
+                continue;
+            }
+            if(BACK.equals(this.albumData.getVideos().get(i).getHrefType())&& (this.albumData.getVideos().get(i).getNormalImgUrl()!=null&& this.albumData.getVideos().get(i).getNormalImgUrl().isEmpty())){
+                Glide.with(this).load(DiffConfig.generateImageUrl(this.albumData.getVideos().get(i).getNormalImgUrl())).into(btnBack);
+                btnBack.setId(i);
+                continue;
+            }
+            if(MORE.equals(this.albumData.getVideos().get(i).getHrefType())&&(this.albumData.getVideos().get(i).getNormalImgUrl()!=null&& this.albumData.getVideos().get(i).getNormalImgUrl().isEmpty())){
+                Glide.with(this).load(DiffConfig.generateImageUrl(this.albumData.getVideos().get(i).getNormalImgUrl())).into(btnMore);
+                btnMore.setId(i);
+                continue;
+            }
+            View itemView= View.inflate(this, R.layout.album_5_item,null);
+            itemView.setId(i);
+            itemView.setOnClickListener(this);
+            itemView.setOnFocusChangeListener(this);
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.item_image);;
+            imageView.setOnFocusChangeListener(this);
+            imageView.setOnClickListener(this);
+            imageView.setId(i);
+            TextView number = itemView.findViewById(R.id.number);
+            number.setText(String.valueOf(i+1));
+            TextView textView = (TextView) itemView.findViewById(R.id.name);
+            textView.setText(this.albumData.getVideos().get(i).getName());
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int)this.getResources().getDimension(R.dimen.dp400),(int) this.getResources().getDimension(R.dimen.dp100));
+            int topMargin = (int)(this.getResources().getDimension(R.dimen.dp50))+i*(int)(this.getResources().getDimension(R.dimen.dp100));
+            params.topMargin = topMargin;
+            //allHeight =  topMargin;
+            album_five.addView(itemView,params);
+
+            if(!(this.albumData.getVideos().get(i).getNormalImgUrl()).isEmpty()||this.albumData.getVideos().get(i).getNormalImgUrl()!= null) {
+                Glide.with(this).load(DiffConfig.generateImageUrl(this.albumData.getVideos().get(i).getNormalImgUrl())).into(imageView);
+            }
+        }
+    }
 
     /*
     *** Network
@@ -464,24 +531,34 @@ public class MediaAlbumActivity extends BuyActivity {
         }
 
         this.albumData = bean;
-
+        this.showType = bean.getShowType();
         this.currentPage = 0;
         this.totalPage = this.albumData.getVideos().size()/pageSize;
         if(this.albumData.getVideos().size()%pageSize > 0)
         {
             this.totalPage++;
         }
+        if(this.showType.equals(MVAlbumTemplate.FIVE)){
+            albumDefault.setVisibility(View.GONE);
+            albumFive.setVisibility(View.VISIBLE);
+            setHahaPlayer(video5);
 
-        updateAlbumBackground(bean.getAlbumBackground());
-        updateItemCount();
-        updateItemContent();
-
+            //updateAlbumBackground(bean.getAlbumBackground());
+           // updateItemCount();
+            updateFiveItemContent();
+        }else {
+            updateAlbumBackground(bean.getAlbumBackground());
+            updateItemCount();
+            updateItemContent();
+        }
         if(this.albumData.getVideos().size() > 0)
         {   this.isFree = this.albumData.isFree();
             this.freeTime =this.albumData.getVideos().get(0).getFreeSecond();
             playMedia(0);
         }
     }
+
+
 
 
 }

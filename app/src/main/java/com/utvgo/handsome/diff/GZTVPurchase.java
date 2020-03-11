@@ -20,6 +20,7 @@ import com.sh.lib.tportal.callback.GetProductListListener;
 import com.sh.module.payment.bean.PayInfo;
 import com.sh.module.payment.manager.UserManager;
 import com.sh.module.payment.utils.MyPay;
+import com.utvgo.handsome.bean.BeanProductParam;
 import com.utvgo.handsome.bean.GZTVTryBestBean;
 import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.handsome.interfaces.JsonCallback;
@@ -41,13 +42,13 @@ public class GZTVPurchase extends IPurchase {
 
     public static final int RequestCode = 6566;
     static final String TAG = "GZTVPurchase";
-    static final String TryBestCmbId = "GZ126285";//ceshi
+    static  String TryBestCmbId = "GZ126285";//ceshi
 /*    GZ126281  虎牙TV-6月-110元
     GZ126284  虎牙TV-1年-200元
     GZ126285  虎牙TV-连续包月-0元-首月免费体验*/
 //4456  1324 body:{"svcCodes":"APP0QQYY","businesskey":"46fc9c3778e4437aa0a9b46827f343ff","token":"e0bb573d013211959a658d4efb5c1347"} d28e51f7e2f66a43655d54481ba1a192
 
-    static final String ProductCategoryId = "4435";
+    static  String ProductCategoryId = "4435";
 
     static final String AuthApiUrl = "http://portal.candytime.com.cn/user/authtication";
 
@@ -55,10 +56,11 @@ public class GZTVPurchase extends IPurchase {
    // static final String SecurityKey = "cfea5f18c2202dfd9ea109b20a1ada61";
     static final String SecurityKey ="cfea5f18c2202dfd9ea109b20a1ada61";
 
-    static final String SvcCodes = "APP0HYTV";
+    static  String SvcCodes = "APP0HYTV";
     static final String AuthBySvcApiUrl = "http://portal.candytime.com.cn:8080/API_AAA/user/authtication";
-    static final String CallBackUrl="http://192.168.44.73/cq-order-web/chongqing/cqUserController/callbackSaveAuthorize.utvgo";
-
+    static final String CallBackUrl="http://192.168.44.73/huya-order-web/chongqing/cqUserController/callbackSaveAuthorize.utvgo";
+//http://192.168.44.73/cq-order-web/   qq
+//http://192.168.44.73/huya-order-web/   huya  下次升级变化
 
     String businessKey = "";
 
@@ -115,7 +117,7 @@ public class GZTVPurchase extends IPurchase {
         final String token = GZTVBox.getToken(context);
 
         this.businessKey = UUIDUtils.getUUID();
-        // gquerySvcCodeByToken(context,token);
+
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("token", token);
         paramMap.put("svcCodes", SvcCodes);
@@ -197,12 +199,10 @@ public class GZTVPurchase extends IPurchase {
                 public void onSuccess(PayInfo payInfo) {
                     XLog.d("GZTV pay onSuccess");
                     callBackFunc(context,payInfo,"0");
-                    callback.onFinished(activity);
-                    ToastUtil.showLong(context,"你已是虎牙TV的会员");
+                    callback.onSuccess(activity);
                     auth(context, new AuthCallback() {
                         @Override
                         public void onFinished(String message) {
-
                         }
                     });
                 }
@@ -211,6 +211,7 @@ public class GZTVPurchase extends IPurchase {
                 public void onFailed(PayInfo payInfo, int i, String s) {
                     XLog.d("Pay error code + " + i + " message " + s);
                     callBackFunc(context,payInfo,"1");
+                    callback.onFail(activity);
                 }
             });
         }
@@ -275,9 +276,10 @@ public class GZTVPurchase extends IPurchase {
     }
     public  void  callBackFunc(final Context context,PayInfo payInfo,final String code){
         Map<String,Object> paramMap=new HashMap<String, Object>();
-        paramMap.put("payInfo",payInfo);
+        paramMap.put("msg",payInfo);
         paramMap.put("code",code);
         paramMap.put("keyNo",DiffConfig.getCA(context));
+        paramMap.put("productId",SvcCodes);
         paramMap.put("SvcCodes",SvcCodes);
         org.json.JSONObject paramData = new org.json.JSONObject(paramMap);
         OkGo.<callBackResult>post(CallBackUrl).cacheMode(CacheMode.NO_CACHE).tag(context)
@@ -520,6 +522,18 @@ public class GZTVPurchase extends IPurchase {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+    public static void getProductInfo(GZTVEnv context){
+        String paramUrl = DiffConfig.baseHost + "/cq-order-web/authorizationController/zjsm/getProductParam.utvgo?type=0";
+        OkGo.<BeanProductParam>get(paramUrl).cacheMode(CacheMode.NO_CACHE).tag(context).execute(new JsonCallback<BeanProductParam>() {
+            @Override
+            public void onSuccess(Response<BeanProductParam> response) {
+                BeanProductParam beanProductParam = response.body();
+                TryBestCmbId = beanProductParam.getData().getTryBestCmbId()==null?TryBestCmbId:beanProductParam.getData().getTryBestCmbId();
+                ProductCategoryId  = beanProductParam.getData().getProductCategoryId()==null?ProductCategoryId:beanProductParam.getData().getProductCategoryId();
+                SvcCodes =  beanProductParam.getData().getSvcCodes()== null?SvcCodes:beanProductParam.getData().getSvcCodes();
             }
         });
     }

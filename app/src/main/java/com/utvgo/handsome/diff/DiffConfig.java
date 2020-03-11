@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.utils.ToastUtil;
 
 public class DiffConfig {
@@ -24,6 +25,8 @@ public class DiffConfig {
 
     public static String TestVideoUrl = "";
     public static String TestAudioUrl = TestVideoUrl;
+    public static String WebUrlBase;
+    public static String dataHost;
 
     static IEnv GlobalEnv = null;
     public static ITVBox CurrentTVBox = null;
@@ -33,7 +36,7 @@ public class DiffConfig {
     public static VoiceAssistant voiceAssistant = new VoiceAssistant();
 
     //修改平台即可
-    public static Platform CurrentPlatform = Platform.gztv;
+    public static Platform CurrentPlatform = BuildConfig.Platform;
 
     static Boolean LocalTest = false;
 

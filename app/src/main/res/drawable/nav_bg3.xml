@@ -3,5 +3,5 @@
     <item android:state_focused="true" android:drawable="@drawable/focus3"/>
     <item android:state_focused="false" android:drawable="@drawable/nav3"/>
     <item android:state_checked="true"  android:drawable="@drawable/check"/>
-    <item android:state_checked="false"  android:drawable="@drawable/nav1"/>
+    <item android:state_checked="false"  android:drawable="@drawable/nav3"/>
 </selector>

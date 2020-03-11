@@ -7,15 +7,23 @@ def releaseTime() {
     def formattedDate = date.format('yyMMddHHmmss')
     return formattedDate
 }
+
+
+
+def gcable = "com.utvgo.handsome.diff.Platform.gcable"
+def gztv = "com.utvgo.handsome.diff.Platform.gztv"
+def gzbn = "com.utvgo.handsome.diff.Platform.gzbn"
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.utvgo.huya"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 100
-        versionName "1.0"
+        versionCode 101    //打包修改
+        versionName "1.1"   //打包修改
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField("com.utvgo.handsome.diff.Platform","Platform","${gcable}")//打包修改
     }
     buildTypes {
             release {

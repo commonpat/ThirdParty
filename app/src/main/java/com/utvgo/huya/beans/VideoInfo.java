@@ -45,6 +45,24 @@ public class VideoInfo implements Serializable {
     private String imageSmall;//": "2019/08/06/20190806105958517.jpg",
     private String videoUrlFluency;//": "http://172.16.146.69:17553/EG/huya/169832881.mp4",
     private int titleSecond;//": 0
+    private String hrefType;
+    private String href;
+
+    public String getHrefType() {
+        return hrefType;
+    }
+
+    public void setHrefType(String hrefType) {
+        this.hrefType = hrefType;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
 
     public String getAliasName() {
         return aliasName;

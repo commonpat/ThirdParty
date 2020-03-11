@@ -15,8 +15,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
+import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.diff.GZTVPurchase;
 import com.utvgo.handsome.diff.IPurchase;
@@ -63,6 +65,12 @@ public class HomeActivity extends BuyActivity {
     @BindView(R.id.sv_video)
     SurfaceView svVideo;
 
+    @BindView(R.id.iv_home_logo)
+    ImageView ivHomeLogo;
+
+    @BindView(R.id.home_bg)
+    ImageView homeBg;
+
     final int flContentIdArray[] = {R.id.bits_1, R.id.bits_2, R.id.bits_3, R.id.bits_4, R.id.bits_5,
             R.id.bits_6, R.id.bits_7, R.id.bits_8, R.id.bits_9, R.id.bits_10};
     final int flContentButtonIdArray[] = {R.id.btn_fl_1, R.id.btn_fl_2, R.id.btn_fl_3, R.id.btn_fl_4, R.id.btn_fl_5,
@@ -72,8 +80,8 @@ public class HomeActivity extends BuyActivity {
     //data
     List<OpItem> pageOpData = new ArrayList<>();
     OpItem videoData = null;
+    OpItem selectBean = null;
 
-    TypesBean typesBean = new TypesBean();
     BeanExitPage beanExitPage;
     List<BeanExitPage.Data> endPushContentBean;
     public boolean needEnterRecommend = true;
@@ -107,6 +115,7 @@ public class HomeActivity extends BuyActivity {
         ButterKnife.bind(this);
         initView();
         stat("首页","");
+
         DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
             @Override
             public void onFinished(String message) {
@@ -119,6 +128,7 @@ public class HomeActivity extends BuyActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                loadTypesData();
                 loadData();
                 stat("首页","");
 
@@ -176,6 +186,7 @@ public class HomeActivity extends BuyActivity {
 
         switch (viewId) {
             case R.id.btn_main_order: {
+                stat("首页进入订购页");
                 DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
                     @Override
                     public void onFinished(String message) {
@@ -190,6 +201,16 @@ public class HomeActivity extends BuyActivity {
                                 public void onFinished(Context context) {
 
                                 }
+
+                                @Override
+                                public void onSuccess(Context context) {
+                                    ToastUtil.show(context, "您已经是 " + getResources().getString(R.string.app_name) + " 尊贵会员");
+                                }
+
+                                @Override
+                                public void onFail(Context context) {
+                                    ToastUtil.show(context, "订购失败！");
+                                }
                             });
                         }
                     }
@@ -202,7 +223,7 @@ public class HomeActivity extends BuyActivity {
             }
             case R.id.btn_main_introduction: {
                 if (DiffConfig.UseWebIntroduction) {
-                    QWebViewActivity.navigateUrl(this, DiffConfig.IntroduceUrl, null);
+                    QWebViewActivity.navigateUrl(this, DiffConfig.IntroduceUrl);
                 } else {
                     startActivity(new Intent(this, IntroduceActivity.class));
                 }
@@ -218,22 +239,51 @@ public class HomeActivity extends BuyActivity {
                 gotoMediaPlayer();
                 break;
             }
-
+            case R.id.btn_tab_0:
+            {
+               // CategoryListActivity.show(context, 156);
+                String channelId = Uri.parse(typesBean.getData().getNavigationBar().get(0).getHref()).getQueryParameter("channelId");
+//            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
+//                    opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+                ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
+                        typesBean.getData().getNavigationBar().get(0).getColumnName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+                break;
+            }
             case R.id.btn_tab_1:
             {
-                CategoryListActivity.show(context, 156);
+                String channelId = Uri.parse(typesBean.getData().getNavigationBar().get(1).getHref()).getQueryParameter("channelId");
+//            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
+//                    opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+                ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
+                        typesBean.getData().getNavigationBar().get(1).getColumnName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+
                 break;
             }
 
             case R.id.btn_tab_2:
             {
-                CategoryListActivity.show(context, 157);
+                String channelId = Uri.parse(typesBean.getData().getNavigationBar().get(2).getHref()).getQueryParameter("channelId");
+//            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
+//                    opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+                ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
+                        typesBean.getData().getNavigationBar().get(2).getColumnName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+
                 break;
             }
 
             case R.id.btn_tab_3:
             {
-                CategoryListActivity.show(context, 158);
+                CategoryListActivity.show(context, 156,JSON.toJSONString(typesBean));
+                break;
+            }
+            case R.id.btn_tab_4:
+            {
+                CategoryListActivity.show(context, 157,JSON.toJSONString(typesBean));
+                break;
+            }
+            case R.id.btn_tab_5:
+            {
+                CategoryListActivity.show(context, 158,JSON.toJSONString(typesBean));
                 break;
             }
 
@@ -481,6 +531,11 @@ public class HomeActivity extends BuyActivity {
                     typesBean = bean;
                 }
             }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
         });
     }
     @Override
@@ -496,7 +551,7 @@ public class HomeActivity extends BuyActivity {
 
         String albumId = getIntent().getStringExtra("pkId");
 
-        String topicId = getIntent().getStringExtra("topicId");
+        String topicId = getIntent().getStringExtra("themId");
         String styleId = getIntent().getStringExtra("styleId");
         Log.d(TAG, "checkIntentData:"+"programId"+programId+"multisetType"+multisetType+"channelId"+channelId+"albumId"+albumId+"topicId"+topicId+"styleId"+styleId);
 
@@ -539,7 +594,10 @@ public class HomeActivity extends BuyActivity {
                     if (beanInitData != null) {
                         String bgImageUrl = DiffConfig.generateImageUrl(beanInitData.getHomePageResource().getImagUrl());
                         String logoImageUrl = DiffConfig.generateImageUrl(beanInitData.getHomePageResource().getLogoUrl());
-                        XLog.d("logoImageUrl:"+logoImageUrl);
+                       if(!"".equals(bgImageUrl)&&!"".equals(logoImageUrl)) {
+                           Glide.with(HomeActivity.this).load(logoImageUrl).into(ivHomeLogo);
+                           Glide.with(HomeActivity.this).load(bgImageUrl).into(homeBg);
+                       }
                         if (HuyaApplication.hadBuy()) {
                             //会员不弹活动
                             return;
@@ -547,7 +605,7 @@ public class HomeActivity extends BuyActivity {
                         if (beanInitData.getStartPushContent() != null && needEnterRecommend) {
 
                                 if (!TextUtils.isEmpty(beanInitData.getStartPushContent().getHref())&&(beanInitData.getStartPushContent().getHref() != null )) {
-                                    QWebViewActivity.navigateUrl(HomeActivity.this,beanInitData.getStartPushContent().getHref(),null);
+                                    QWebViewActivity.navigateUrl(HomeActivity.this,beanInitData.getStartPushContent().getHref(),null,null);
                                 } else {
                                     Intent intent = new Intent(HomeActivity.this, ActivityActivity.class);
                                     intent.putExtra("bgImageUrl",bgImageUrl);

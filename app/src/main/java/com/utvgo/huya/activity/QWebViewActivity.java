@@ -3,7 +3,9 @@ package com.utvgo.huya.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -19,7 +21,11 @@ import android.widget.Toast;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.utils.URLBuilder;
 import com.utvgo.huya.R;
+import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.net.QJSInterface;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class QWebViewActivity extends BaseActivity {
 
@@ -43,6 +49,7 @@ public class QWebViewActivity extends BaseActivity {
     private static final String IntentUrl = "IntentUrl";
     private static final String IntentRequestType = "IntentRequestType";
     private static final String IntentRequestParams = "IntentRequestParams";
+    private static final String IntentRequestJsonParams="IntentRequestJsonParams";
 
     public static final String  QuitScheme = "UTVGOQuit";
 
@@ -52,7 +59,8 @@ public class QWebViewActivity extends BaseActivity {
 
     public static void navigateUrl(final Context context,
                                    final String url,
-                                   final RequestType requestType) {
+                                   final RequestType requestType,
+                                   final String jsonParams) {
         RequestType val = RequestType.get;
         if (requestType != null) {
             val = requestType;
@@ -61,12 +69,13 @@ public class QWebViewActivity extends BaseActivity {
         intent.setClass(context, QWebViewActivity.class);
         intent.putExtra(IntentUrl, url);
         intent.putExtra(IntentRequestType, val.ordinal());
+        intent.putExtra(IntentRequestJsonParams,jsonParams);
         context.startActivity(intent);
     }
 
     public static void navigateUrl(final Context context, final String url)
     {
-        navigateUrl(context, url, RequestType.get);
+        navigateUrl(context, url, RequestType.get,null);
     }
 
     @Override
@@ -90,9 +99,8 @@ public class QWebViewActivity extends BaseActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                String params = intent.getStringExtra(IntentRequestJsonParams);
                 if (requestType == RequestType.post) {
-
-                    String params = intent.getStringExtra(IntentRequestParams);
                     if (params == null) {
                         params = "";
                     }
@@ -103,6 +111,7 @@ public class QWebViewActivity extends BaseActivity {
                                     .appendPath(url)
                                     .appendParam("ca", DiffConfig.getCA(this))
                                     .appendParam("isPurchase",  "true")
+                                    //.append(params)
                                     .toString());
                 }
             }
@@ -133,11 +142,13 @@ public class QWebViewActivity extends BaseActivity {
         webseting.setAllowFileAccess(true);
         webseting.setAppCacheEnabled(true);
         webseting.setCacheMode(WebSettings.LOAD_DEFAULT);
+
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onReachedMaxAppCacheSize(long spaceNeeded, long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater) {
                 quotaUpdater.updateQuota(spaceNeeded * 2);
             }
+
         });
         webView.addJavascriptInterface(new QJSInterface(this), "app");
 
@@ -190,12 +201,24 @@ public class QWebViewActivity extends BaseActivity {
 
         //改写物理返回键的逻辑
         if(keyCode==KeyEvent.KEYCODE_BACK) {
-            if(webView.canGoBack()) {
-                webView.goBack();//返回上一页面
-                return true;
-            } else {
-               this.finish();
+            if(timeStamp > 0)
+            {
+                if(System.currentTimeMillis() < (timeStamp + 2000))
+                {
+                    finish();
+                    return true;
+                }
             }
+
+            timeStamp = System.currentTimeMillis();
+            webView.loadUrl("javascript:doBackKey()");
+            return true;
+//            if(webView.canGoBack()) {
+//                webView.goBack();//返回上一页面
+//                return false;
+//            } else {
+//               this.finish();
+//            }
         }
         return super.onKeyDown(keyCode, event);
     }

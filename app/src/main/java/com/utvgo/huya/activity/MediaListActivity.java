@@ -407,7 +407,7 @@ public class MediaListActivity extends BasePageActivity {
                     return;
                 }
                 if (data.isOk()) {
-                    initLabels(data.getData());//标题栏
+                        initLabels(data.getData());//标题栏
                     int index = -1;
                     for(int i = 0; i < data.getData().size(); i++)
                     {
