@@ -18,10 +18,10 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.utvgo.huya"
-        minSdkVersion 19
+        minSdkVersion 17
         targetSdkVersion 28
-        versionCode 101    //打包修改
-        versionName "1.1"   //打包修改
+        versionCode 103    //打包修改
+        versionName "1.3"   //打包修改
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField("com.utvgo.handsome.diff.Platform","Platform","${gcable}")//打包修改
     }
@@ -70,6 +70,7 @@ android {
             }
         }
     }
+
 }
 
 dependencies {

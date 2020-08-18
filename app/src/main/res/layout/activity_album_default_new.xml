@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_album_new">
+    <TextView
+        android:layout_width="@dimen/dp800"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="72dp"
+        android:layout_marginTop="100dp"
+        android:id="@+id/album_title"
+        android:text="标题"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp30"></TextView>
+    <RelativeLayout android:layout_width="763dp"
+                android:layout_height="428dp"
+                android:layout_marginTop="179dp"
+                android:layout_marginLeft="72dp">
+
+               <com.utvgo.handsome.views.CustomVideoView
+                        android:id="@+id/video"
+                        style="@style/setEnableFocusNO"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"/>
+
+
+               <Button
+                    android:id="@+id/btn_fl_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_common_button"
+                    android:onClick="onClick"
+                    />
+            </RelativeLayout>
+
+    <com.utvgo.huya.views.SmoothVorizontalScrollView
+        android:layout_width="390dp"
+        android:layout_height="@dimen/dp480"
+        android:layout_marginLeft="840dp"
+        android:layout_marginTop="153dp"
+        android:layout_marginBottom="135dp">
+
+        <FrameLayout
+            android:id="@+id/album_item_content"
+            android:layout_width="390dp"
+            android:layout_height="@dimen/dp480">
+
+        </FrameLayout>
+    </com.utvgo.huya.views.SmoothVorizontalScrollView>
+
+
+    <ImageView
+        android:id="@+id/video_logo"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginLeft="880dp"
+        android:src="@mipmap/video_logo"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="550dp"
+        android:layout_marginTop="620dp"
+        android:text="点击视频窗全屏播放"
+        android:textColor="@color/white"
+        android:textSize="28px"></TextView>
+</FrameLayout>

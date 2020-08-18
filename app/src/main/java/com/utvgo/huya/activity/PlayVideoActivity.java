@@ -473,7 +473,10 @@ public class PlayVideoActivity extends BuyActivity {
         if (!TextUtils.isEmpty(playlistName)) {
             tvPlayListName.setText(playlistName);
         }
-        //翻页重新添加
+        if(programContent.getVideos()!= null&&programContent.getVideos().size()>0){
+            tvTitle.setText(programContent.getVideos().get(playingIndex).getName());
+
+        }        //翻页重新添加
         flPlayListContent.removeAllViews();
         for (int i = 0; i < programContent.getVideos().size(); i++) {
             VideoInfo dataBean = programContent.getVideos().get(i);
@@ -746,6 +749,8 @@ public class PlayVideoActivity extends BuyActivity {
                 }
             }
             showViewByHandler(videoPlayerProgress);
+            playingTitle = "视频-"+currentProgramContent.getName();
+            stat("弹出订购-"+playingTitle);
             if(shouldPay)
             {
                 showBuy(currentProgramContent.getPkId() + "");
@@ -929,5 +934,15 @@ public class PlayVideoActivity extends BuyActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            videoView.stopPlayback();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        super.onDestroy();
     }
 }

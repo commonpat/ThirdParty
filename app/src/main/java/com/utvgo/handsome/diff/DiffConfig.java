@@ -31,6 +31,7 @@ public class DiffConfig {
     static IEnv GlobalEnv = null;
     public static ITVBox CurrentTVBox = null;
     public static IPurchase CurrentPurchase = null;
+    public static String deviceId ;
 
     public static Proxyer CurrentProxy = new Proxyer();
     public static VoiceAssistant voiceAssistant = new VoiceAssistant();

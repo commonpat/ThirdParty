@@ -52,7 +52,7 @@ public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
                         DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
                             @Override
                             public void onFinished(Context context) {
-                                DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
+                              //  DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
                             }
 
                             @Override

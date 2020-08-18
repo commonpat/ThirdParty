@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import java.util.List;
+
 public class AppUtils {
     public static String getVersion(Context context) {
         String version = "0.0";
@@ -15,5 +17,20 @@ public class AppUtils {
             e.printStackTrace();
         }
         return version;
+    }
+    public static Boolean isApkExist(Context context,String pkgName){
+        PackageManager packageManager;
+        try{
+             packageManager = context.getPackageManager();
+            List<PackageInfo> list = packageManager.getInstalledPackages(0);
+            for (PackageInfo packageInfo:list){
+                if (pkgName.equalsIgnoreCase(packageInfo.packageName)){
+                    return true;
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }

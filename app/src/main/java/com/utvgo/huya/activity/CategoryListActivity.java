@@ -68,7 +68,7 @@ public class CategoryListActivity extends BaseActivity {
     public List<OpItem> subjectRecordListBeen = new ArrayList<>();
 
     private int pageIndex = 0;
-    final int pageSize = 4;
+    final int pageSize = 8;
 
     private final List<RelativeLayout> itemViewArray = new ArrayList<>();
 

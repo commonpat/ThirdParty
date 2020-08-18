@@ -92,7 +92,26 @@ public class GZTVBox implements ITVBox {
         }
         return account;
     }
+    public static String getDeviceId(final Context context){
+        String deviceId = "";
+        Uri uri = Uri.parse("content://com.skyworthdigital.authenticationprovider/login");
+        Cursor  cursor = context.getContentResolver().query(uri, null, null, null, null);
+        try {
+            if(cursor.moveToFirst()){
+                for (int i = 0;i<cursor.getColumnCount();i++){
+                    int  index= cursor.getColumnIndex("deviceID");
+                    deviceId = cursor.getString(index);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(deviceId != null){
+            return deviceId;
+        }
 
+        return "1";
+    }
     //
     @Override
     public String getCA(final Context context) {

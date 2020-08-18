@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
@@ -67,6 +68,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     public boolean hadCallBuyView = false;
     public boolean needBringFront = true;
     private boolean needTransition = true;
+    public static String playingTitle;
     TypesBean typesBean = new TypesBean();
 
 
@@ -82,6 +84,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     @Override
     protected void onDestroy() {
          unregisterReceiver(mHomeKeyEventReceiver);
+         //unregisterReceiver(orderBroadcastReceiver);
         borderView = null;
         hiFiDialogTools = null;
         focusView = null;
@@ -259,8 +262,8 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         if (!needTransition) {
             overridePendingTransition(0, 0);//设置返回没有动画
         }
-        ViewGroup view = (ViewGroup) getWindow().getDecorView();
-        view.removeAllViews();
+//        ViewGroup view = (ViewGroup) getWindow().getDecorView();
+//        view.removeAllViews();
         super.finish();
     }
 
@@ -328,6 +331,19 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         }
     };
 
+
+    private BroadcastReceiver orderBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int payState = intent.getIntExtra("payState",-9);
+            String info = intent.getStringExtra("info");
+            String timestamp = intent.getStringExtra("timestamp");
+           // this.clearAbortBroadcast();
+            Log.d("BroadcastReceiver", "onReceive: payState："+intent.getAction()+" info:"+info+"timestamp:"+timestamp);
+        }
+    };
+
+
     public void netBack(int requestTag, Object object) {
 
     }
@@ -356,7 +372,11 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     }
 
     protected void stat(final String name, final String title) {
-        NetworkService.defaultService().statisticsVisit(this, "app-" + name, title, "");
+        try {
+            NetworkService.defaultService().statisticsVisit(this, "app-" + name, title, "");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void stat(final String name) {
@@ -388,9 +408,15 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                     QWebViewActivity.navigateUrl(this, href);
                     break;
                 }
+                case smallVideo:
+                    break;
                 case program:
                 {
-                    String programId = uri.getQueryParameter("pkId");
+                    String channelId = uri.getQueryParameter("channelId");
+                    ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
+                            opItem.getName(), 29, 0);
+
+                    /*String programId = uri.getQueryParameter("pkId");
                     String multisetType = uri.getQueryParameter("multisetType");
                     String channelId = uri.getQueryParameter("channelId");
                     NetworkService.defaultService().fetchProgramContent(this, StringUtils.intValueOfString(programId),
@@ -405,7 +431,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                                         PlayVideoActivity.play(context, list, 0, false);
                                     }
                                 }
-                            });
+                            });*/
                     break;
                 }
 
@@ -436,11 +462,109 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                 }
                 case topicPage:
                 case topicCollection:
+                    String pkgId = uri.getQueryParameter("typeId");
+                    CategoryListActivity.show(context,Integer.valueOf(pkgId), JSON.toJSONString(typesBean));
+                    break;
                 case albumList:
+                    String typeId = uri.getQueryParameter("typeId");
+                    AlbumListActivity.show(context,Integer.valueOf(typeId.trim()), opItem.getName(),JSON.toJSONString(typesBean));
                 case more:
                 case back:
 
                         default:
+                {
+                    ret = false;
+                    break;
+                }
+            }
+        }
+        return ret;
+    }
+    public boolean actionOnNavOp(TypesBean.DataBean.navigationBarBean navigationBarBean)
+    {
+        boolean ret = false;
+        if(navigationBarBean != null)
+        {
+            ret = true;
+            final Context context = this;
+            //if (BuildConfig.DEBUG){opItem.setHrefType("0");}
+            ConstantEnum.OpType opType = ConstantEnum.OpType.fromTypeString(navigationBarBean.getHrefType());
+            String href = navigationBarBean.getHref();
+            Uri uri = Uri.parse(href);
+            switch (opType)
+            {
+                case web:
+                {   if(!href.startsWith("http:")){
+                    href=DiffConfig.WebUrlBase+href;
+                }
+                    if(BuildConfig.DEBUG){href="http://172.16.146.56/huyaTV/activityHalf.html";}
+                    QWebViewActivity.navigateUrl(this, href);
+                    break;
+                }
+                case program:
+                {
+                    String channelId = uri.getQueryParameter("channelId");
+                    ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
+                            navigationBarBean.getColumnName(), 29, 0);
+
+                    /*String programId = uri.getQueryParameter("pkId");
+                    String multisetType = uri.getQueryParameter("multisetType");
+                    String channelId = uri.getQueryParameter("channelId");
+                    NetworkService.defaultService().fetchProgramContent(this, StringUtils.intValueOfString(programId),
+                            multisetType, StringUtils.intValueOfString(channelId), new JsonCallback<BaseResponse<ProgramContent>>() {
+                                @Override
+                                public void onSuccess(Response<BaseResponse<ProgramContent>> response) {
+                                    BaseResponse<ProgramContent> data = response.body();
+                                    if(data.isOk())
+                                    {
+                                        ArrayList<ProgramInfoBase> list = new ArrayList<>();
+                                        list.add(data.getData());
+                                        PlayVideoActivity.play(context, list, 0, false);
+                                    }
+                                }
+                            });*/
+                    break;
+                }
+
+                case album:{
+                    String albumId = uri.getQueryParameter("pkId");
+                    MediaAlbumActivity.show(this, StringUtils.intValueOfString(albumId));
+                    break;
+                }
+
+                case topic:{
+                    String topicId = uri.getQueryParameter("themId");
+                    String styleId = uri.getQueryParameter("styleID");
+                    TopicActivity.show(this, topicId, styleId);
+                    break;
+                }
+                case activity:{
+                    if (HuyaApplication.hadBuy()) {
+                        //会员不弹活动
+                        ToastUtil.showLong(BaseActivity.this,"你已是虎牙TV的会员");
+                        break;
+                    } else{
+                        QWebViewActivity.navigateUrl(this, navigationBarBean.getHref(), null,null);
+                    }
+//                    Intent intent = new Intent(BaseActivity.this, ActivityActivity.class);
+//                    intent.putExtra("bgImageUrl",DiffConfig.generateImageUrl(opItem.getImgUrl()));
+//                    startActivity(intent);
+                    break;
+                }
+                case topicPage:
+                case topicCollection:
+                    String pkId = uri.getQueryParameter("typeId");
+                    CategoryListActivity.show(context,Integer.valueOf(pkId), JSON.toJSONString(typesBean));
+                    break;
+                case albumList:
+                    String typeId = uri.getQueryParameter("typeId");
+                    String name = navigationBarBean.getColumnName();
+                    AlbumListActivity.show(context,Integer.valueOf(typeId.trim()), name,JSON.toJSONString(typesBean));
+                    break;
+                case more:
+                case back:
+
+                default:
                 {
                     ret = false;
                     break;

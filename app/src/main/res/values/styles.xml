@@ -173,10 +173,18 @@
         <item name="android:layout_width">267dp</item>
         <item name="android:layout_height">200dp</item>
     </style>
+    <style name="mv_item1" parent="setEnableFocusNO">
+        <item name="android:layout_width">267dp</item>
+        <item name="android:layout_height">200dp</item>
+    </style>
+    <style name="mv_item_new" parent="focusAndSetTag">
+        <item name="android:layout_width">218dp</item>
+        <item name="android:layout_height">182dp</item>
+    </style>
 
     <style name="setEnableFocusNO.mv_item_image">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">151dp</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="mv_item_title">
@@ -241,8 +249,8 @@
     </style>
 
     <style name="MainNav">
-        <item name="android:layout_height">68dp</item>
-        <item name="android:layout_width">190dp</item>
+        <item name="android:layout_height">65dp</item>
+        <item name="android:layout_width">165dp</item>
     </style>
 
     <style name="CategoryItem">

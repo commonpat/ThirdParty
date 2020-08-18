@@ -9,7 +9,7 @@ public class HNTVEnv implements IEnv {
         DiffConfig.authHost = "http://100.125.9.4";
         DiffConfig.statisticsHost = DiffConfig.baseHost;
 
-        DiffConfig.activityHost = DiffConfig.baseHost;
+        DiffConfig.activityHost = DiffConfig.baseHost+"/huya-activity-client-web";
         DiffConfig.host = DiffConfig.baseHost + "/utvgo-uu-web/";
         DiffConfig.orderHost = DiffConfig.authHost + "/qqmusic-order-web/";
 

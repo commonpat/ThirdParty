@@ -2,6 +2,7 @@ package com.utvgo.huya.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,13 +19,17 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
+import com.sh.lib.tportal.bean.User;
+import com.sh.module.payment.manager.UserManager;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.GZTVBox;
 import com.utvgo.handsome.diff.GZTVPurchase;
 import com.utvgo.handsome.diff.IPurchase;
 import com.utvgo.handsome.diff.Platform;
 import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.handsome.utils.AppUtils;
 import com.utvgo.handsome.utils.XLog;
 import com.utvgo.handsome.views.CustomVideoView;
 import com.utvgo.huya.BuildConfig;
@@ -114,13 +119,53 @@ public class HomeActivity extends BuyActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         initView();
-        stat("首页","");
+        Boolean isPayApk = AppUtils.isApkExist(this,"com.sh.project.pay.general");
+        if(!isPayApk){
+            Intent intent = new Intent();
+            ComponentName componentName = new ComponentName("com.huan.appstore","com.huan.appstore.ui.AppDetailActivity");
+            intent.putExtra("packagename","com.sh.project.pay.general");
+            intent.setComponent(componentName);
+            String category = "android.intent.category.DEFAULT";
+            intent.addCategory(category);
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+        if(DiffConfig.CurrentTVBox instanceof  GZTVBox){
+            DiffConfig.deviceId = GZTVBox.getDeviceId(this);
 
+        }
         DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
             @Override
             public void onFinished(String message) {
                 if(BuildConfig.DEBUG){
                     Toast.makeText(HomeActivity.this, "HomePage auth finished: " + (DiffConfig.CurrentPurchase.isPurchased() ? "is Purchased" : "not Purchased"), Toast.LENGTH_LONG).show();
+                }
+
+                if(DiffConfig.CurrentPurchase instanceof GZTVPurchase) {
+                    final UserManager userManager = UserManager.getInstance(HomeActivity.this);
+                    userManager.getUserInfo(new UserManager.UserCallBack() {
+                        @Override
+                        public void onSuccess(User user) {
+                            if("".equals(user.getBankNum()) || user.getBankNum() == null){
+                                stat("无甜果支付"+GZTVBox.getDeviceId(HomeActivity.this));
+                            }
+                        }
+                        @Override
+                        public void onFailure(int i, String s) {
+
+                        }
+                    });
+                    try {
+                        if ("0".equals(message)) {
+                            NetworkService.defaultService().syncUserAuthorization(getBaseContext(), "0", GZTVPurchase.TryBestCmbId);
+                        } else {
+                            NetworkService.defaultService().syncUserAuthorization(getBaseContext(), "1", GZTVPurchase.TryBestCmbId);
+
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
                 getInitData();
             }
@@ -130,38 +175,11 @@ public class HomeActivity extends BuyActivity {
             public void run() {
                 loadTypesData();
                 loadData();
-                stat("首页","");
+
 
             }
         });
-
-        /*if(!DiffConfig.CurrentPurchase.isPurchased())
-        {
-            if(DiffConfig.CurrentPurchase instanceof GZTVPurchase)
-            {
-                final Context context = this;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        GZTVPurchase purchase = (GZTVPurchase)DiffConfig.CurrentPurchase;
-                        purchase.tryBest(context, new GZTVPurchase.TryBestCallback() {
-                            @Override
-                            public void d(String s) {
-                                final String msg = s;
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        XLog.d(msg);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                }).start();
-            }
-        }*/
     }
-
 
     private void initView() {
         int i = 0;
@@ -187,6 +205,10 @@ public class HomeActivity extends BuyActivity {
         switch (viewId) {
             case R.id.btn_main_order: {
                 stat("首页进入订购页");
+                if (DiffConfig.CurrentPurchase.isPurchased()) {
+                    ToastUtil.show(context, "您已经是 " + getResources().getString(R.string.app_name) + " 尊贵会员");
+                    break;
+                }
                 DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
                     @Override
                     public void onFinished(String message) {
@@ -219,9 +241,19 @@ public class HomeActivity extends BuyActivity {
             }
             case R.id.btn_main_user_favor: {
                 startActivity(new Intent(this, UserFavoriteActivity.class));
+//                Intent intent = new Intent();
+//                intent.setAction("intent.PAY_STATE");
+//                intent.putExtra("payState",0);
+//                intent.putExtra("info","支付成功");
+//                intent.putExtra("timestamp","APP0HYTV");
+//                sendBroadcast(intent);
                 break;
             }
             case R.id.btn_main_introduction: {
+                if(BuildConfig.DEBUG){
+                    QWebViewActivity.navigateUrl(this,"http://192.168.5.16:8080/app/huya/activity20200813.html");
+                    break;
+                }
                 if (DiffConfig.UseWebIntroduction) {
                     QWebViewActivity.navigateUrl(this, DiffConfig.IntroduceUrl);
                 } else {
@@ -246,7 +278,7 @@ public class HomeActivity extends BuyActivity {
 //            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
 //                    opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
                 ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
-                        typesBean.getData().getNavigationBar().get(0).getColumnName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+                        typesBean.getData().getNavigationBar().get(0).getColumnName(), 29, 0);
                 break;
             }
             case R.id.btn_tab_1:
@@ -255,7 +287,7 @@ public class HomeActivity extends BuyActivity {
 //            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
 //                    opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
                 ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
-                        typesBean.getData().getNavigationBar().get(1).getColumnName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+                        typesBean.getData().getNavigationBar().get(1).getColumnName(), 29, 0);
 
                 break;
             }
@@ -266,7 +298,7 @@ public class HomeActivity extends BuyActivity {
 //            MediaListActivity.show(this, StringUtils.intValueOfString(channelId),
 //                    opItem.getName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
                 ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
-                        typesBean.getData().getNavigationBar().get(2).getColumnName(), StringUtils.intValueOfString(AppConfig.PackageId), 0);
+                        typesBean.getData().getNavigationBar().get(2).getColumnName(), 29, 0);
 
                 break;
             }
@@ -365,7 +397,8 @@ public class HomeActivity extends BuyActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        playingTitle = "弹出订购-订购菜单";
+        stat("首页","");
         if (!DiffConfig.validateDeviceKeyNO(this)) {
             return;
         }
@@ -499,7 +532,7 @@ public class HomeActivity extends BuyActivity {
      **** network service
      */
     private void loadData() {
-        NetworkService.defaultService().fetchHomePageData(this, new JsonCallback<BaseResponse<List<OpItem>>>() {
+        NetworkService.defaultService().fetchHomePageData(this,AppConfig.typeId, new JsonCallback<BaseResponse<List<OpItem>>>() {
             @Override
             public void onSuccess(Response<BaseResponse<List<OpItem>>> response) {
                 BaseResponse<List<OpItem>> bean = response.body();
@@ -523,7 +556,7 @@ public class HomeActivity extends BuyActivity {
     }
 
     private void loadTypesData() {
-        NetworkService.defaultService().fetchHomePageNavData(this, new JsonCallback<TypesBean>() {
+        NetworkService.defaultService().fetchHomePageNavData(this,31+"", new JsonCallback<TypesBean>() {
             @Override
             public void onSuccess(Response<TypesBean> response) {
                 TypesBean bean = response.body();
@@ -572,17 +605,19 @@ public class HomeActivity extends BuyActivity {
         }
         if(albumId != null) {
             needEnterRecommend = false;
+            stat("外流好推荐进入合集");
             MediaAlbumActivity.show(this, StringUtils.intValueOfString(albumId));
         }
        if(topicId != null ) {
            needEnterRecommend = false;
+           stat("外流好推荐进入专题");
            TopicActivity.show(this, topicId, styleId);
        }
 
     }
     private void getInitData() {
 
-        String path = DiffConfig.baseHost + "/huya-activity-client-web/activity/androidActivityController/getPushContent.utvgo?regionCode="
+        String path = DiffConfig.activityHost + "/activity/androidActivityController/getPushContent.utvgo?regionCode="
                 + DiffConfig.getRegionCode(this);
         try{
         NetUtils.getData(this, path, null, BeanInitData.class, new NetUtils.NetCallBack() {
@@ -596,12 +631,12 @@ public class HomeActivity extends BuyActivity {
                         String logoImageUrl = DiffConfig.generateImageUrl(beanInitData.getHomePageResource().getLogoUrl());
                        if(!"".equals(bgImageUrl)&&!"".equals(logoImageUrl)) {
                            Glide.with(HomeActivity.this).load(logoImageUrl).into(ivHomeLogo);
-                           Glide.with(HomeActivity.this).load(bgImageUrl).into(homeBg);
+                          // Glide.with(HomeActivity.this).load(bgImageUrl).into(homeBg);
                        }
-                        if (HuyaApplication.hadBuy()) {
-                            //会员不弹活动
-                            return;
-                        }
+//                        if (HuyaApplication.hadBuy()) {
+//                            //会员不弹活动
+//                            return;
+//                        }
                         if (beanInitData.getStartPushContent() != null && needEnterRecommend) {
 
                                 if (!TextUtils.isEmpty(beanInitData.getStartPushContent().getHref())&&(beanInitData.getStartPushContent().getHref() != null )) {

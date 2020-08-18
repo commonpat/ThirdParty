@@ -164,6 +164,10 @@ public class TopicActivity extends BuyActivity {
 //            itemTopic.setOnFocusChangeListener(changePage);
             itemTopic.setOnClickListener(this);
             itemTopic.setId(i);
+            //2020/8/4 修复滚动子视图多的时候光标错乱的问题，指定聚焦视图
+            itemTopic.setNextFocusRightId(i+1);
+            itemTopic.setNextFocusLeftId(i-1);
+
             itemTopic.setNextFocusUpId(R.id.iv_video_focus);
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp250),
                     (int) getResources().getDimension(R.dimen.dp175));
@@ -187,7 +191,6 @@ public class TopicActivity extends BuyActivity {
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(allWidth, ViewGroup.LayoutParams.MATCH_PARENT);
         flTopicContent.setLayoutParams(params);
-
         focusOn1stView(findViewById(0), R.mipmap.border_focus_style_default,
                 (int) getResources().getDimension(R.dimen.dp50),
                 (int) getResources().getDimension(R.dimen.dp58));

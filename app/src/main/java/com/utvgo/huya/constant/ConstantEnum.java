@@ -29,7 +29,7 @@ public class ConstantEnum {
 
     public enum OpType
     {
-        web, program, album, topic, topicPage, topicCollection, albumList, more, back, activity;
+        web, smallVideo,program, album, topic, topicPage, topicCollection, albumList, more, back, activity;
 
         public static OpType fromTypeString(final String typeString)
         {
@@ -55,7 +55,7 @@ public class ConstantEnum {
 
             OpType opType = web;
             if("1".equalsIgnoreCase(typeString)){
-
+                opType = smallVideo;
             }else if("2".equalsIgnoreCase(typeString))
             {
                 opType = program;

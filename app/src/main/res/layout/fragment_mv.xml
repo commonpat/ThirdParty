@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/activity_RootView"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@mipmap/bg_second">
+    android:id="@+id/activity_RootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_second">
 
     <RelativeLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_home_logo"
             android:layout_width="325dp"
@@ -54,11 +54,11 @@
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/place_holder_default"
-            />
+                />
             <TextView
                 style="@style/mv_item_title"
                 android:text=""
-            />
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -72,11 +72,11 @@
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/place_holder_default"
-            />
+                />
             <TextView
                 style="@style/mv_item_title"
                 android:text=""
-            />
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -85,18 +85,18 @@
             android:layout_marginLeft="650dp"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-        >
+            >
 
             <ImageView
                 style="@style/setEnableFocusNO.mv_item_image"
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/place_holder_default"
-            />
+                />
             <TextView
                 style="@style/mv_item_title"
                 android:text=""
-            />
+                />
 
         </LinearLayout>
 
@@ -106,18 +106,18 @@
             android:layout_marginLeft="938dp"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-        >
+            >
 
             <ImageView
                 style="@style/setEnableFocusNO.mv_item_image"
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/place_holder_default"
-            />
+                />
             <TextView
                 style="@style/mv_item_title"
                 android:text=""
-            />
+                />
 
         </LinearLayout>
 
@@ -128,18 +128,18 @@
             android:layout_marginLeft="74dp"
             android:layout_marginTop="241dp"
             android:orientation="vertical"
-        >
+            >
 
             <ImageView
                 style="@style/setEnableFocusNO.mv_item_image"
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/place_holder_default"
-            />
+                />
             <TextView
                 style="@style/mv_item_title"
                 android:text=""
-            />
+                />
 
         </LinearLayout>
 
@@ -149,18 +149,18 @@
             android:layout_marginLeft="362dp"
             android:layout_marginTop="241dp"
             android:orientation="vertical"
-        >
+            >
 
             <ImageView
                 style="@style/setEnableFocusNO.mv_item_image"
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/place_holder_default"
-            />
+                />
             <TextView
                 style="@style/mv_item_title"
                 android:text=""
-            />
+                />
 
         </LinearLayout>
 
@@ -170,18 +170,18 @@
             android:layout_marginLeft="650dp"
             android:layout_marginTop="241dp"
             android:orientation="vertical"
-        >
+            >
 
             <ImageView
                 style="@style/setEnableFocusNO.mv_item_image"
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/place_holder_default"
-            />
+                />
             <TextView
                 style="@style/mv_item_title"
                 android:text=""
-            />
+                />
 
         </LinearLayout>
 
@@ -191,7 +191,7 @@
             android:layout_marginLeft="938dp"
             android:layout_marginTop="241dp"
             android:orientation="vertical"
-        >
+            >
 
             <ImageView
                 android:id="@+id/item_ImageBtn1"
@@ -199,11 +199,11 @@
                 android:background="@null"
                 android:scaleType="fitXY"
                 android:src="@drawable/place_holder_default"
-            />
+                />
             <TextView
                 style="@style/mv_item_title"
                 android:text=""
-            />
+                />
 
         </LinearLayout>
 
@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="55dp"
-        >
+            >
 
             <FrameLayout
                 android:id="@+id/fl_type"

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/leftItem"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/setEnableFocusNO">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        style="@style/mv_item">
+
+        <ImageView
+
+            style="@style/setEnableFocusNO"
+            android:layout_width="@dimen/dp250"
+            android:layout_height="@dimen/dp150"
+            android:scaleType="fitXY"
+            android:id="@+id/content_image"
+            android:src="@drawable/place_holder_default" />
+        <TextView
+            android:layout_width="@dimen/dp250"
+            android:layout_height="30dp"
+            android:id="@+id/content_name"
+            android:background="@color/fivety_black"
+            android:textColor="@color/white"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/dp10"
+            android:text="标题"/>
+
+
+    </LinearLayout>
+    <!--<Button-->
+        <!--android:layout_width="@dimen/dp250"-->
+        <!--android:layout_height="@dimen/dp180"-->
+        <!--android:id="@+id/content_btn"-->
+        <!--android:background="@drawable/selector_item_focus"/>-->
+</FrameLayout>

@@ -23,6 +23,7 @@ import com.utvgo.handsome.diff.GZTVPurchase;
 import com.utvgo.handsome.diff.IPurchase;
 import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.activity.ActivityActivity;
 import com.utvgo.huya.activity.BaseActivity;
@@ -59,14 +60,35 @@ public class QJSInterface {
         return ca;
     }
     @JavascriptInterface
-    public void zjsmorder(){
+    public void zjsmorder(String s){
         if (c instanceof BaseActivity) {
             BaseActivity activity = (BaseActivity) c;
-            activity.stat("活动进入订购页");
+            activity.playingTitle = "活动-"+s;
+            activity.stat("弹出订购-"+activity.playingTitle);
         }
         if(HuyaApplication.hadBuy()){
             ToastUtil.show(c, "你已经是虎牙TV的尊贵会员！");
         }else {
+            if(BuildConfig.DEBUG){
+                DiffConfig.CurrentPurchase.pay(c, new CommonCallback() {
+                    @Override
+                    public void onFinished(Context context) {
+                        Activity  backc=(Activity)context;
+                        backc.finish();
+                    }
+
+                    @Override
+                    public void onSuccess(Context context) {
+
+                    }
+
+                    @Override
+                    public void onFail(Context context) {
+
+                    }
+                });
+                return;
+            }
         DiffConfig.CurrentPurchase.auth(c, new IPurchase.AuthCallback() {
             @Override
             public void onFinished(String message) {
@@ -168,14 +190,16 @@ public class QJSInterface {
 //    }
     @JavascriptInterface
     public boolean checkAuth(){
+        Log.d("wzb", "checkAuth: "+DiffConfig.CurrentPurchase.isPurchased());
        return DiffConfig.CurrentPurchase.isPurchased()?true:false;
 
     }
     @JavascriptInterface
-    public boolean goPay(){
+    public boolean goPay(String s){
         if (c instanceof BaseActivity) {
             BaseActivity activity = (BaseActivity) c;
-            activity.stat("活动进入订购页");
+            activity.playingTitle = "活动-"+s;
+            activity.stat("弹出订购-"+activity.playingTitle);
         }
         DiffConfig.CurrentPurchase.pay(c, new CommonCallback() {
             @Override

@@ -87,6 +87,8 @@
         </activity>
         <activity android:name=".activity.ExitNewActivity" >
         </activity>
+        <activity android:name=".activity.AlbumListActivity" >
+        </activity>
 
     </application>
 

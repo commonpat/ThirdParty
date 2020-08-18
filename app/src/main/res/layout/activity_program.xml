@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/program_bg"
+    android:id="@+id/activity_RootView">
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:id="@+id/program_title"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:text="英雄联盟"/>
+    <ImageView
+        android:layout_width="@dimen/dp275"
+        android:layout_height="52dp"
+        android:layout_marginTop="@dimen/dp120"
+        android:layout_marginLeft="@dimen/dp90"
+        android:src="@drawable/listpage_logo"></ImageView>
+    <FrameLayout
+        android:layout_width="165dp"
+        android:layout_height="380dp"
+        android:layout_marginLeft="146dp"
+        android:layout_marginTop="200dp"
+         >
+
+        <com.utvgo.huya.views.SmoothVorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/leftBar_labels"
+                style="@style/setEnableFocusNO">
+
+            </FrameLayout>
+        </com.utvgo.huya.views.SmoothVorizontalScrollView>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/left_down"
+        android:layout_width="66dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="195dp"
+        android:layout_marginTop="590dp"
+        android:src="@drawable/program_down"/>
+
+    <FrameLayout
+        android:layout_width="790dp"
+        android:layout_height="585dp"
+        android:layout_marginLeft="400dp"
+        android:layout_marginTop="70dp">
+
+        <com.utvgo.huya.views.SmoothVorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/smoothVoriztalScroll"
+            style="@style/setEnableFocusNO">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/program_content"
+                style="@style/setEnableFocusNO">
+            </FrameLayout>
+        </com.utvgo.huya.views.SmoothVorizontalScrollView>
+    </FrameLayout>
+    <ImageView
+        android:id="@+id/content_up"
+        android:layout_width="66dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="766dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/program_up"/>
+    <ImageView
+        android:id="@+id/content_down"
+        android:layout_width="66dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="766dp"
+        android:layout_marginTop="660dp"
+        android:src="@drawable/program_down"/>
+
+</FrameLayout>

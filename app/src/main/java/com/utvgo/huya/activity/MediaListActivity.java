@@ -239,8 +239,25 @@ public class MediaListActivity extends BasePageActivity {
             if (i == 0) {
                 params.leftMargin = (int) getResources().getDimension(R.dimen.dp20);
             } else {
-                params.leftMargin = (int) getResources().getDimension(R.dimen.dp30) * this.labelInfoList.get(i - 1).getName().length() + leftPreMargin +
-                        (int) getResources().getDimension(R.dimen.dp30);
+//                params.leftMargin = (int) getResources().getDimension(R.dimen.dp30) * this.labelInfoList.get(i - 1).getName().length() + leftPreMargin +
+//                        (int) getResources().getDimension(R.dimen.dp30);
+
+
+                int numberCount = 0;
+                int chineseCount = 0;
+                int englishCount = 0;
+                for (int n = 0; n < this.labelInfoList.get(i - 1).getName().length(); n++) {
+                    char ch = this.labelInfoList.get(i - 1).getName().charAt(n);
+                    if (isChinese(ch)) {
+                        chineseCount++;
+                    } else {
+                        numberCount++;
+                    }
+
+                    params.leftMargin = (int) getResources().getDimension(R.dimen.dp30) * chineseCount + (int) getResources().getDimension(R.dimen.dp15) * numberCount + leftPreMargin +
+                            (int) getResources().getDimension(R.dimen.dp30);
+
+                }
             }
             params.topMargin = (int) getResources().getDimension(R.dimen.dp20);
             leftPreMargin = params.leftMargin;
@@ -248,6 +265,15 @@ public class MediaListActivity extends BasePageActivity {
             cbList.add(cb);
             flType.addView(cb);
         }
+    }
+    private boolean isChinese(char ch){
+        Character.UnicodeBlock unicodeBlock = Character.UnicodeBlock.of(ch);
+        if(unicodeBlock == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS || unicodeBlock == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+                ||unicodeBlock == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B||unicodeBlock == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+        ){
+            return true;
+        }
+        return false;
     }
 
     private void updateProgramListItem(final int totalPage, final int currentPage)

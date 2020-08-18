@@ -1,5 +1,7 @@
 package com.utvgo.handsome.diff;
 
+import com.utvgo.handsome.utils.AppUtils;
+
 public class GZTVEnv implements IEnv {
 
     public void initEnv()
@@ -22,8 +24,7 @@ public class GZTVEnv implements IEnv {
 //        DiffConfig.IntroduceUrl = "http://192.168.44.73/app/introduce.html";
 /*
     数据接口：http://192.168.44.73/utvgo-tv-mvc/
-    订购：http://192.168.44.73/huya-order-web/
-    收藏：http://192.168.44.73/utvgo-user/
+    用户：http://192.168.44.73/utvgo-user/
     采集：http://192.168.44.76/utvgo-statistics/
     图片：http://192.168.44.76:81/cms/uploadFile/image/*/
 
@@ -33,12 +34,13 @@ public class GZTVEnv implements IEnv {
         DiffConfig.imageHost = "http://192.168.44.76:81/cms/uploadFile/image/";  //正式
         DiffConfig.authHost = "http://192.168.44.73";
         DiffConfig.statisticsHost = "http://192.168.44.76";
-        DiffConfig.activityHost = DiffConfig.baseHost;
+        DiffConfig.activityHost = DiffConfig.baseHost+"/huya-activity-client-web";
         DiffConfig.orderHost = DiffConfig.authHost + "/huya-order-web/";
         DiffConfig.playHost = "http://192.168.44.73:17553/EG/huya/";
 
         DiffConfig.UseWebIntroduction = true;
         DiffConfig.IntroduceUrl = "http://192.168.44.73/huya/introduce.html";
         GZTVPurchase.getProductInfo(this);
+
     }
 }

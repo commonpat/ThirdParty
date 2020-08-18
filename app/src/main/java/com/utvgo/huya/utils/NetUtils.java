@@ -43,11 +43,11 @@ public class NetUtils {
     }
 
     public static void getData(Context context, final String path, Map<String, String> params, final Class className, final NetCallBack callBack) {
-        getData(context, path, 0, params, className, "加载中", callBack);
+         getData(context, path, 0, params, className, "", callBack);
     }
 
     public static void getData(Context context, final String path, final int reqTag, Map<String, String> params, final Class className, final NetCallBack callBack) {
-        getData(context, path, reqTag, params, className, "加载中", callBack);
+        getData(context, path, reqTag, params, className, "", callBack);
     }
 
     public static void getData(final Context context, final String path, final int reqTag, Map<String, String> params, final Class className, String loadingStr, final NetCallBack callBack) {

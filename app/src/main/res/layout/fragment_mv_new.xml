@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/activity_RootView"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@mipmap/album_new_bg">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     style="@style/setEnableFocusNO">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="100dp"
+            android:id="@+id/content_name"
+            android:text="主播"
+            android:textStyle="bold"
+            style="@style/setEnableFocusNO"
+            android:textColor="@color/white"
+            android:textSize="45sp"/>
+        <ImageView
+            android:id="@+id/iv_home_logo"
+            android:layout_width="325dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="45dp"
+            android:layout_marginRight="75dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/logo"/>
+        <ImageView
+            android:id="@+id/fra_had_left"
+            style="@style/setEnableFocusNO"
+            android:layout_width="30dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="@dimen/dp30"
+            android:layout_marginTop="385dp"
+            android:background="@drawable/had_left"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/fra_had_right"
+            style="@style/setEnableFocusNO"
+            android:layout_width="30dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="1220dp"
+            android:layout_marginTop="385dp"
+            android:background="@drawable/had_right"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="150dp"
+        >
+
+        <FrameLayout
+            android:id="@+id/item1"
+            style="@style/mv_item1"
+
+            android:layout_width="461dp"
+            android:layout_height="258dp"
+            android:paddingTop="@dimen/dp30"
+            android:layout_marginLeft="72dp">
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:id="@+id/album_img_0"
+                android:src="@drawable/place_holder_default" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/album_btn_0"
+                android:background="@drawable/selector_item_focus"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/item2"
+            android:layout_width="202dp"
+            android:layout_height="258dp" android:paddingTop="@dimen/dp30"
+            android:layout_marginLeft="556dp">
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:id="@+id/album_img_1"
+                android:src="@drawable/place_holder_default"
+            />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/album_btn_1"
+                android:background="@drawable/selector_item_focus"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/item3"
+            android:layout_width="202dp"
+            android:layout_height="258dp" android:paddingTop="@dimen/dp30"
+            android:layout_marginLeft="781dp"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:id="@+id/album_img_2"
+                android:src="@drawable/place_holder_default"
+            />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/album_btn_2"
+                android:background="@drawable/selector_item_focus"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/item4"
+            android:layout_width="202dp"
+            android:layout_height="258dp" android:paddingTop="@dimen/dp30"
+            android:layout_marginLeft="1006dp"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:id="@+id/album_img_3"
+                android:src="@drawable/place_holder_default"
+            />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/album_btn_3"
+                android:background="@drawable/selector_item_focus"/>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/item5"
+            style="@style/mv_item_new"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="281dp"
+            android:orientation="vertical"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:id="@+id/album_img_4"
+                android:src="@drawable/place_holder_default"
+            />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/album_btn_4"
+                android:background="@drawable/selector_item_focus"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/item6"
+            style="@style/mv_item_new"
+            android:layout_marginLeft="315dp"
+            android:layout_marginTop="281dp"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:id="@+id/album_img_5"
+                android:src="@drawable/place_holder_default"
+            />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/album_btn_5"
+                android:background="@drawable/selector_item_focus"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/item7"
+            android:layout_width="202dp"
+            android:layout_height="182dp"
+            android:layout_marginLeft="556dp"
+            android:layout_marginTop="281dp"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:id="@+id/album_img_6"
+                android:src="@drawable/place_holder_default"
+            />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/album_btn_6"
+                android:background="@drawable/selector_item_focus"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/item8"
+            android:layout_width="202dp"
+            android:layout_height="182dp"
+            android:layout_marginLeft="781dp"
+            android:layout_marginTop="281dp"
+        >
+
+            <ImageView
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:id="@+id/album_img_7"
+                android:src="@drawable/place_holder_default"
+            />
+            <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/album_btn_7"
+            android:background="@drawable/selector_item_focus"/>
+
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/item9"
+            android:layout_width="202dp"
+            android:layout_height="182dp"
+            android:layout_marginLeft="1006dp"
+            android:layout_marginTop="281dp"
+            >
+
+            <ImageView
+                android:id="@+id/album_img_8"
+                style="@style/setEnableFocusNO.mv_item_image"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/place_holder_default"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/album_btn_8"
+                android:background="@drawable/selector_item_focus"/>
+        </FrameLayout>
+
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/tv_page"
+        style="@style/setEnableFocusNO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:minWidth="@dimen/dp100"
+        android:text=""
+        android:textColor="#cccccc"
+        android:textSize="30sp"/>
+</FrameLayout>

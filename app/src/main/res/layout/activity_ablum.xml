@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+    android:id="@+id/activity_RootView"
                 android:clipChildren="false"
                 android:clipToPadding="false">
     <SurfaceView
@@ -14,10 +15,11 @@
         android:id="@+id/bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/exit_new_bg"
         android:scaleType="fitCenter"/>
-    <include android:id="@+id/activity_album_default" layout="@layout/activity_album_default" android:visibility="visible"/>
+    <include android:id="@+id/activity_album_default" layout="@layout/activity_album_default_new" android:visibility="visible"/>
     <include android:id="@+id/activity_album_five" layout="@layout/activity_album_five" android:visibility="gone"/>
+    <include android:id="@+id/activity_album_four" layout="@layout/activity_album_four" android:visibility="gone"/>
+
 
 
 

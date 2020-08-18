@@ -1,8 +1,12 @@
 package com.utvgo.handsome.diff;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
@@ -27,6 +31,7 @@ import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.handsome.utils.UUIDUtils;
 import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.activity.ActivityActivity;
+import com.utvgo.huya.activity.BaseActivity;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.utils.ToastUtil;
 
@@ -42,7 +47,7 @@ public class GZTVPurchase extends IPurchase {
 
     public static final int RequestCode = 6566;
     static final String TAG = "GZTVPurchase";
-    static  String TryBestCmbId = "GZ126285";//ceshi
+    public static  String TryBestCmbId = "GZ126285";//ceshi
 /*    GZ126281  虎牙TV-6月-110元
     GZ126284  虎牙TV-1年-200元
     GZ126285  虎牙TV-连续包月-0元-首月免费体验*/
@@ -61,8 +66,11 @@ public class GZTVPurchase extends IPurchase {
     static final String CallBackUrl="http://192.168.44.73/huya-order-web/chongqing/cqUserController/callbackSaveAuthorize.utvgo";
 //http://192.168.44.73/cq-order-web/   qq
 //http://192.168.44.73/huya-order-web/   huya  下次升级变化
-
+   public static boolean isPayFailed = false;
     String businessKey = "";
+    static String selectProductId;
+    static String selectProductName;
+    static float selectProductPrice;
 
     class GZTVAuthResult implements Serializable
     {
@@ -115,7 +123,7 @@ public class GZTVPurchase extends IPurchase {
     @Override
     public void auth(Context context, final AuthCallback authCallback) {
         final String token = GZTVBox.getToken(context);
-
+        final Context c = context;
         this.businessKey = UUIDUtils.getUUID();
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -153,12 +161,22 @@ public class GZTVPurchase extends IPurchase {
                                 if("0".equalsIgnoreCase(flag))
                                 {
                                     setOrderStatus(0);
+                                    authCallback.onFinished("0");
+                                    if(GZTVPurchase.isPayFailed){
+                                        PayInfo payInfo = new PayInfo();
+                                        callBackFunc(c,payInfo,"0");
+                                        GZTVPurchase.isPayFailed = false;
+                                    }
+                                }else {
+                                    errorMessage = description;
+                                    authCallback.onFinished(errorMessage);
                                 }
 
                             }
                             else
                             {
                                 errorMessage = description;
+                                authCallback.onFinished(errorMessage);
                             }
 
                         }catch (Exception e){
@@ -171,6 +189,7 @@ public class GZTVPurchase extends IPurchase {
                         String message = "auth onError： ";
                         try{
                             message += response.body();
+                            authCallback.onFinished(message);
                         }catch (Exception e){
                             message += e.getLocalizedMessage();
                             e.printStackTrace();
@@ -180,43 +199,47 @@ public class GZTVPurchase extends IPurchase {
 
                     @Override
                     public void onFinish() {
-                        if(authCallback != null)
-                        {
-                            authCallback.onFinished(errorMessage);
-                        }
+
                     }
                 });
     }
 
+//    @Override
+//    public void pay(final Context context, final CommonCallback callback) {
+//        if (context instanceof Activity) {
+//            final Activity activity = (Activity) context;
+//            MyPay mPay = MyPay.instance;
+//            int requestCode = RequestCode;
+//            mPay.startPay(activity, null, ProductCategoryId, requestCode, new MyPay.IGalaPayCallback() {
+//                @Override
+//                public void onSuccess(PayInfo payInfo) {
+//                    XLog.d("GZTV pay onSuccess");
+//                    callBackFunc(context,payInfo,"0");
+//                    callback.onSuccess(activity);
+//                    auth(context, new AuthCallback() {
+//                        @Override
+//                        public void onFinished(String message) {
+//                        }
+//                    });
+//                }
+//
+//                @Override
+//                public void onFailed(PayInfo payInfo, int i, String s) {
+//                    XLog.d("Pay error code + " + i + " message " + s);
+//                    callBackFunc(context,payInfo,"1");
+//                    callback.onFail(activity);
+//                }
+//            });
+//        }
+//    }
+
     @Override
-    public void pay(final Context context, final CommonCallback callback) {
-        if (context instanceof Activity) {
-            final Activity activity = (Activity) context;
-            MyPay mPay = MyPay.instance;
-            int requestCode = RequestCode;
-            mPay.startPay(activity, null, ProductCategoryId, requestCode, new MyPay.IGalaPayCallback() {
-                @Override
-                public void onSuccess(PayInfo payInfo) {
-                    XLog.d("GZTV pay onSuccess");
-                    callBackFunc(context,payInfo,"0");
-                    callback.onSuccess(activity);
-                    auth(context, new AuthCallback() {
-                        @Override
-                        public void onFinished(String message) {
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailed(PayInfo payInfo, int i, String s) {
-                    XLog.d("Pay error code + " + i + " message " + s);
-                    callBackFunc(context,payInfo,"1");
-                    callback.onFail(activity);
-                }
-            });
-        }
+    public void pay(Context context, final CommonCallback callback) {
+        Intent intent = new Intent("com.sh.project.action.PAY_GENERAL");
+        intent.putExtra("catalogId",ProductCategoryId);
+        intent.putExtra("timestamp",SvcCodes);
+        context.startActivity(intent);
     }
-
     @Override
     public void refreshOrderStatus(final Context context, final AuthCallback callback) {
         auth(context, callback);
@@ -274,6 +297,7 @@ public class GZTVPurchase extends IPurchase {
 
         return null;
     }
+
     public  void  callBackFunc(final Context context,PayInfo payInfo,final String code){
         Map<String,Object> paramMap=new HashMap<String, Object>();
         paramMap.put("msg",payInfo);
@@ -304,6 +328,7 @@ public class GZTVPurchase extends IPurchase {
                     }
                 });
     }
+
     public void tryBest(final Context context, final TryBestCallback callback) {
 
         String apiUrl = DiffConfig.baseHost + String.format(Locale.getDefault(), "/huya-report-web/report/reportController/judgeWhetherOrder.utvgo?keyNo=%s&interfaceType=1",
@@ -353,7 +378,7 @@ public class GZTVPurchase extends IPurchase {
     }
 
     public void foo(final Context context, final TryBestCallback callback)
-    {
+    {   final BaseActivity base = (BaseActivity)context;
         final String categoryId = GZTVPurchase.ProductCategoryId;
         final UserManager userManager = UserManager.getInstance(context);
         if(callback != null)
@@ -363,6 +388,9 @@ public class GZTVPurchase extends IPurchase {
         userManager.getUserInfo(new UserManager.UserCallBack() {
             @Override
             public void onSuccess(User userInfo) {
+                if("".equals(userInfo.getBankNum()) || userInfo.getBankNum() == null){
+                    base.stat("无甜果支付"+GZTVBox.getDeviceId(context));
+                }
                 userManager.getQiyProductList(userInfo.getPhoneNo(), categoryId, new GetProductListListener() {
                     public void onSuccess(List<Product> list) {
                         if(callback != null)
@@ -379,11 +407,15 @@ public class GZTVPurchase extends IPurchase {
                                     product.getProductName(),
                                     product.getProductPrice(),
                                     product.getProductNote());
+                            base.stat(msg);
                             if(!isExist)
                             {
                                 if(TryBestCmbId.equalsIgnoreCase(product.getProductId()))
                                 {
                                     isExist = true;
+                                    selectProductId = product.getProductId();
+                                    selectProductName = product.getProductName();
+                                    selectProductPrice = product.getProductPrice();
                                 }
                             }
                             XLog.i(TAG, msg);
@@ -443,17 +475,6 @@ public class GZTVPurchase extends IPurchase {
         {
             callback.d("userManager.order");
         }
-        /*userManager.getUserInfo(new UserManager.UserCallBack() {
-            @Override
-            public void onSuccess(User user) {
-
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-
-            }
-        });*/
         userManager.order(TryBestCmbId, "", 1, new StringCallBackListener() {
             public void onSuccess(String s) {
                 if(callback != null)
@@ -503,9 +524,9 @@ public class GZTVPurchase extends IPurchase {
             }
         });
     }
-    private void saveRecord(final Context context,final boolean isSuccess,final String s,final TryBestCallback callback){
+    public void saveRecord(final Context context, final boolean isSuccess, final String s, final TryBestCallback callback){
         String saveRecordUrl = DiffConfig.baseHost + String.format(Locale.getDefault(), "/huya-report-web/report/reportController/saveOrdeRecoder.utvgo?keyNo=%s&status=%s&msg=%s&vipCode=APP0HYTV",
-                DiffConfig.getCA(context), isSuccess ? "200" : "-1", s);
+                DiffConfig.getCA(context), isSuccess ? "200" : "-1",  s+selectProductId+"_"+selectProductName+"_"+selectProductPrice+"_"+GZTVBox.getDeviceId(context));
         if(isSuccess){
             setPurchased();
         }
@@ -525,6 +546,7 @@ public class GZTVPurchase extends IPurchase {
             }
         });
     }
+
     public static void getProductInfo(GZTVEnv context){
         String paramUrl = DiffConfig.baseHost + "/cq-order-web/authorizationController/zjsm/getProductParam.utvgo?type=0";
         OkGo.<BeanProductParam>get(paramUrl).cacheMode(CacheMode.NO_CACHE).tag(context).execute(new JsonCallback<BeanProductParam>() {
@@ -534,6 +556,58 @@ public class GZTVPurchase extends IPurchase {
                 TryBestCmbId = beanProductParam.getData().getTryBestCmbId()==null?TryBestCmbId:beanProductParam.getData().getTryBestCmbId();
                 ProductCategoryId  = beanProductParam.getData().getProductCategoryId()==null?ProductCategoryId:beanProductParam.getData().getProductCategoryId();
                 SvcCodes =  beanProductParam.getData().getSvcCodes()== null?SvcCodes:beanProductParam.getData().getSvcCodes();
+            }
+
+            @Override
+            public void onError(Response<BeanProductParam> response) {
+                super.onError(response);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
+    }
+
+    public void tryBestAfterFailed(final Context context, final TryBestCallback callback) {
+
+        String apiUrl = DiffConfig.baseHost + String.format(Locale.getDefault(), "/huya-report-web/report/reportController/judgeWhetherOrder.utvgo?keyNo=%s&interfaceType=71",
+                DiffConfig.getCA(context));
+        if(callback != null)
+        {
+            callback.d(apiUrl);
+        }
+        OkGo.<GZTVTryBestBean>get(apiUrl).cacheMode(CacheMode.NO_CACHE).tag(context).execute(new JsonCallback<GZTVTryBestBean>() {
+            @Override
+            public void onSuccess(Response<GZTVTryBestBean> response) {
+                try {
+                    GZTVTryBestBean bean = response.body();
+                    if(callback != null)
+                    {
+                        callback.d("User " + DiffConfig.getCA(context) +  " before try Best action code " + bean.getCode());
+                    }
+
+                    if ("1".equalsIgnoreCase(bean.getCode())) {
+                        if (bean.isData())
+                        {
+                            foo(context, callback);
+                        }
+                        else
+                        {
+                            if(callback != null)
+                            {
+                                callback.d("Do not try best");
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if(callback != null)
+                    {
+                        callback.d("User " + DiffConfig.getCA(context) +  " before tryBest action error ");
+                    }
+                }
             }
         });
     }

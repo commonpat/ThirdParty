@@ -11,8 +11,7 @@
         android:id="@+id/iv_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@mipmap/bg" />
+        android:scaleType="fitXY" />
 
 
     <include
@@ -42,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/dp80"
-        android:layout_marginLeft="@dimen/dp60"
+        android:layout_marginLeft="@dimen/dp650"
         android:textSize="@dimen/dp20"
         android:textColor="@color/white"
         android:translationZ="999px"

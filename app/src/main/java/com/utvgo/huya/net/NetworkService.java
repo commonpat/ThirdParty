@@ -8,6 +8,7 @@ import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.handsome.utils.NetworkUtils;
+import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanArryPage;
 import com.utvgo.huya.beans.BeanCheckCollect;
@@ -44,15 +45,15 @@ public class NetworkService {
         return DiffConfig.dataHost+path;
     }
 
-    public void fetchHomePageNavData(final Context context, final JsonCallback<TypesBean> callback)
+    public void fetchHomePageNavData(final Context context,String packageId,final JsonCallback<TypesBean> callback)
     {
-        String url = path2HuyaUrl("/ui/vip/index/navigation.utvgo?packageId=" + AppConfig.PackageId);
+        String url = path2HuyaUrl("/ui/vip/index/navigation.utvgo?packageId="+packageId);
         NetworkUtils.get(context, url, callback);
     }
 
-    public void fetchHomePageData(final Context context, final JsonCallback<BaseResponse<List<OpItem>>> callback)
+    public void fetchHomePageData(final Context context,int typeId, final JsonCallback<BaseResponse<List<OpItem>>> callback)
     {
-        final int typeId = 74;
+        //final int typeId = 74;
         String url = path2HuyaUrl("/ui/vip/index/page.utvgo?typeId=" + typeId);
         NetworkUtils.get(context, url, callback);
     }
@@ -173,7 +174,7 @@ public class NetworkService {
         String url = DiffConfig.statisticsHost + "/utvgo-statistics/visit/statistics.utvgo";
         url += "?branchNo=" + DiffConfig.getRegionCode(context) + "&keyNo=" + DiffConfig.getCA(context)
                 + "&vipCode=" + AppConfig.VipCode + "&orderStatus=" + orderStatus + "&vipName=" + AppConfig.AppName + "&pageName=" + pageName +AppUtils.getLocalVersionName(context)+ "&visitTime=1" +
-                "&id=&pageUrl=" + pageUrl + "&boxInfo=&channelId=&channelName=&referrer=&labels=&labelIds=&pageTitle=" + pageTitle;
+                "&id=&pageUrl=" + pageUrl + "&boxInfo="+DiffConfig.deviceId+"&channelId=&channelName=&referrer=&labels=&labelIds=&pageTitle=" + pageTitle;
 
         NetworkUtils.get(context, url, new JsonCallback<BaseResponse>() {
             @Override
@@ -200,13 +201,36 @@ public class NetworkService {
                 "&channelId=" + channelId + "&channelName=" + channelName + "&programId=" + programId + "&spName=" + spName + "&programName=" + programName + "&orderStatus=" + orderStatus + "&totalTime=" + totalTime;
         NetworkUtils.get(context, url, callback);
     }
+    /**
+     * 退出挽留页数据接口
+     * */
 
     public  void fetchExitPage(Context context,String typeId,final JsonCallback<BeanExitPage> callback){
         String url=path2HuyaUrl("/ui/vip/index/page.utvgo?typeId=75");
         NetworkUtils.get(context,url,callback);
     }
     public  void fetchExitNewPage(Context context,String typeId,final JsonCallback<BeanExitPage> callback){
-        String url=DiffConfig.baseHost+"/huya-tv-mvc/ui/vip/index/page.utvgo?typeId=78";
+        String url=DiffConfig.baseHost+"/utvgo-tv-mvc/ui/vip/index/page.utvgo?typeId=78";
         NetworkUtils.get(context,url,callback);
+    }
+    /**
+     * 第一次鉴权上报接口，给订购开关判断条件
+     * @param state 0已授权 1未授权
+     * */
+    public void syncUserAuthorization (Context context,String state,String productId){
+        String url = "";
+        if(BuildConfig.DEBUG){
+             url = "http://172.16.146.56:8380/cq-order-web/authorizationController/syncUserAuthorization.utvgo?keyNo="+DiffConfig.getCA(context)+"&state="+state+"&cmboId="+productId+"&contentMid=";
+
+        }else {
+            url = DiffConfig.baseHost + "/cq-order-web/authorizationController/syncUserAuthorization.utvgo?keyNo="+DiffConfig.getCA(context)+"&state="+state+"&cmboId="+productId+"&contentMid=";
+        }
+        NetworkUtils.get(context, url, new JsonCallback<BeanExitPage>() {
+            @Override
+            public void onSuccess(Response<BeanExitPage> response) {
+                BeanExitPage beanExitPage = (BeanExitPage) response.body();
+                beanExitPage.getCode();
+            }
+        });
     }
 }

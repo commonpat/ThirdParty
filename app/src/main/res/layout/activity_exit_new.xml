@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/setEnableFocusNO"
+        android:src="@mipmap/exit_new_bg"/>
+    <com.utvgo.handsome.views.CustomVideoView
+        android:layout_marginLeft="240dp"
+        android:layout_marginTop="58dp"
+        android:layout_width="800dp"
+        android:layout_height="448dp"
+        style="@style/setEnableFocusNO"
+        android:id="@+id/exit_video"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/exit_new_continue"
+        android:layout_marginLeft="@dimen/dp320"
+        android:layout_marginTop="@dimen/dp560"
+        android:onClick="onClick"
+        android:background="@drawable/exit_new_continue"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/exit_new_back"
+        android:layout_marginLeft="@dimen/dp720"
+        android:layout_marginTop="@dimen/dp560"
+        android:onClick="onClick"
+        android:background="@drawable/exit_new_back"/>
+
+
+</FrameLayout>
