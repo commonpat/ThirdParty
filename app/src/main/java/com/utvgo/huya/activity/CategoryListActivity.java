@@ -117,19 +117,19 @@ public class CategoryListActivity extends BaseActivity {
                 if(pkId == 156)
                 {    checkId=R.id.btn_tab_4;
                     showCheck(R.id.btn_tab_4);
-                    findViewById(R.id.btn_tab_4).requestFocus();
+                    //findViewById(R.id.btn_tab_4).requestFocus();
                 }
                 else if(pkId == 157)
                 {
                     checkId=R.id.btn_tab_5;
                     showCheck(R.id.btn_tab_5);
-                    findViewById(R.id.btn_tab_5).requestFocus();
+                    //findViewById(R.id.btn_tab_5).requestFocus();
                 }
                 else if(pkId == 158)
                 {
                     checkId=R.id.btn_tab_6;
                     showCheck(R.id.btn_tab_6);
-                    findViewById(R.id.btn_tab_6).requestFocus();
+                   // findViewById(R.id.btn_tab_6).requestFocus();
                 }
                 loadData();
             }
