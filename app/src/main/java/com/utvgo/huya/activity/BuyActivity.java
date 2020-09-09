@@ -54,7 +54,6 @@ public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
                             public void onFinished(Context context) {
                               //  DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
                             }
-
                             @Override
                             public int hashCode() {
                                 return super.hashCode();

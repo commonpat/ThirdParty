@@ -2,6 +2,7 @@ package com.utvgo.huya.net;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Button;
 
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
@@ -13,6 +14,7 @@ import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanArryPage;
 import com.utvgo.huya.beans.BeanCheckCollect;
 import com.utvgo.huya.beans.BeanExitPage;
+import com.utvgo.huya.beans.BeanUpgrade;
 import com.utvgo.huya.beans.UserFavoriteData;
 import com.utvgo.huya.beans.UserPlayHistoryData;
 import com.utvgo.huya.beans.BeanStatistics;
@@ -232,5 +234,14 @@ public class NetworkService {
                 beanExitPage.getCode();
             }
         });
+    }
+    public void getVersionInfo(Context context,String s,final JsonCallback<BeanUpgrade> callback){
+        String url;
+        if (BuildConfig.DEBUG){
+            url = "http://172.16.146.56:9091/utvgo-tv-mvc/tv/pageCenter/getVersionInfo.utvgo?projectType=com.utvgo.huya";
+        }else {
+            url = "";
+        }
+        NetworkUtils.get(context,url,callback);
     }
 }

@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId "com.utvgo.huya"
         minSdkVersion 17
-        targetSdkVersion 28
+        targetSdkVersion 27
         versionCode 103    //打包修改
         versionName "1.3"   //打包修改
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

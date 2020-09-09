@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="@dimen/dp500"
+        android:layout_height="@dimen/dp300"
+        android:layout_centerInParent="true"
+        android:background="@color/white">
+        <TextView
+            android:layout_width="@dimen/dp500"
+            android:layout_height="@dimen/dp250"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="26sp"
+            android:text="有新版本可以更新，是否立即升级?"
+            android:id="@+id/upgrade_tips"/>
+        <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/upgrade_tips"
+           android:orientation="horizontal"
+           android:id="@+id/current_version"
+           android:visibility="gone" >
+            <Button
+                android:layout_width="@dimen/dp250"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_upgrade"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:text="确定"
+                style="@style/focusAndSetTag"
+                android:background="@drawable/change_button_upgrade_bg_select"/>
+            <Button
+                android:layout_width="@dimen/dp250"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_upgrade_cancel"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:text="取消"
+                style="@style/focusAndSetTag"
+                android:background="@drawable/change_button_upgrade_bg_select"
+                />
+       </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/upgrade_tips"
+            android:orientation="horizontal"
+            android:id="@+id/min_version"
+            android:visibility="gone">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_min_upgrade"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:text="立即升级"
+                style="@style/focusAndSetTag"
+                android:background="@drawable/change_button_upgrade_bg_select"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

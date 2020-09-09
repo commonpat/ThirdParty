@@ -45,6 +45,7 @@ import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanInitData;
+import com.utvgo.huya.beans.BeanUpgrade;
 import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
@@ -105,20 +106,21 @@ public class NewHomeActivity extends BuyActivity{
         setContentView(R.layout.activity_new_home);
         ButterKnife.bind(this);
         initView();
-        Boolean isPayApk = AppUtils.isApkExist(this,"com.sh.project.pay.general");
-        if(!isPayApk){
-            Intent intent = new Intent();
-            ComponentName componentName = new ComponentName("com.huan.appstore","com.huan.appstore.ui.AppDetailActivity");
-            intent.putExtra("packagename","com.sh.project.pay.general");
-            intent.setComponent(componentName);
-            String category = "android.intent.category.DEFAULT";
-            intent.addCategory(category);
-            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        }
+
         if(DiffConfig.CurrentTVBox instanceof GZTVBox){
             DiffConfig.deviceId = GZTVBox.getDeviceId(this);
+            Boolean isPayApk = AppUtils.isApkExist(this,"com.sh.project.pay.general");
+            if(!isPayApk){
+                Intent intent = new Intent();
+                ComponentName componentName = new ComponentName("com.huan.appstore","com.huan.appstore.ui.AppDetailActivity");
+                intent.putExtra("packagename","com.sh.project.pay.general");
+                intent.setComponent(componentName);
+                String category = "android.intent.category.DEFAULT";
+                intent.addCategory(category);
+                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
         }
         DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
             @Override
@@ -159,6 +161,7 @@ public class NewHomeActivity extends BuyActivity{
              public void run() {
                 getMainNavData();
                 getMainContentData();
+                loadUpgrade();
              }
         });
     }
@@ -200,6 +203,50 @@ public class NewHomeActivity extends BuyActivity{
                 loadImage((ImageView) findViewById(flContentIdArray[i]),DiffConfig.generateImageUrl(data.get(i).getImgUrl()));
             }
         }
+    }
+    private void loadUpgrade() {
+        NetworkService.defaultService().getVersionInfo(this, "", new JsonCallback<BeanUpgrade>() {
+            @Override
+            public void onSuccess(Response<BeanUpgrade> response) {
+                BeanUpgrade beanUpgrade = response.body();
+                if(beanUpgrade != null && "1".equals(beanUpgrade.getCode())){
+                    if(beanUpgrade.getData() != null) {
+                        int currentVersionCode = beanUpgrade.getData().getCurrentVersionCode();
+                        String currentVersionName = beanUpgrade.getData().getCurrentVersionName();
+                        int minVersionCode = beanUpgrade.getData().getMinVersionCode();
+                        String minVersionName = beanUpgrade.getData().getMinVersionName();
+                        int versionCode;
+                        String versionName;
+                        //高于最低版本
+                        if (BuildConfig.VERSION_CODE >= minVersionCode) {
+                            if (BuildConfig.VERSION_CODE < currentVersionCode) {
+                                HiFiDialogTools.getInstance().showUpgradeTips(NewHomeActivity.this, beanUpgrade, new MyDialogEnterListener() {
+                                    @Override
+                                    public void onClickEnter(Dialog dialog, Object object) {
+                                        if((int)object == 0){
+                                            jumpAppStore();
+
+                                        }else if ((int)object == 1){
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                });
+                            }
+                        }else {
+                            HiFiDialogTools.getInstance().showMinUpgradeTips(NewHomeActivity.this, beanUpgrade, new MyDialogEnterListener() {
+                                @Override
+                                public void onClickEnter(Dialog dialog, Object object) {
+                                    if((int)object == 0){
+                                        jumpAppStore();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+
+            }
+        });
     }
 
     private void playVideo() {

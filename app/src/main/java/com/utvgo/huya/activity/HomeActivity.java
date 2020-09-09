@@ -30,6 +30,7 @@ import com.utvgo.handsome.diff.Platform;
 import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.handsome.utils.AppUtils;
+import com.utvgo.handsome.utils.NetworkUtils;
 import com.utvgo.handsome.utils.XLog;
 import com.utvgo.handsome.views.CustomVideoView;
 import com.utvgo.huya.BuildConfig;
@@ -38,6 +39,7 @@ import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanExitPage;
 import com.utvgo.huya.beans.BeanInitData;
+import com.utvgo.huya.beans.BeanUpgrade;
 import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
@@ -175,7 +177,53 @@ public class HomeActivity extends BuyActivity {
             public void run() {
                 loadTypesData();
                 loadData();
+                loadUpgrade();
 
+
+            }
+        });
+    }
+
+    private void loadUpgrade() {
+        NetworkService.defaultService().getVersionInfo(this, "", new JsonCallback<BeanUpgrade>() {
+            @Override
+            public void onSuccess(Response<BeanUpgrade> response) {
+                 BeanUpgrade beanUpgrade = new BeanUpgrade();
+                 if(beanUpgrade != null && "1".equals(beanUpgrade.getCode())){
+                     if(beanUpgrade.getData() != null) {
+                         int currentVersionCode = beanUpgrade.getData().getCurrentVersionCode();
+                         String currentVersionName = beanUpgrade.getData().getCurrentVersionName();
+                         int minVersionCode = beanUpgrade.getData().getMinVersionCode();
+                         String minVersionName = beanUpgrade.getData().getMinVersionName();
+                         int versionCode;
+                         String versionName;
+                         //高于最低版本
+                         if (BuildConfig.VERSION_CODE >= minVersionCode) {
+                             if (BuildConfig.VERSION_CODE < currentVersionCode) {
+                                 HiFiDialogTools.getInstance().showUpgradeTips(HomeActivity.this, beanUpgrade, new MyDialogEnterListener() {
+                                     @Override
+                                     public void onClickEnter(Dialog dialog, Object object) {
+                                         if((int)object == 0){
+                                             jumpAppStore();
+
+                                         }else if ((int)object == 1){
+                                             dialog.dismiss();
+                                         }
+                                     }
+                                 });
+                             }
+                         }else {
+                             HiFiDialogTools.getInstance().showMinUpgradeTips(HomeActivity.this, beanUpgrade, new MyDialogEnterListener() {
+                                 @Override
+                                 public void onClickEnter(Dialog dialog, Object object) {
+                                     if((int)object == 0){
+                                         jumpAppStore();
+                                     }
+                                 }
+                             });
+                         }
+                     }
+                 }
 
             }
         });
@@ -190,7 +238,6 @@ public class HomeActivity extends BuyActivity {
         }
 
         videoView = (CustomVideoView)findViewById(R.id.vv_small);
-
         mainTabButton1.requestFocus();
     }
 

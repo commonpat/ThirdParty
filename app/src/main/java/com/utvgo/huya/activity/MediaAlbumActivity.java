@@ -502,7 +502,7 @@ public class MediaAlbumActivity extends BuyActivity {
             albumItemContent.addView(itemView, layoutParams);
 
         }
-            albumItemContent.getChildAt(0).requestFocus();
+           showViewByHandler(albumItemContent.getChildAt(0));
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {

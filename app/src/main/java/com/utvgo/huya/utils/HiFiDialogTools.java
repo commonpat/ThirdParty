@@ -6,12 +6,14 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.utvgo.handsome.utils.XLog;
 import com.utvgo.huya.R;
+import com.utvgo.huya.beans.BeanUpgrade;
 import com.utvgo.huya.listeners.MyDialogEnterListener;
 import com.utvgo.huya.views.FilterView;
 import java.util.ArrayList;
@@ -170,6 +172,50 @@ public class HiFiDialogTools {
             e.printStackTrace();
         }
     }
+    public void showUpgradeTips(Context context, BeanUpgrade beanUpgrade, final MyDialogEnterListener myDialogEnterListener){
+        final Dialog dialog = new Dialog(context,R.style.MyDialog);
+        dialog.setContentView(R.layout.activity_upgrade_tips);
+        dialog.findViewById(R.id.current_version).setVisibility(View.VISIBLE);
+        Button button1 = dialog.findViewById(R.id.btn_upgrade);
+        Button button2 = dialog.findViewById(R.id.btn_upgrade_cancel);
+        TextView textView = dialog.findViewById(R.id.upgrade_tips);
+        if(beanUpgrade.getData().getUpgradeTips()!= null){
+            textView.setText(beanUpgrade.getData().getUpgradeTips());
+        }
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialogEnterListener.onClickEnter(dialog,0);
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialogEnterListener.onClickEnter(dialog,1);
+            }
+        });
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(false);
+        safeShowDialog(context,dialog);
+    }
+    public void showMinUpgradeTips(Context context, BeanUpgrade beanUpgrade, final MyDialogEnterListener myDialogEnterListener){
+        final Dialog dialog = new Dialog(context,R.style.MyDialog);
+        dialog.setContentView(R.layout.activity_upgrade_tips);
+        dialog.findViewById(R.id.min_version).setVisibility(View.VISIBLE);
 
-
+        Button button1 = dialog.findViewById(R.id.btn_min_upgrade);
+        TextView textView = dialog.findViewById(R.id.upgrade_tips);
+        if(beanUpgrade.getData().getMinUpgradeTips()!= null){
+            textView.setText(beanUpgrade.getData().getMinUpgradeTips());
+        }
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialogEnterListener.onClickEnter(dialog,0);
+            }
+        });
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(false);
+        safeShowDialog(context,dialog);
+    }
 }

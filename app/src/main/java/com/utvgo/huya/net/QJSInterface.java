@@ -1,7 +1,9 @@
 package com.utvgo.huya.net;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -289,5 +291,34 @@ public class QJSInterface {
             e.printStackTrace();
         }
         return localVersion;
+    }
+    @JavascriptInterface
+    public int getVersionCode() {
+
+        return BuildConfig.VERSION_CODE;
+    }
+    @JavascriptInterface
+    public String getVersionName() {
+
+        return BuildConfig.VERSION_NAME;
+    }
+    /**
+     *
+     * 跳转珠江应用市场
+     * */
+    @JavascriptInterface
+    public void jumpAppStore(String pkgName){
+        Intent intent = new Intent();
+        ComponentName componentName = new ComponentName("com.huan.appstore","com.huan.appstore.ui.AppDetailActivity");
+        //ComponentName componentName = new ComponentName("com.utvgo.huya","com.utvgo.huya.activity.LaunchActivity");
+        Log.d("", "jumpAppStore: "+c.getApplicationContext().getPackageName());
+        intent.setComponent(componentName);
+        intent.putExtra("packagename",pkgName);
+        intent.setComponent(componentName);
+        String category = "android.intent.category.DEFAULT";
+        intent.addCategory(category);
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        c.startActivity(intent);
     }
 }

@@ -2,6 +2,7 @@ package com.utvgo.huya.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -577,5 +578,24 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         ProgramListActivity.show(this, StringUtils.intValueOfString(channelId),
                 name, StringUtils.intValueOfString(AppConfig.PackageId), 0);
 
+    }
+    public void jumpAppStore(){
+        try{
+            Intent intent = new Intent();
+            ComponentName componentName = new ComponentName("com.huan.appstore","com.huan.appstore.ui.AppDetailActivity");
+            //ComponentName componentName = new ComponentName("com.utvgo.huya","com.utvgo.huya.activity.LaunchActivity");
+            Log.d("", "jumpAppStore: "+getApplicationContext().getPackageName());
+            intent.setComponent(componentName);
+            intent.putExtra("packagename",getApplicationContext().getPackageName());
+            intent.setComponent(componentName);
+            String category = "android.intent.category.DEFAULT";
+            intent.addCategory(category);
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }catch (Exception e){
+            e.printStackTrace();
+            onBackPressed();
+        }
     }
 }
