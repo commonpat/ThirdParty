@@ -121,6 +121,7 @@ public class HomeActivity extends BuyActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         initView();
+
         Boolean isPayApk = AppUtils.isApkExist(this,"com.sh.project.pay.general");
         if(!isPayApk){
             Intent intent = new Intent();

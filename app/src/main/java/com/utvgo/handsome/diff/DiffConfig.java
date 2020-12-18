@@ -41,7 +41,7 @@ public class DiffConfig {
 
     static Boolean LocalTest = false;
 
-    public static void initEnv(final Boolean isLocalTest)
+    public static void initEnv(final Boolean isLocalTest,Context context)
     {
         LocalTest = isLocalTest;
 
@@ -74,6 +74,13 @@ public class DiffConfig {
                 CurrentPurchase = new HNTVPurchase();
                 break;
             }
+            case topway:
+            {
+                GlobalEnv = new TOPWAYEnv();
+                CurrentTVBox = new TOPWAYBox();
+                CurrentPurchase = new TOPWAYPurchase();
+            }
+
 //            case gzbn:
 //            {
 //                GlobalEnv = new GZBNEnv();
@@ -85,9 +92,9 @@ public class DiffConfig {
         if(GlobalEnv != null)
         {
             GlobalEnv.initEnv();
+            CurrentTVBox.initDeviceInfo(context);
         }
     }
-
     /**
      * 广东修改视频地址前缀
      * @param playHost
@@ -131,6 +138,10 @@ public class DiffConfig {
 
             case gzbn :
                 return "贵州";
+
+            case topway:
+                return "深圳天威";
+
             default:
                 return "";
         }

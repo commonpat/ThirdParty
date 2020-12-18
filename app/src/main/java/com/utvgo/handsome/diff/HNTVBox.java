@@ -29,6 +29,11 @@ public class HNTVBox implements ITVBox {
     }
 
     @Override
+    public void initDeviceInfo(Context context) {
+
+    }
+
+    @Override
     public void fetchUrlByVODAssetId(final Context context, final String vodId, final FetchUrlByVODAssetIdCallBack callback) {
         final String ca = DiffConfig.getCA(context);
         String url = DiffConfig.baseHost+"/cq-order-web/hunan/hnUserController/authorization3A.utvgo";

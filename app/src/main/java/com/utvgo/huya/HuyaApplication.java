@@ -28,7 +28,8 @@ public class HuyaApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DiffConfig.initEnv(true);
+        DiffConfig.initEnv(true,this);
+
         IntentFilter intentFilter = new IntentFilter("intent.PAY_STATE");
         registerReceiver(orderBroadcastReceiver,intentFilter);
     }

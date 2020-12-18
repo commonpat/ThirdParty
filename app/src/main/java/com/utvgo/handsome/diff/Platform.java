@@ -7,6 +7,7 @@ public enum Platform {
     hncatv,
     gacs,
     gahb,
+    topway,
     gzbn;
 
     public String toAreaString()
@@ -15,17 +16,15 @@ public enum Platform {
         {
             case gcable:
                 return "广东";
-
             case gztv:
                 return "广州";
-
             case hncatv:
                 return "湖南";
-
             case gzbn:
                 return "贵州";
-
-                default:
+            case topway:
+                return "深圳天威";
+             default:
                     return "";
         }
     }

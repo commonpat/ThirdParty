@@ -11,6 +11,7 @@ public interface ITVBox {
 
     String getCA(final Context context);
     String getRegionCode(final Context context);
+    void initDeviceInfo(final Context context);
 
     void fetchUrlByVODAssetId(final Context context, final String vodId, final FetchUrlByVODAssetIdCallBack callback);
 }

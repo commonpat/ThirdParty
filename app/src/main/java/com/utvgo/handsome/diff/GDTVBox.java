@@ -14,6 +14,11 @@ public class GDTVBox implements ITVBox {
     }
 
     @Override
+    public void initDeviceInfo(Context context) {
+
+    }
+
+    @Override
     public void fetchUrlByVODAssetId(final Context context, String vodId, FetchUrlByVODAssetIdCallBack callback) {
 
     }
