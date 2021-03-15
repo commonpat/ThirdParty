@@ -4,6 +4,7 @@ import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 public class ViewUtil {
@@ -65,6 +66,9 @@ public class ViewUtil {
         root.offsetDescendantRectToMyCoords(view, rect);
         return rect;
     }
-
+    public static void scaleView(boolean hasFocus,View view){
+        float scale = hasFocus ? 1.08f : 1.0f;
+        view.animate().scaleY(scale).scaleX(scale).setInterpolator(new OvershootInterpolator()).setDuration(350);
+    }
 
 }

@@ -94,24 +94,6 @@ public class ProgramListActivity extends BasePageActivity{
         this.defaultSelectedLabelId = getIntent().getIntExtra("defaultSelectedLabelId",0);
          fetchLabels();
         programTitle.setText(channelName);
-        smoothVorizontalScrollView.setOnScrollChangeListener(new SmoothVorizontalScrollView.OnScrollChangeListener() {
-
-            @Override
-            public void onTop(int l, int t, int oldl, int oldt) {
-
-            }
-
-            @Override
-            public void onBottom(int l, int t, int oldl, int oldt) {
-//                pageNo+=1;
-//                fetchProgramListWithLabel(defaultSelectedLabelIdIndex);
-            }
-
-            @Override
-            public void onScroll(int l, int t, int oldl, int oldt) {
-                Log.d(TAG, "onScroll:111 "+t);
-            }
-        });
         stat(channelName+"节目列表");
     }
 
@@ -282,8 +264,15 @@ public class ProgramListActivity extends BasePageActivity{
     public void onFocusChange(View v, boolean hasFocus) {
         Log.d(TAG, "onFocusChange: "+v.getId());
         if(v instanceof LinearLayout) {
-
+            if(((ViewGroup)v.getParent()).getId() == R.id.leftItem){
+                borderView.setBorderBitmapResId(0);
+            }else {
+                borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default);
+            }
            runText((ViewGroup) v, hasFocus);
+
+        }else {
+            borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default);
         }
         super.onFocusChange(v, hasFocus);
     }
@@ -315,16 +304,20 @@ public class ProgramListActivity extends BasePageActivity{
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        View view =  (ViewGroup)getCurrentFocus().getParent();
-        Log.d(TAG, getCurrentFocus().getId()+"onKeyDown: "+((labelInfoList.size() - 1)+3000));
-        if(view.getId() == R.id.leftBar_labels) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN && (getCurrentFocus().getId()) == ((labelInfoList.size() - 1)+3000)) {
-                return true;
+        try {
+            View view = (ViewGroup) getCurrentFocus().getParent();
+            Log.d(TAG, getCurrentFocus().getId()+"onKeyDown: "+((labelInfoList.size() - 1)+3000));
+            if(view.getId() == R.id.leftBar_labels) {
+                if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN && (getCurrentFocus().getId()) == ((labelInfoList.size() - 1)+3000)) {
+                    return true;
+                }
+                if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP && (getCurrentFocus().getId()) == 3000) {
+                    return true;
+                }
             }
-            if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP && (getCurrentFocus().getId()) == 3000) {
-                return true;
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        }
         return super.onKeyDown(keyCode, event);
     }
 

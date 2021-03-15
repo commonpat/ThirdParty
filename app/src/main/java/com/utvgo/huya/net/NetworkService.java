@@ -175,7 +175,7 @@ public class NetworkService {
         String orderStatus = DiffConfig.CurrentPurchase.isPurchased() ? "0" : "1";
         String url = DiffConfig.statisticsHost + "/utvgo-statistics/visit/statistics.utvgo";
         url += "?branchNo=" + DiffConfig.getRegionCode(context) + "&keyNo=" + DiffConfig.getCA(context)
-                + "&vipCode=" + AppConfig.VipCode + "&orderStatus=" + orderStatus + "&vipName=" + AppConfig.AppName + "&pageName=" + pageName +AppUtils.getLocalVersionName(context)+ "&visitTime=1" +
+                + "&vipCode=" + AppConfig.VipCode + "&orderStatus=" + orderStatus + "&vipName=" + AppConfig.AppName + "&pageName=" + pageName +"version_"+AppUtils.getLocalVersionName(context)+ "&visitTime=1" +
                 "&id=&pageUrl=" + pageUrl + "&boxInfo="+DiffConfig.deviceId+"&channelId=&channelName=&referrer=&labels=&labelIds=&pageTitle=" + pageTitle;
 
         NetworkUtils.get(context, url, new JsonCallback<BaseResponse>() {

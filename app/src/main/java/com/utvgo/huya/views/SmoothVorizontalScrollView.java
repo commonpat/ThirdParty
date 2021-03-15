@@ -29,7 +29,6 @@ public class SmoothVorizontalScrollView extends ScrollView {
     }
 
     private int mFadingEdge;
-    private OnScrollChangeListener onScrollChangeListener;
 
     public SmoothVorizontalScrollView(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
@@ -79,31 +78,4 @@ public class SmoothVorizontalScrollView extends ScrollView {
         return scrollYDelta;
     }
 
-    @Override
-    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        super.onScrollChanged(l, t, oldl, oldt);
-//         try {
-//
-//             View contentView = getChildAt(0);
-//             Log.d(TAG, "onScrollChanged: "+computeVerticalScrollRange() +"__"+ getScrollY() +"-->"+ getHeight());
-//             if (contentView != null && computeVerticalScrollRange() <= (getScrollY() + getHeight())) {
-//                 onScrollChangeListener.onBottom(l, t, oldl, oldt);
-//             } else if (getScrollY() == 0) {
-//                 onScrollChangeListener.onTop(l, t, oldl, oldt);
-//             } else {
-//                 onScrollChangeListener.onScroll(l, t, oldl, oldt);
-//             }
-//         }catch (Exception e){
-//             e.printStackTrace();
-//         }
-    }
-    public interface OnScrollChangeListener{
-        void onTop(int l, int t, int oldl, int oldt);
-        void onBottom(int l, int t, int oldl, int oldt);
-        void onScroll(int l, int t, int oldl, int oldt);
-    }
-
-    public void setOnScrollChangeListener(OnScrollChangeListener onScrollChangeListener) {
-        this.onScrollChangeListener = onScrollChangeListener;
-    }
 }

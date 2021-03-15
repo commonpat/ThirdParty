@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -46,6 +47,7 @@ import com.utvgo.huya.utils.StringUtils;
 import com.utvgo.huya.utils.ToastUtil;
 import com.utvgo.huya.views.FocusBorderView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class BaseActivity extends RooterActivity implements View.OnFocusChangeListener,
@@ -71,7 +73,16 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     private boolean needTransition = true;
     public static String playingTitle;
     TypesBean typesBean = new TypesBean();
-
+    public Handler baseHandle = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            if(msg.what == 257){
+                finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -323,9 +334,10 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     HuyaApplication.beanActivity = null;
+                    clearCacheHomeKey();
                     //表示按了home键,程序到了后台
-                    finish();
-                    android.os.Process.killProcess(android.os.Process.myPid());
+//                    finish();
+//                    android.os.Process.killProcess(android.os.Process.myPid());
 //                    Process.killProcess(Process.myPid());
                 }
             }
@@ -547,7 +559,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                     } else{
                         QWebViewActivity.navigateUrl(this, navigationBarBean.getHref(), null,null);
                     }
-//                    Intent intent = new Intent(BaseActivity.this, ActivityActivity.class);
+//                    Intent intent = new Intent (BaseActivity.this, ActivityActivity.class);
 //                    intent.putExtra("bgImageUrl",DiffConfig.generateImageUrl(opItem.getImgUrl()));
 //                    startActivity(intent);
                     break;
@@ -598,4 +610,59 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
             onBackPressed();
         }
     }
+    public void clearCache(){
+        final Context context = this;
+
+        Glide.get(context).clearMemory();
+        Log.d(TAG, "clearCache: clearMemory");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Glide.get(context).clearDiskCache();
+                Log.d(TAG, "clearCache: clearDiskCache");
+                try{
+                    File cacheDir = getCacheDir();
+                    deleteFilesByDirectory(cacheDir);
+                }catch(Exception e){
+                    e.printStackTrace();
+
+                }
+            }
+        }).start();
+    }
+    /** * 删除方法 这里只会删除某个文件夹下的文件，如果传入的directory是个文件，将不做处理 * * @param directory */
+    private static void deleteFilesByDirectory(File directory) {
+        if (directory != null && directory.exists() && directory.isDirectory()) {
+            for (File item : directory.listFiles()) {
+                boolean ret = item.delete();
+                Log.d("deleteFiles", ret ? "OK"+  item.getAbsolutePath() : "Failed" + ": delete file " + item.getAbsolutePath());
+            }
+        }
+    }
+    /**
+     * 主页键清缓存，杀进程
+     *
+     * */
+    public void clearCacheHomeKey(){
+        final Context context = this;
+
+        Glide.get(context).clearMemory();
+        Log.d(TAG, "clearCache: clearMemory");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Glide.get(context).clearDiskCache();
+                Log.d(TAG, "clearCache: clearDiskCache");
+                try{
+                    File cacheDir = getCacheDir();
+                    deleteFilesByDirectory(cacheDir);
+                }catch(Exception e){
+                    e.printStackTrace();
+
+                }
+                baseHandle.sendEmptyMessage(257);
+            }
+        }).start();
+    }
+
 }

@@ -56,6 +56,7 @@ import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.NetUtils;
 import com.utvgo.huya.utils.StringUtils;
 import com.utvgo.huya.utils.ToastUtil;
+import com.utvgo.huya.utils.ViewUtil;
 import com.utvgo.huya.views.SmoothVorizontalScrollView;
 
 import java.nio.channels.ScatteringByteChannel;
@@ -88,6 +89,8 @@ public class NewHomeActivity extends BuyActivity{
     CustomVideoView vvSmall;
     @BindView(R.id.iv_home_logo)
     ImageView ivHomeLogo;
+    @BindView(R.id.home_bg)
+    ImageView homeBg;
     Boolean canScrollTop = true;
     private String videoArr[] = null;
     private OpItem videoData = null;
@@ -106,6 +109,7 @@ public class NewHomeActivity extends BuyActivity{
         setContentView(R.layout.activity_new_home);
         ButterKnife.bind(this);
         initView();
+        homeScrollView.setFadingEdge(180);
 
         if(DiffConfig.CurrentTVBox instanceof GZTVBox){
             DiffConfig.deviceId = GZTVBox.getDeviceId(this);
@@ -275,37 +279,6 @@ public class NewHomeActivity extends BuyActivity{
         vvSmall.setFocusable(false);
         setHahaPlayer(vvSmall);
         findViewById(R.id.btn_fl_0).requestFocus();
-        homeScrollView.setOnScrollChangeListener(new SmoothVorizontalScrollView.OnScrollChangeListener() {
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            @Override
-            public void onTop(int l, int t, int oldl, int oldt) {
-//                canScrollTop = true;
-//                Animation animation = new TranslateAnimation(0, 0, 0, 0);
-//                animation.setDuration(500);
-//                animation.setFillAfter(true);
-//                mainNav.startAnimation(animation);
-//                mainHeader.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onBottom(int l, int t, int oldl, int oldt) {
-
-            }
-
-            @Override
-            public void onScroll(int l, int t, int oldl, int oldt) {
-//                if (t > oldt && canScrollTop) {
-//                    canScrollTop = false;
-//                    Animation animation = new TranslateAnimation(0, 0, 0, -80);
-//                    animation.setDuration(500);
-//                    animation.setFillAfter(true);
-//                    mainNav.startAnimation(animation);
-//                    mainHeader.setVisibility(View.INVISIBLE);
-//                    //mainNav.setBackgroundColor(getResources().getColor(R.color.cc));
-//                }
-            }
-        });
     }
 
     @Override
@@ -313,17 +286,10 @@ public class NewHomeActivity extends BuyActivity{
             R.id.btn_fl_11,R.id.btn_fl_12,R.id.btn_fl_13,R.id.btn_fl_14,R.id.btn_fl_15,R.id.btn_fl_16,R.id.btn_fl_17,R.id.btn_fl_18,R.id.btn_fl_19})
     public void onFocusChange(View v, boolean hasFocus) {
         super.onFocusChange(v, hasFocus);
-        if(hasFocus&&v.getId() != R.id.btn_fl_video){
-                 ((RelativeLayout) v.getParent()).bringToFront();
-                 ViewCompat.animate((RelativeLayout) v.getParent())
-                         .scaleX(1.12f)
-                         .scaleY(1.12f)
-                         .start();
-        }else if(v.getId() != R.id.btn_fl_video){
-                 ViewCompat.animate((RelativeLayout)v.getParent())
-                     .scaleX(1)
-                     .scaleY(1)
-                     .start();
+
+        if(v.getId() != R.id.btn_fl_video){
+            ((RelativeLayout) v.getParent()).bringToFront();
+           // ViewUtil.scaleView(hasFocus, (View) v.getParent());
         }
 
     }
@@ -576,9 +542,11 @@ public class NewHomeActivity extends BuyActivity{
                         if (beanInitData != null) {
                             String bgImageUrl = DiffConfig.generateImageUrl(beanInitData.getHomePageResource().getImagUrl());
                             String logoImageUrl = DiffConfig.generateImageUrl(beanInitData.getHomePageResource().getLogoUrl());
-                            if(!"".equals(bgImageUrl)&&!"".equals(logoImageUrl)) {
+                            if(!"".equals(logoImageUrl)) {
                                 Glide.with(NewHomeActivity.this).load(logoImageUrl).into(ivHomeLogo);
-                                // Glide.with(HomeActivity.this).load(bgImageUrl).into(homeBg);
+                            }
+                            if(!"".equals(bgImageUrl)){
+                                Glide.with(NewHomeActivity.this).load(bgImageUrl).into(homeBg);
                             }
 //                        if (HuyaApplication.hadBuy()) {
 //                            //会员不弹活动
@@ -607,6 +575,7 @@ public class NewHomeActivity extends BuyActivity{
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            clearCache();
             turnHome();
         }
     }

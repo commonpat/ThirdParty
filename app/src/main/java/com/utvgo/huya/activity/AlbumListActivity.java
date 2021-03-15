@@ -7,6 +7,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +42,8 @@ import butterknife.OnFocusChange;
 public class AlbumListActivity extends BasePageActivity{
     @BindView(R.id.content_name)
     TextView content_name;
+    @BindView(R.id.activity_RootView)
+    FrameLayout frameLayout;
     private List<OpItem> contentData = new ArrayList<>();
     private int typeId = 81;
     private String name = "";
@@ -66,6 +69,9 @@ public class AlbumListActivity extends BasePageActivity{
         this.typeId = getIntent().getIntExtra("typeId",81);
         this.string = getIntent().getStringExtra("string");
         this.name = getIntent().getStringExtra("name");
+        if(typeId == 80 || typeId == 82){
+            frameLayout.setBackgroundResource(R.mipmap.bg_zhubo);
+        }
         TypesBean typesBean = JSON.parseObject(this.string,new TypeReference<TypesBean>(){});
         content_name.setText(this.name);
         runOnUiThread(new Runnable() {
