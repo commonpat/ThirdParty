@@ -378,26 +378,4 @@ public class CategoryListActivity extends BaseActivity {
         updateItemContent();
     }
 
-    @SuppressLint("RestrictedApi")
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-//        if(event.getKeyCode()==KeyEvent.KEYCODE_DPAD_UP){
-//            if(getCurrentFocus().getId()==R.id.btn_fl_0||getCurrentFocus().getId()==R.id.btn_fl_1||
-//                    getCurrentFocus().getId()==R.id.btn_fl_3||getCurrentFocus().getId()==R.id.btn_fl_4){
-//
-//                switch (pkId) {
-//                    case 156:
-//                        getCurrentFocus().setNextFocusUpId(R.id.btn_tab_1);
-//                       break;
-//                    case 157:
-//                        getCurrentFocus().setNextFocusUpId(R.id.btn_tab_2);
-//                        break;
-//                    case 158:
-//                        getCurrentFocus().setNextFocusUpId(R.id.btn_tab_3);
-//                        break;
-//                }
-//            }
-//        }
-        return super.dispatchKeyEvent(event);
-    }
 }

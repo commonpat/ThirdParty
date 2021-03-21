@@ -24,8 +24,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:screenOrientation="landscape"
-        tools:replace="icon,label,theme"
         android:theme="@style/AppTheme"
+        android:largeHeap="true"
         >
         <!--<meta-data-->
             <!--android:name="com.google.android.actions"-->

@@ -2,6 +2,9 @@ package com.utvgo.huya.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -44,6 +47,8 @@ public class AlbumListActivity extends BasePageActivity{
     TextView content_name;
     @BindView(R.id.activity_RootView)
     FrameLayout frameLayout;
+    @BindView(R.id.album_list_bg)
+    ImageView albumListBg;
     private List<OpItem> contentData = new ArrayList<>();
     private int typeId = 81;
     private String name = "";
@@ -69,8 +74,11 @@ public class AlbumListActivity extends BasePageActivity{
         this.typeId = getIntent().getIntExtra("typeId",81);
         this.string = getIntent().getStringExtra("string");
         this.name = getIntent().getStringExtra("name");
-        if(typeId == 80 || typeId == 82){
-            frameLayout.setBackgroundResource(R.mipmap.bg_zhubo);
+        if(typeId == 80 || typeId == 83){
+            albumListBg.setImageDrawable(getResources().getDrawable(R.mipmap.bg_zhubo));
+
+        }else {
+            albumListBg.setImageDrawable(getResources().getDrawable(R.mipmap.bg_second));
         }
         TypesBean typesBean = JSON.parseObject(this.string,new TypeReference<TypesBean>(){});
         content_name.setText(this.name);
@@ -105,12 +113,12 @@ public class AlbumListActivity extends BasePageActivity{
             R.id.album_btn_6,R.id.album_btn_7,R.id.album_btn_8})
     public void onFocusChange(View v, boolean hasFocus) {
         super.onFocusChange(v, hasFocus);
-        if (hasFocus){
-            ((View) v.getParent()).bringToFront();
-            ViewCompat.animate((View) v.getParent()).scaleY(1.12f).scaleX(1.12f).start();
-        }else {
-            ViewCompat.animate((View) v.getParent()).scaleY(1.00f).scaleX(1.00f).start();
-        }
+//        if (hasFocus){
+//            ((View) v.getParent()).bringToFront();
+//            ViewCompat.animate((View) v.getParent()).scaleY(1.12f).scaleX(1.12f).start();
+//        }else {
+//            ViewCompat.animate((View) v.getParent()).scaleY(1.00f).scaleX(1.00f).start();
+//        }
     }
 
     @Override
@@ -126,4 +134,26 @@ public class AlbumListActivity extends BasePageActivity{
     void getData() {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+       // releaseImageViewResouce();
+
+    }
+
+    private void releaseImageViewResouce() {
+            if (albumListBg == null) return;
+            Drawable drawable = albumListBg.getDrawable();
+            if (drawable != null && drawable instanceof BitmapDrawable) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                if (bitmap != null && !bitmap.isRecycled()) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+            }
+         System.gc();
+    }
+
 }

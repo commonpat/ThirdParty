@@ -14,6 +14,7 @@
         android:layout_height="239dp"
         android:id="@+id/i2"
         android:focusable="true"
+        android:nextFocusDown="@id/i4"
         android:layout_marginLeft="972dp"
         android:layout_marginTop="182dp"/>
     <ImageView
@@ -28,6 +29,7 @@
         android:layout_height="239dp"
         android:id="@+id/i4"
         android:focusable="true"
+        android:nextFocusDown="@id/i6"
         android:layout_marginLeft="847dp"
         android:layout_marginTop="308dp"/>
     <ImageView

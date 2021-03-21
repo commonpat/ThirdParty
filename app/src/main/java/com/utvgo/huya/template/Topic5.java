@@ -47,6 +47,21 @@ public class Topic5 {
             currentId++;
             imageViews.get(i).setId(currentId);
         }
+        imageViews.get(0).setNextFocusDownId(imageViews.get(2).getId());
+        imageViews.get(1).setNextFocusDownId(imageViews.get(3).getId());
+        imageViews.get(2).setNextFocusDownId(imageViews.get(4).getId());
+        imageViews.get(3).setNextFocusDownId(imageViews.get(5).getId());
+        moreFocusImage.setNextFocusDownId(imageViews.get(0).getId());
+
+
+        imageViews.get(5).setNextFocusUpId(imageViews.get(3).getId());
+        imageViews.get(4).setNextFocusUpId(imageViews.get(2).getId());
+        imageViews.get(2).setNextFocusUpId(imageViews.get(0).getId());
+        imageViews.get(3).setNextFocusUpId(imageViews.get(1).getId());
+        imageViews.get(1).setNextFocusUpId(moreFocusImage.getId());
+
+
+
         imageFocusViews.add((ImageView) activity.findViewById(R.id.if1));
         imageFocusViews.add((ImageView) activity.findViewById(R.id.if2));
         imageFocusViews.add((ImageView) activity.findViewById(R.id.if3));

@@ -237,11 +237,11 @@ public class NetworkService {
     }
     public void getVersionInfo(Context context,String s,final JsonCallback<BeanUpgrade> callback){
         String url;
-        if (BuildConfig.DEBUG){
-            url = "http://172.16.146.56:9091/utvgo-tv-mvc/tv/pageCenter/getVersionInfo.utvgo?projectType=com.utvgo.huya";
-        }else {
-            url = "";
-        }
+//        if (BuildConfig.DEBUG){
+//            url = "http://172.16.146.56:9091/utvgo-tv-mvc/tv/pageCenter/getVersionInfo.utvgo?projectType=com.utvgo.huya";
+//        }else {
+            url = DiffConfig.baseHost+"/utvgo-tv-mvc/tv/pageCenter/getVersionInfo.utvgo?projectType=com.utvgo.huya";
+       // }
         NetworkUtils.get(context,url,callback);
     }
 }

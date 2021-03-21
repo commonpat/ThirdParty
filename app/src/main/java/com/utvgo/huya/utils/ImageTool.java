@@ -1,5 +1,6 @@
 package com.utvgo.huya.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.ImageView;
 
@@ -15,7 +16,8 @@ public class ImageTool {
 
     public static void loadImageWithUrl(Context context, String url, ImageView imageView) {
         //不要placeholder
-        Glide.with(context).load(url)/*.skipMemoryCache(true).placeholder(R.drawable.default_small)*/.into(imageView);
+
+        Glide.with(context).load(url).into(imageView);
     }
 
     public static void loadCircleImageWithUrl(Context context, String url, ImageView imageView) {

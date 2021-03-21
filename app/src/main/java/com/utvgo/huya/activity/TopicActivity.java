@@ -374,7 +374,7 @@ public class TopicActivity extends BuyActivity {
         try {
             switch (type) {
                 case 0:
-                    borderView.setBorderBitmapResId(0, (int) getResources().getDimension(R.dimen.dp38),
+                    borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default, (int) getResources().getDimension(R.dimen.dp38),
                             (int) getResources().getDimension(R.dimen.dp50));
                     initView(beanTopic);
                     page.setVisibility(View.VISIBLE);

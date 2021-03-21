@@ -7,7 +7,7 @@
         android:id="@+id/home_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/home_scroll_bg" />
+        android:background="@drawable/home_scroll_bg" />
 
        <com.utvgo.huya.views.SmoothVorizontalScrollView
            android:layout_width="1280dp"

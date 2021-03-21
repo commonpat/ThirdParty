@@ -109,7 +109,7 @@ public class NewHomeActivity extends BuyActivity{
         setContentView(R.layout.activity_new_home);
         ButterKnife.bind(this);
         initView();
-        homeScrollView.setFadingEdge(180);
+        homeScrollView.setFadingEdge(780);
 
         if(DiffConfig.CurrentTVBox instanceof GZTVBox){
             DiffConfig.deviceId = GZTVBox.getDeviceId(this);
