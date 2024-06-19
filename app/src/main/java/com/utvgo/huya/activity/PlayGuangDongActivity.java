@@ -17,6 +17,7 @@ import com.utvgo.handsome.diff.Platform;
 import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.interfaces.PlayerInterface;
 import com.utvgo.handsome.utils.XLog;
+import com.utvgo.huya.utils.ToastUtil;
 
 //import com.utvgo.qqmusic.interfaces.PlayerInterface;
 //import com.utvgo.qqmusic.utils.XLog;
@@ -33,7 +34,7 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
     //private final String TAG = "PlayGuizhouActivity";
     protected VideoView videoView;
     private boolean isPlayer = false;
-
+    boolean isSeeking = false;
     @Override
     public void  hahaPlayUrl(String playUrl) {
 
@@ -41,7 +42,7 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
         vodPayingTime = 0;
 
         if(!isPlayer) {
-            Log.d(TAG, "hahaPlayUrl: videoview");
+            Log.d(TAG, "hahaPlayUrl: videoview"+playUrl);
             videoView.setVisibility(View.VISIBLE);
             videoView.setVideoURI(Uri.parse(assetId));
             videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -59,6 +60,7 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
                     mp.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
                         @Override
                         public void onSeekComplete(MediaPlayer mp) {
+                            isSeeking = false;
                             Log.d(TAG, "onSeekComplete: "+ mp.getCurrentPosition());
 
                         }
@@ -69,6 +71,7 @@ public class PlayGuangDongActivity extends PlayBaseActivity implements PlayerInt
                 @Override
                 public boolean onError(MediaPlayer mp, int what, int extra) {
                     Log.e("PlayVideoActivity", "onError: what " + what + "  extra " + extra);
+                    ToastUtil.show(getApplicationContext(),"播放出错了，播放下一首");
                     hahaPlayEnd(0.1f);
                     return true;
                 }

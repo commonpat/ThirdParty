@@ -41,7 +41,7 @@ public class ExitNewActivity extends PlayGuangDongActivity{
         exitNewBack.requestFocus();
         try {
             loadExitDate();
-            stat("退出页");
+            stat("退出页","");
         }catch (Exception e){
             hiFiDialogTools.showtips(this,"获取数据有误,请重试",null);
         }

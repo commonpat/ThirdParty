@@ -8,6 +8,10 @@ public interface PlatformInterface {
 
     boolean isP60();
 
+    boolean isP30();
+
+    boolean isIptv();
+
     boolean isHuBei();
 
     boolean isHuNan();
@@ -23,7 +27,5 @@ public interface PlatformInterface {
     boolean isFML1();
 
     boolean isZJSM();
-
-    boolean isHN();
 
 }

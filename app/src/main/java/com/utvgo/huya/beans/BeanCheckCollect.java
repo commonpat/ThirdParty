@@ -32,6 +32,15 @@ public class BeanCheckCollect  {
     }
     public static class Data{
         private String isCollect;
+        private int id;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public String getIsCollect() {
             return isCollect;

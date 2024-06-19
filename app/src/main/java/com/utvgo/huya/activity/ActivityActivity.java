@@ -1,6 +1,5 @@
 package com.utvgo.huya.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -10,9 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.utvgo.handsome.diff.DiffConfig;
-import com.utvgo.handsome.diff.GZTVPurchase;
 import com.utvgo.handsome.diff.IPurchase;
-import com.utvgo.handsome.interfaces.CommonCallback;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.utils.ToastUtil;
@@ -58,42 +55,6 @@ public class ActivityActivity extends BaseActivity {
 
                                 }
                             });*/
-                        if (!HuyaApplication.hadBuy()) {
-                            if (DiffConfig.CurrentPurchase instanceof GZTVPurchase) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        GZTVPurchase purchase = (GZTVPurchase) DiffConfig.CurrentPurchase;
-                                        purchase.foo(ActivityActivity.this, new GZTVPurchase.TryBestCallback() {
-                                            @Override
-                                            public void d(String s) {
-                                                final String msg = s;
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void success(String s) {
-                                                ToastUtil.show(ActivityActivity.this, "你已经是虎牙TV的尊贵会员！");
-
-                                                ActivityActivity.this.finish();
-
-
-                                            }
-
-                                            @Override
-                                            public void fail(String s) {
-                                                ToastUtil.show(ActivityActivity.this, "订购失败！");
-                                            }
-                                        });
-                                    }
-                                }).start();
-                            }
-                        }
                     }
                 });
             }

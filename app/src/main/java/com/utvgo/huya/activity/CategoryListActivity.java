@@ -45,6 +45,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.VIDEOLIST;
+
 public class CategoryListActivity extends BaseActivity {
 
     @BindView(R.id.tv_count)
@@ -88,6 +90,7 @@ public class CategoryListActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        stat(pkId+"节目列表",VIDEOLIST);
         showCheck(checkId);
     }
 
@@ -350,7 +353,7 @@ public class CategoryListActivity extends BaseActivity {
                         if(data.isOk())
                         {
                             layout(data.getData());
-                            stat("专辑播放-" + data.getData().getName());
+                            stat("专辑播放-" + data.getData().getName(),VIDEOLIST);
                         }
                     }
                 });
@@ -378,4 +381,9 @@ public class CategoryListActivity extends BaseActivity {
         updateItemContent();
     }
 
+    @Override
+    protected void onDestroy() {
+        clearCache();
+        super.onDestroy();
+    }
 }

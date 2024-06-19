@@ -1,8 +1,10 @@
 package com.utvgo.huya.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +13,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.UserFavoriteData;
+import com.utvgo.huya.constant.ConstantEnum;
 import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.ToastUtil;
+import com.utvgo.huya.utils.ViewUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +67,12 @@ public class UserFavoriteActivity extends BaseActivity {
         createBorderView(this);
         initView();
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -94,6 +107,7 @@ public class UserFavoriteActivity extends BaseActivity {
                 ((TextView) frameLayout.getChildAt(1)).setTextColor(ContextCompat.getColor(this, R.color.white));
                 ((TextView) ((LinearLayout) frameLayout.getChildAt(2)).getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.white));
             }
+            ViewUtil.runText(v,hasFocus);
         }
         super.onFocusChange(v, hasFocus);
     }
@@ -109,6 +123,14 @@ public class UserFavoriteActivity extends BaseActivity {
             } else if ((focusView.getId() == R.id.fl_song1 || focusView.getId() == R.id.fl_song3 || focusView.getId() == R.id.fl_song5 || focusView.getId() == R.id.fl_song7
                     || focusView.getId() == R.id.fl_song9) && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {//上一页
                 showOther(flSongList, -2000);
+                ret = true;
+            }
+            if((focusView.getId() == R.id.fl_song1||(focusView.getId() == R.id.fl_song2))&& event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP){
+                showOther(flSongList, -2000);
+                ret =  true;
+            }
+            if((focusView.getId() == R.id.fl_song9||(focusView.getId() == R.id.fl_song10))&& event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN){
+                showOther(flSongList, 2000);
                 ret = true;
             }
         }
@@ -146,11 +168,25 @@ public class UserFavoriteActivity extends BaseActivity {
         if (itemList.contains(v)) {
             ArrayList<ProgramInfoBase> list = new ArrayList<>();
             int index = itemList.indexOf(v);
-            for (int i = 0; i < dataList.size(); i++) {
+           // for (int i = 0; i < dataList.size(); i++) {
                 UserFavoriteData.Item item = dataList.get(index);
                 list.add(item.toProgram());
+           // }
+           // PlayVideoActivity.play(this, list, index, false);
+            final ConstantEnum.MediaType mediaType = ConstantEnum.MediaType.video;
+            Intent intent = new Intent(this, PlayVideoActivity.class);
+            intent.putExtra("playIndex", index);
+            intent.putExtra("fileType", mediaType.ordinal());
+            intent.putExtra("isExperience", false);
+            intent.putExtra("isHistory",true);
+            if(list != null)
+            {
+                Gson gson = new Gson();
+                Type typeToken = new TypeToken<ArrayList<ProgramInfoBase>>(){}.getType();
+                String jsonString = gson.toJson(list, typeToken);
+                intent.putExtra("playList", jsonString);
             }
-            PlayVideoActivity.play(this, list, index, false);
+            startActivity(intent);
         }
     }
 
@@ -168,7 +204,8 @@ public class UserFavoriteActivity extends BaseActivity {
 
         for (int i = 0; i < list.size() && i < itemList.size(); i++) {
             UserFavoriteData.Item dataBean = list.get(i);
-            nameTVList.get(i).setText(dataBean.getProgramName());
+            String name = !TextUtils.isEmpty(dataBean.getVideoName())?dataBean.getVideoName():dataBean.getProgramName();
+            nameTVList.get(i).setText(name);
             indexTVList.get(i).setText((pageNo - 1) * pageSize + i + 1 + "");
             singNameList.get(i).setVisibility(View.GONE);
             itemList.get(i).setVisibility(View.VISIBLE);

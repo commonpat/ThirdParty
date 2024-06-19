@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,19 +30,23 @@ import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.IPurchase;
 import com.utvgo.handsome.diff.ITVBox;
 import com.utvgo.handsome.diff.Platform;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.handsome.utils.TopWayBroacastUtils;
 import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BaseResponse;
+import com.utvgo.huya.beans.BeanCheckCollect;
 import com.utvgo.huya.beans.BeanStatistics;
 import com.utvgo.huya.beans.OpItem;
 import com.utvgo.huya.beans.ProgramContent;
 import com.utvgo.huya.beans.ProgramInfoBase;
 import com.utvgo.huya.beans.TPageData;
 import com.utvgo.huya.beans.VideoInfo;
+import com.utvgo.huya.constant.ConstantEnum;
 import com.utvgo.huya.constant.MVAlbumTemplate;
 import com.utvgo.huya.net.NetworkService;
 import com.utvgo.huya.utils.HiFiDialogTools;
@@ -56,6 +61,12 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.media.MediaPlayer.MEDIA_INFO_BUFFERING_END;
+import static android.media.MediaPlayer.MEDIA_INFO_BUFFERING_START;
+import static com.utvgo.huya.constant.ConstantEnumHuya.Asset_Id;
+import static com.utvgo.huya.constant.ConstantEnumHuya.Category_Id;
+import static com.utvgo.huya.constant.ConstantEnumHuya.VIDEOLIST;
+import static com.utvgo.huya.constant.ConstantEnumHuya.VIDEO_DETAIL;
 import static com.utvgo.huya.constant.MVAlbumTemplate.BACK;
 import static com.utvgo.huya.constant.MVAlbumTemplate.MORE;
 import static com.utvgo.huya.constant.MVAlbumTemplate.VIDEOFOCUS;
@@ -83,6 +94,10 @@ public class MediaAlbumActivity extends BuyActivity {
     Button btnFlVideo;
     @BindView(R.id.album_title)
     TextView albumTitle;
+    @BindView(R.id.image_loading)
+    ImageView imageLoading;
+    @BindView(R.id.image_pause)
+    ImageView imagePause;
 
     private View oldView;
     private String showType = "";
@@ -108,7 +123,7 @@ public class MediaAlbumActivity extends BuyActivity {
     long currentMediaDuration = 0;
     private int playFocusIndex = 0;
     private int playFocusIndexOld = 0;
-
+    private String ifCollectton = "no";
 
 
     public static void show(final Context context, final int albumId)
@@ -129,7 +144,7 @@ public class MediaAlbumActivity extends BuyActivity {
         this.multisetType = getIntent().getIntExtra("multiSetType", 4);
         this.channelId = getIntent().getIntExtra("channelId", 36);
         btnFlVideo.setOnFocusChangeListener(this);
-
+        imageLoading.setVisibility(View.VISIBLE);
         setHahaPlayer(video);
         runOnUiThread(new Runnable() {
             @Override
@@ -162,10 +177,16 @@ public class MediaAlbumActivity extends BuyActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (videoView != null) {
-            hahaPauseOrResumePlay();
-            this.freeTime = (int) (nowTime/1000+10);
-        }
+        DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
+            @Override
+            public void onFinished(String message) {
+
+            }
+        });
+//        if (videoView != null && DiffConfig.CurrentPurchase.isPurchased()) {
+//            hahaPauseOrResumePlay();
+//            //this.freeTime = (int) (nowTime/1000+10);
+//        }
         /*
         if (hadCallBuyView  && !isExperience) {
             hadCallBuyView = false;
@@ -242,7 +263,7 @@ public class MediaAlbumActivity extends BuyActivity {
                             }
                         }
                 );
-                stat("视频播放-" + videoBean.getName());
+                stat("视频播放-" + videoBean.getName(),VIDEO_DETAIL);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -261,6 +282,7 @@ public class MediaAlbumActivity extends BuyActivity {
             VideoInfo videoBean = this.albumData.getVideos().get(this.playIndex);
             //hahaPlayUrl(videoBean.getMediaSourceUrl());
             this.freeTime = videoBean.getFreeSecond();
+
             getHahaPlayerUrl(videoBean.getMediaSourceUrl());
 
         }
@@ -269,6 +291,29 @@ public class MediaAlbumActivity extends BuyActivity {
     @Override
     public void getHahaPlayerUrl(String vodID) {
         VideoInfo videoBean = this.albumData.getVideos().get(this.playIndex);
+        assetName = videoBean.getName();
+        asset = vodID;
+        //imageLoading.setVisibility(View.INVISIBLE);
+        videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+            @Override
+            public boolean onInfo(MediaPlayer mediaPlayer, int i, int i1) {
+                Log.d(TAG, "onInfo:player what"+i+"____"+i1);
+               // isCacheing = true;
+                if(i == MEDIA_INFO_BUFFERING_START ){
+                    hahaPauseOrResumePlay();
+                    imageLoading.setVisibility(View.VISIBLE);
+                    return true;
+
+                }else if(i == MEDIA_INFO_BUFFERING_END){
+                    imageLoading.setVisibility(View.INVISIBLE);
+                    hahaPauseOrResumePlay();
+                    return true;
+                }else {
+                    imageLoading.setVisibility(View.INVISIBLE);
+                }
+                return false;
+            }
+        });
         super.getHahaPlayerUrl(videoBean.getMediaSourceUrl());
     }
 
@@ -282,28 +327,37 @@ public class MediaAlbumActivity extends BuyActivity {
     @Override
     public void onDuration(long l) {
         this.currentMediaDuration = l;
+        imageLoading.setVisibility(View.INVISIBLE);
+        imagePause.setVisibility(View.INVISIBLE);
         startStatisticsPlay(this.currentMediaDuration);
         super.onDuration(l);
+      //  TopWayBroacastUtils.getInstance().playEvent(this, asset, "PLAY", assetName, vodDur / 1000 + "", String.valueOf(vodPayingTime * timeStep / 1000), Asset_Id, Category_Id);
+
     }
 
     @Override
     public void setPlayTime(long nowTime, long allTime) {
         super.setPlayTime(nowTime, allTime);
         this.nowTime = nowTime;
+        Log.d(TAG, "setPlayTime: "+nowTime/1000  +"  freeTime:"+freeTime);
         needBuy();
     }
 
     private boolean needBuy() {
-        if(!HuyaApplication.hadBuy()&&isToShowBuy){
-            if(!isFree) {
-                if (freeTime != -1 && !isExperience) {
-                    if (nowTime / 1000 > freeTime) {
-
-                        showBuy(albumMid);
-                        return true;
+        if(!HuyaApplication.hadBuy()){
+                if (!isFree) {
+                    if (freeTime != -1 && !isExperience) {
+                        if (nowTime / 1000 > freeTime) {
+                            hahaPausePlay();
+                          //  TopWayBroacastUtils.getInstance().playEvent(this, asset, "PAUSE", assetName,String.valueOf(vodDur/1000),String.valueOf(vodPayingTime * timeStep/1000),Asset_Id,Category_Id);
+                            imagePause.setVisibility(View.VISIBLE);
+                            if(!hadCallBuyView) {
+                                showBuy(albumMid);
+                            }
+                            return true;
+                        }
                     }
                 }
-            }
         }
         return false;
     }
@@ -318,22 +372,28 @@ public class MediaAlbumActivity extends BuyActivity {
                 playVideoFullScreen();
                 break;
             }
+            case R.id.iv_collect:
 
+                break;
           default:
-            {
-                if(System.currentTimeMillis() > (timesmap + 2000)) {
-                    timesmap = System.currentTimeMillis();
-                     @SuppressLint("ResourceType") int index =  view.getId()-1000;
+            {   @SuppressLint("ResourceType") int index =  view.getId()-1000;
+
+                if(index !=playFocusIndex) {
+                    hadCallBuyView = false;
                     playFocusIndex = index;
                     playFocusIndexOld = playFocusIndex;
                     albumTitle.setText(this.albumData.getVideos().get(index).getName());
                     if (index >= 0) {
+                        imageLoading.setVisibility(View.VISIBLE);
                         playMedia(index);
                     }
-                }else {
+                }else if(System.currentTimeMillis() < (timesmap + 2000) ) {
+
                     playVideoFullScreen();
                 }
+                timesmap = System.currentTimeMillis();
             }
+            break;
         }
     }
 
@@ -367,17 +427,16 @@ public class MediaAlbumActivity extends BuyActivity {
             super.showBuy(vodID);
             hadCallBuyView = true;
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-            }
-        },2000);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                finish();
+//            }
+//        },2000);
     }
 
     @Override
     public void onBackPressed() {
-
             finish();
     }
 
@@ -450,14 +509,14 @@ public class MediaAlbumActivity extends BuyActivity {
     *** Network
      */
    private void loadData(){
-        NetworkService.defaultService().fetchProgramContent(this, this.albumId, this.multisetType + "", this.channelId,  new JsonCallback<BaseResponse<ProgramContent>>() {
+        NetworkService.defaultService().fetchProgramContent(this, this.albumId, this.multisetType + "", this.channelId, "", new JsonCallback<BaseResponse<ProgramContent>>() {
             @Override
             public void onSuccess(Response<BaseResponse<ProgramContent>> response) {
                 BaseResponse<ProgramContent> data = response.body();
                 if(data.isOk()){
                     layout(data.getData());
                     try{
-                        stat("专辑播放-" + data.getData().getName());
+                        stat("专辑播放-" + data.getData().getName(),VIDEOLIST);
                         }catch (Exception e){
                             HiFiDialogTools.getInstance().showtips(MediaAlbumActivity.this, "获取数据失败，请稍后重试", null);
                         }
@@ -498,7 +557,7 @@ public class MediaAlbumActivity extends BuyActivity {
             itemView.setFocusable(true);
             itemView.setOnFocusChangeListener(this);
             itemView.setOnClickListener(this);
-            itemView.setNextFocusLeftId(R.id.btn_fl_video);
+            itemView.setNextFocusLeftId(itemView.getId());
             TextView textView = itemView.findViewById(R.id.album_item_content_text);
             textView.setText(videoInfo.getName());
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -215,7 +215,7 @@ public class VideoInfo implements Serializable {
             if(this.videoUrlHigh.startsWith("http")){
                 return this.videoUrlHigh;
             }else {
-                this.videoUrlHigh = DiffConfig.playHost+videoUrlHigh;
+               // this.videoUrlHigh = DiffConfig.playHost+videoUrlHigh;
                 return this.videoUrlHigh;
             }
         }
@@ -224,7 +224,7 @@ public class VideoInfo implements Serializable {
             if(this.videoUrlFluency.startsWith("http")){
                 return this.videoUrlFluency;
             }else {
-                this.videoUrlFluency = DiffConfig.playHost+videoUrlFluency;
+              //  this.videoUrlFluency = DiffConfig.playHost+videoUrlFluency;
                 return this.videoUrlFluency;
             }
         }

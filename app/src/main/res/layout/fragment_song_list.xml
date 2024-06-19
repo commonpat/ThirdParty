@@ -55,8 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:visibility="gone"
-                    android:src="@drawable/mv_tag" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -105,8 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:visibility="gone"
-                    android:src="@drawable/mv_tag" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -154,7 +152,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:src="@drawable/mv_tag"
                     android:visibility="gone"/>
 
                 <TextView
@@ -189,7 +186,7 @@
                 android:text="4" />
 
             <LinearLayout
-                android:layout_width="292dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
@@ -203,7 +200,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:src="@drawable/mv_tag"
                     android:visibility="gone" />
 
                 <TextView
@@ -252,8 +248,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:visibility="gone"
-                    android:src="@drawable/mv_tag" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -301,8 +296,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:visibility="gone"
-                    android:src="@drawable/mv_tag" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -351,7 +345,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
                     android:visibility="gone"
-                    android:src="@drawable/mv_tag" />
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -400,7 +394,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
                     android:visibility="gone"
-                    android:src="@drawable/mv_tag" />
+                   />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -449,7 +443,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
                     android:visibility="gone"
-                    android:src="@drawable/mv_tag" />
+                  />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -497,8 +491,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:visibility="gone"
-                    android:src="@drawable/mv_tag" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"

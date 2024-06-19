@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.lzy.okgo.model.Response;
+import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.huya.R;
 import com.utvgo.huya.beans.BeanExitPage;
@@ -76,15 +77,15 @@ public class ExitActivity extends BaseActivity {
                  beanExitPage = response.body();
                 ImageView[] imgViews= new ImageView[]{ivImg0,ivImg1,ivImg2,ivImg3};
                 for (int i=0; i<imgViews.length; i++) {
-                    Glide.with(ExitActivity.this).load( beanExitPage.getImageProfix()+beanExitPage.getData().get(i).getBgImgUrl()).into(imgViews[i]);
+                    Glide.with(ExitActivity.this).load(DiffConfig.generateImageUrl(beanExitPage.getData().get(i).getBgImgUrl())).into(imgViews[i]);
                 }
                 focusView.getViewTreeObserver().addOnGlobalFocusChangeListener(ExitActivity.this);
                 ivImg0.requestFocus();
-                Glide.with(ExitActivity.this).load(beanExitPage.getImageProfix() + beanExitPage.getData().get(0).getBgImgUrl()).into(exitRoot);
+                Glide.with(ExitActivity.this).load(DiffConfig.generateImageUrl(beanExitPage.getData().get(0).getBgImgUrl())).into(exitRoot);
                 focusView.setFocusView(ivImg0,R.mipmap.border_focus_style_default);
             }
         });
-       stat("退出挽留页");
+       stat("退出挽留页","");
     }
 
     @OnClick({R.id.iv_img0,R.id.iv_img1,R.id.iv_img2,R.id.iv_img3, R.id.btn_back, R.id.btn_exit})
@@ -149,16 +150,16 @@ public class ExitActivity extends BaseActivity {
             focusView.setFocusView(newFocus, R.mipmap.border_focus_style_default);
             switch (newFocus.getId()) {
                 case R.id.iv_img0:
-                    Glide.with(this).load(beanExitPage.getImageProfix() + beanExitPage.getData().get(0).getBgImgUrl()).into(exitRoot);
+                    Glide.with(this).load(DiffConfig.generateImageUrl(beanExitPage.getData().get(0).getBgImgUrl())).into(exitRoot);
                     break;
                 case R.id.iv_img1:
-                    Glide.with(this).load(beanExitPage.getImageProfix() +  beanExitPage.getData().get(1).getBgImgUrl()).into(exitRoot);
+                    Glide.with(this).load(DiffConfig.generateImageUrl(beanExitPage.getData().get(1).getBgImgUrl())).into(exitRoot);
                     break;
                 case R.id.iv_img2:
-                    Glide.with(this).load(beanExitPage.getImageProfix() +  beanExitPage.getData().get(2).getBgImgUrl()).into(exitRoot);
+                    Glide.with(this).load(DiffConfig.generateImageUrl(beanExitPage.getData().get(2).getBgImgUrl())).into(exitRoot);
                     break;
                 case R.id.iv_img3:
-                    Glide.with(this).load(beanExitPage.getImageProfix() +  beanExitPage.getData().get(3).getBgImgUrl()).into(exitRoot);
+                    Glide.with(this).load(DiffConfig.generateImageUrl(beanExitPage.getData().get(3).getBgImgUrl())).into(exitRoot);
                     break;
                 default:
                     focusView.setVisibility(View.INVISIBLE);

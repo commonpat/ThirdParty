@@ -7,12 +7,12 @@
 
     <ImageView
         android:id="@+id/iv_home_logo"
-        android:layout_width="243dp"
-        android:layout_height="67dp"
+        android:layout_width="269dp"
+        android:layout_height="62dp"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="40dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/video_logo"/>
+        android:src="@mipmap/logo_index" />
 
     <FrameLayout android:layout_width="1166dp"
                   android:layout_height="wrap_content"

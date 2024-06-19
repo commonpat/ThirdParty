@@ -35,7 +35,9 @@ public class Topic5 {
         backFocusImage = (ImageView) activity.findViewById(R.id.back_focus);
         backImage = (ImageView) activity.findViewById(R.id.back);
         moreFocusImage = (ImageView) activity.findViewById(R.id.more_focus);
+        moreFocusImage.setVisibility(View.GONE);
         moreImage = (ImageView) activity.findViewById(R.id.more);
+        moreImage.setVisibility(View.GONE);
         imageViews.add((ImageView) activity.findViewById(R.id.i1));
         imageViews.add((ImageView) activity.findViewById(R.id.i2));
         imageViews.add((ImageView) activity.findViewById(R.id.i3));
@@ -58,7 +60,7 @@ public class Topic5 {
         imageViews.get(4).setNextFocusUpId(imageViews.get(2).getId());
         imageViews.get(2).setNextFocusUpId(imageViews.get(0).getId());
         imageViews.get(3).setNextFocusUpId(imageViews.get(1).getId());
-        imageViews.get(1).setNextFocusUpId(moreFocusImage.getId());
+       // imageViews.get(1).setNextFocusUpId(moreFocusImage.getId());
 
 
 

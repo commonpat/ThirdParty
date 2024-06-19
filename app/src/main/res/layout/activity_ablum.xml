@@ -16,7 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"/>
-    <include android:id="@+id/activity_album_default" layout="@layout/activity_album_default_new" android:visibility="visible"/>
+
+    <include
+        android:id="@+id/activity_album_default"
+        layout="@layout/activity_album_default_new"
+        android:visibility="visible" />
     <include android:id="@+id/activity_album_five" layout="@layout/activity_album_five" android:visibility="gone"/>
     <include android:id="@+id/activity_album_four" layout="@layout/activity_album_four" android:visibility="gone"/>
 

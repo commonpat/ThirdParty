@@ -45,6 +45,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.VIDEOLIST;
+
 public class TopicActivity extends BuyActivity {
 
     @BindView(R.id.topic_default)
@@ -323,16 +325,12 @@ public class TopicActivity extends BuyActivity {
 
     @Override
     public void onBackPressed() {
-        if (isRecommendExit) {
-            setResult(RESULT_CANCELED);
-        } else {
-            setResult(RESULT_OK);
-        }
         finish();
     }
 
     @Override
     protected void onDestroy() {
+        clearCache();
         super.onDestroy();
         releaseImageViewResouce();
     }
@@ -367,7 +365,7 @@ public class TopicActivity extends BuyActivity {
         type = StringUtils.intValueOfString(bean.getShowType());
         loadImage(ivBg, DiffConfig.generateImageUrl(bean.getImgUrl()));
         showTopic(type, bean);
-        stat("专题-" + bean.getName());
+        stat("专题-" + bean.getName(),VIDEOLIST);
     }
 
     private void showTopic(int type, BeanTopic beanTopic) {

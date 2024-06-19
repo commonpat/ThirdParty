@@ -141,13 +141,14 @@
                 android:text="4" />
 
             <LinearLayout
-                android:layout_width="292dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/song_list"
+                    android:singleLine="true"
                     android:text="I am yong bin" />
 
             </LinearLayout>

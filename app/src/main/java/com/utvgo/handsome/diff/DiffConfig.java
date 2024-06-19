@@ -27,18 +27,19 @@ public class DiffConfig {
     public static String TestAudioUrl = TestVideoUrl;
     public static String WebUrlBase;
     public static String dataHost;
+    public static String UserCenter;
 
     static IEnv GlobalEnv = null;
     public static ITVBox CurrentTVBox = null;
     public static IPurchase CurrentPurchase = null;
     public static String deviceId ;
+    public static String epg_url ;
 
     public static Proxyer CurrentProxy = new Proxyer();
     public static VoiceAssistant voiceAssistant = new VoiceAssistant();
 
     //修改平台即可
-    public static Platform CurrentPlatform = BuildConfig.Platform;
-
+    public static Platform CurrentPlatform = Platform.stringToPlatform(BuildConfig.FLAVOR_area);
     static Boolean LocalTest = false;
 
     public static void initEnv(final Boolean isLocalTest,Context context)
@@ -47,13 +48,7 @@ public class DiffConfig {
 
         switch (CurrentPlatform)
         {
-            case gztv:
-            {
-                GlobalEnv = new GZTVEnv();
-                CurrentTVBox = new GZTVBox();
-                CurrentPurchase = new GZTVPurchase();
-                break;
-            }
+
 
             case gcable:
             {
@@ -62,16 +57,6 @@ public class DiffConfig {
                 CurrentPurchase = new GDPurchase();
 
                 //广东广电U点服务器需要设置代理以及语音助手
-                CurrentProxy = new GDTVProxyer();
-                voiceAssistant = new GDTVXiri();
-                break;
-            }
-
-            case hncatv:
-            {
-                GlobalEnv = new HNTVEnv();
-                CurrentTVBox = new HNTVBox();
-                CurrentPurchase = new HNTVPurchase();
                 break;
             }
             case topway:
@@ -80,13 +65,6 @@ public class DiffConfig {
                 CurrentTVBox = new TOPWAYBox();
                 CurrentPurchase = new TOPWAYPurchase();
             }
-
-//            case gzbn:
-//            {
-//                GlobalEnv = new GZBNEnv();
-//                CurrentTVBox = new GZBNBox();
-//                CurrentPurchase = new GZBNPurchase();
-//            }
         }
 
         if(GlobalEnv != null)

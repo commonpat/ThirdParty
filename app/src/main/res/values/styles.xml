@@ -7,7 +7,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarSize">0dp</item>
-        <item name="android:windowBackground">@drawable/load_bg</item>
+        <item name="android:windowBackground">@drawable/load_bg_0</item>
     </style>
     <style name="focusView">
         <item name="android:focusable">true</item>
@@ -105,7 +105,7 @@
         <item name="android:textSize">@dimen/sp28</item>
         <item name="android:textColor">@drawable/selector_text_color</item>
         <item name="android:onClick">onClick</item>
-        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
         <item name="android:maxWidth">@dimen/dp480</item>
         <item name="android:layout_marginLeft">@dimen/dp65</item>
         <item name="android:layout_gravity">center_vertical</item>

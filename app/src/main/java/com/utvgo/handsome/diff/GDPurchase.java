@@ -75,4 +75,9 @@ public class GDPurchase extends IPurchase {
     public void refreshOrderStatus(final Context context, final AuthCallback callback) {
         auth(context, callback);
     }
+
+    @Override
+    public void syncUserAuthorization(Context context, String message) {
+
+    }
 }

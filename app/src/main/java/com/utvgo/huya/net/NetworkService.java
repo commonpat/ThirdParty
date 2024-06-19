@@ -5,10 +5,15 @@ import android.util.Log;
 import android.widget.Button;
 
 import com.lzy.okgo.model.Response;
+import com.utvgo.handsome.bean.BeanAuthManagerData;
+import com.utvgo.handsome.bean.BeanGetPlayPoint;
+import com.utvgo.handsome.bean.BeanMvPlayPoint;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.TOPWAYPurchase;
 import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.handsome.utils.NetworkUtils;
+import com.utvgo.handsome.utils.URLBuilder;
 import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.BeanArryPage;
@@ -27,8 +32,10 @@ import com.utvgo.huya.beans.TypesBean;
 import com.utvgo.huya.utils.AppUtils;
 import com.utvgo.huya.utils.NetUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class NetworkService {
     private static class SingletonInner {
@@ -83,10 +90,10 @@ public class NetworkService {
         NetworkUtils.get(context, url, callback);
     }
 
-    public void fetchProgramContent(final Context context,  final int programId, final String multisetType, final int channelID,
+    public void fetchProgramContent(final Context context,  final int programId, final String multisetType, final int channelID,String vodId,
                                final JsonCallback<BaseResponse<ProgramContent>> callback)
     {
-        String url = path2HuyaUrl("/tv/pageCenter/program_content.utvgo?pkId=" + programId + "&channelId=" + channelID +
+        String url = path2HuyaUrl("/tv/pageCenter/program_content.utvgo?pkId=" + programId + "&channelId=" + channelID +"&vodid="+ vodId +
                 "&multiSetType=" + multisetType + "&pageNo=1&pageSize=10000");
         NetworkUtils.get(context, url, callback);
     }
@@ -96,13 +103,13 @@ public class NetworkService {
      */
     public void fetchUserFavorData(final Context context, final int pageNO, final int pageSize, final JsonCallback<BaseResponse<UserFavoriteData>> callback)
     {
-        String url= path2ApiUrl("/utvgo-user/collect/collectPageList.utvgo?pageNo=" + pageNO + "&pageSize=" + pageSize);
+        String url= path2ApiUrl("/huya-user/collect/collectPageList.utvgo?pageNo=" + pageNO + "&pageSize=" + pageSize);
         NetworkUtils.get(context, url, callback);
     }
 
     public void fetchUserPlayHistoryData(final Context context, final int pageNO, final int pageSize, final JsonCallback<BaseResponse<UserPlayHistoryData>> callback)
     {
-        String url= path2ApiUrl("/utvgo-user/video/playhistoryPageList.utvgo?pageNo=" + pageNO + "&pageSize=" + pageSize);
+        String url= path2ApiUrl("/huya-user/video/playhistoryPageList.utvgo?pageNo=" + pageNO + "&pageSize=" + pageSize);
         NetworkUtils.get(context, url, callback);
     }
 
@@ -113,21 +120,32 @@ public class NetworkService {
     }
 
     public void userCheckFavorStatus(final Context context, final String programId, final JsonCallback<BeanCheckCollect> callback)  {
-        String url = path2ApiUrl("/utvgo-user/collect/checkcollect.utvgo?programId=" + programId);
+        String url = path2ApiUrl("/huya-user/collect/checkcollect.utvgo?programId=" + programId);
         NetworkUtils.get(context, url, callback);
     }
 
-    public void userAddFavor(final Context context, String collectionType, int assetId, int channelId, final JsonCallback<BaseResponse> callback) {
-        String url = path2ApiUrl("/utvgo-user/collect/savecollect.utvgo?programId=" + assetId + "&channelId=" + channelId+"&keyNo="+DiffConfig.getCA(context));
-        String params="keyNo="+DiffConfig.getCA(context)+"&programId=" + assetId + "&channelId=" + channelId;
+    public void userAddFavor(final Context context,
+                             String collectionType,
+                             int pkId,
+                             int videoId,
+                             int channelId,
+                             String videoName,
+                             String programName,
+                             String multiSetType,
+                             final JsonCallback<BaseResponse> callback) {
+        String url = path2ApiUrl("/huya-user/collect/savecollect.utvgo?keyNo="+DiffConfig.getCA(context))+"&programId=" + pkId + "&channelId=" + channelId +"&videoName="+ URLBuilder.encodeURIComponent(videoName)+"&videoId=" + videoId
+                +"&programName=" + URLBuilder.encodeURIComponent(programName)+"&multiSetType="+multiSetType;;
+        String params="keyNo="+DiffConfig.getCA(context)+"&programId=" + pkId + "&channelId=" + channelId +"&videoName="+ URLBuilder.encodeURIComponent(videoName)+"&videoId=" + videoId
+                +"&programName=" + URLBuilder.encodeURIComponent(programName)+"&multiSetType="+multiSetType;
         NetworkUtils.post(context,url,params,callback);
         //NetUtils.postData(context,url,1,params,BaseResponse.class,callback);
         //NetworkUtils.get(context, url, callback);
     }
 
     public void userDeleteFavor(final Context context, String collectionType, String assetIdString, final JsonCallback<BaseResponse> callback) {
-        String url = path2ApiUrl("/utvgo-user/collect/delcollect.utvgo?idStr=" + assetIdString);
-        NetworkUtils.post(context, url,null, callback);
+        String url = path2ApiUrl("/huya-user/collect/delcollect.utvgo?idStr=" + assetIdString);
+        String params="keyNo="+DiffConfig.getCA(context) + "idStr=" + assetIdString;
+        NetworkUtils.post(context, url,params, callback);
     }
 
     public void userPlayRecord(final Context context, String playPoint,
@@ -135,10 +153,10 @@ public class NetworkService {
                                     String programId, String programName,
                                     String channelId,
                                     String multiSetType,
-                                    long totalTime) {
-        String url = path2ApiUrl("/utvgo-user/video/playhistory.utvgo?playPoint=" + playPoint + "&videoId=" + videoId +
-                "&videoName=" + videoName+ "&multiSetType=" + multiSetType +
-                "&channelId=" + channelId + "&programId=" + programId + "&programName=" + programName  + "&totalTime=" + totalTime
+                                    long totalTime,final JsonCallback<BaseResponse> callback) {
+        String url = path2ApiUrl("/huya-user/video/playhistory.utvgo?playPoint=" + playPoint + "&videoId=" + videoId +
+                "&videoName=" + URLBuilder.encodeURIComponent(videoName)+ "&multiSetType=" + multiSetType +
+                "&channelId=" + channelId + "&programId=" + programId + "&programName=" + URLBuilder.encodeURIComponent(programName)  + "&totalTime=" + totalTime
                 +"&keyNo=" + DiffConfig.getCA(context) + "&regionCode=" + DiffConfig.getRegionCode(context) + "&vipCode=" + AppConfig.VipCode);
 //        NetworkUtils.get(context, url, new JsonCallback<BaseResponse>() {
 //            @Override
@@ -147,25 +165,10 @@ public class NetworkService {
 //            }
 //        });
         String params = "playPoint=" + playPoint + "&videoId=" + videoId +
-        "&videoName=" + videoName+ "&multiSetType=" + multiSetType +
-                "&channelId=" + channelId + "&programId=" + programId + "&programName=" + programName  + "&totalTime=" + totalTime
+        "&videoName=" + URLBuilder.encodeURIComponent(videoName)+ "&multiSetType=" + multiSetType +
+                "&channelId=" + channelId + "&programId=" + programId + "&programName=" + URLBuilder.encodeURIComponent(programName)  + "&totalTime=" + totalTime
                 +"&keyNo=" + DiffConfig.getCA(context) + "&regionCode=" + DiffConfig.getRegionCode(context) + "&vipCode=" + AppConfig.VipCode;
-        NetworkUtils.post(context, url, params, new JsonCallback<BaseResponse>() {
-            @Override
-            public void onSuccess(Response<BaseResponse> response) {
-                Log.d("userPlayRecord", "onSuccess: "+response.toString());
-            }
-
-            @Override
-            public void onError(Response<BaseResponse> response) {
-                Log.d("userPlayRecord", "onSuccess: "+response.toString());
-            }
-
-            @Override
-            public void onFinish() {
-                Log.d("userPlayRecord", "onSuccess: hhhhhhhhhhh");
-            }
-        });
+        NetworkUtils.post(context, url, params,callback);
     }
 
 
@@ -212,7 +215,7 @@ public class NetworkService {
         NetworkUtils.get(context,url,callback);
     }
     public  void fetchExitNewPage(Context context,String typeId,final JsonCallback<BeanExitPage> callback){
-        String url=DiffConfig.baseHost+"/utvgo-tv-mvc/ui/vip/index/page.utvgo?typeId=78";
+        String url= path2HuyaUrl("/vip/index/page.utvgo?typeId=78");
         NetworkUtils.get(context,url,callback);
     }
     /**
@@ -244,4 +247,58 @@ public class NetworkService {
        // }
         NetworkUtils.get(context,url,callback);
     }
+
+    public void getKeyNoLimitType(Context context,final JsonCallback<BeanAuthManagerData> callback){
+        String url = "";
+//        if(BuildConfig.DEBUG){
+//             url = "http://172.16.146.56:8380/cq-order-web/authorizationController/getKeyNoLimitType.utvgo?keyNo="+keyNo;
+//        }else {
+        url = DiffConfig.baseHost + "/cq-order-web/authorizationController/getKeyNoLimitType.utvgo?keyNo=" + DiffConfig.getCA(context);
+//        }
+        NetworkUtils.get(context,url,callback);
+    }
+    public  void  callBackFunc(Context context,int state,String msg){
+        String url = "";
+        url = DiffConfig.baseHost + "/cq-order-web/chongqing/cqUserController/callbackSaveAuthorize.utvgo";
+        Map<String,String> paramMap=new HashMap<String, String>();
+        paramMap.put("msg",msg);
+        paramMap.put("code",String.valueOf(state));
+        paramMap.put("keyNo",DiffConfig.getCA(context));
+        paramMap.put("productId", TOPWAYPurchase.productId);
+        paramMap.put("SvcCodes","");
+        NetUtils.postJsonData(context, url, 2, paramMap, BaseResponse.class, "", new NetUtils.NetCallBack() {
+            @Override
+            public void netBack(int requestTag, Object object) {
+                BaseResponse baseResponse = (BaseResponse) object;
+                Log.d("TAG", "netBack: "+baseResponse.getMessage());
+            }
+        });
+
+    }
+    /**
+     * 更新上报时长，做续播
+     * */
+    public void  updateUserPlayPoint(Context context,String contentMid,String playPoint,int programId,int videoId,JsonCallback<com.utvgo.handsome.bean.BaseResponse> callback){
+        String url = DiffConfig.baseHost + "/huya-user/video/updateUserPlayPoint.utvgo?"+"programId="+programId+"&videoId="+videoId+"&playPoint="+playPoint;
+        NetworkUtils.get(context,url,callback);
+    }
+    /**
+     * 更新上报时长，做续播
+     * */
+    public void  getUserPlayPoint(Context context,String contentMid,int programId,int videoId,JsonCallback<BeanGetPlayPoint> callback){
+        String url = DiffConfig.baseHost +"/huya-user/video/getUserPlayhistory.utvgo?"+"programId="+programId+"&videoId="+videoId;
+        NetworkUtils.get(context,url,callback);
+    }
+
+    public void  newCallBackFunc(Context context,int code,String msg){
+        String url = DiffConfig.baseHost +"/cq-order-web/chongqing/cqUserController/callbackSaveAuthorize.utvgo?code="+code+"&productId=huya&sourceType=1";
+        NetworkUtils.get(context, url, new JsonCallback<com.utvgo.handsome.bean.BaseResponse>() {
+
+            @Override
+            public void onSuccess(Response<com.utvgo.handsome.bean.BaseResponse> response) {
+
+            }
+        });
+    }
+
 }

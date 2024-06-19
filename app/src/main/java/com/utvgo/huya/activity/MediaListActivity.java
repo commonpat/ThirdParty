@@ -47,6 +47,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.VIDEOLIST;
+
 
 public class MediaListActivity extends BasePageActivity {
 
@@ -143,7 +145,7 @@ public class MediaListActivity extends BasePageActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        stat("节目列表-" + this.channelName);
+        stat("节目列表-" + this.channelName,VIDEOLIST);
     }
 
     @SuppressLint("ResourceType")
@@ -188,6 +190,7 @@ public class MediaListActivity extends BasePageActivity {
 
     @Override
     protected void onDestroy() {
+        clearCache();
         super.onDestroy();
         releaseImageViewResource();
 
@@ -201,7 +204,6 @@ public class MediaListActivity extends BasePageActivity {
         handler.removeMessages(MSG_TURN_PAGE);
         handler = null;
 
-        System.gc();
     }
 
     @OnClick({R.id.item1, R.id.item2, R.id.item3, R.id.item4, R.id.item5, R.id.item6, R.id.item7, R.id.item8})
@@ -487,5 +489,6 @@ public class MediaListActivity extends BasePageActivity {
         }
 
     }
+
 }
 

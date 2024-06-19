@@ -1,5 +1,7 @@
 package com.utvgo.handsome.diff;
 
+import android.content.Context;
+
 public class GDTVEnv implements IEnv {
 
     public void initEnv()
@@ -21,5 +23,10 @@ public class GDTVEnv implements IEnv {
         DiffConfig.WebUrlBase = "http://172.16.146.56/uusports/huya";
       //  DiffConfig.IntroduceUrl = "http://172.16.146.56/huyaTV/activity.html";
         DiffConfig.IntroduceUrl = "http://172.16.146.56/huyaTV/topic.html?themId=155&styleID=5&from=&backUrl=http%3A%2F%2F172.16.146.56%2FhuyaTV%2F%3FfocusArea%3D2%26pos%3D4";
+    }
+
+    @Override
+    public void jumpAppStore(Context context) {
+
     }
 }

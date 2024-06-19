@@ -5,8 +5,6 @@ public enum Platform {
     gcable,
     gztv,
     hncatv,
-    gacs,
-    gahb,
     topway,
     gzbn;
 
@@ -27,5 +25,18 @@ public enum Platform {
              default:
                     return "";
         }
+    }
+    public static Platform stringToPlatform(String s){
+        switch (s){
+            case "gcable":
+                return gcable;
+            case "gztv":
+                return gztv;
+            case "topway":
+                return topway;
+            default:
+                return gcable;
+        }
+
     }
 }

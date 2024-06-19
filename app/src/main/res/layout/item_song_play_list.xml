@@ -18,8 +18,7 @@
         android:id="@+id/tv_song_name"
         style="@style/song_list"
         android:layout_marginRight="@dimen/dp40"
-        android:maxLines="1"
-        android:ellipsize="end"
+        android:singleLine="true"
         android:text="I  " />
 
     <TextView

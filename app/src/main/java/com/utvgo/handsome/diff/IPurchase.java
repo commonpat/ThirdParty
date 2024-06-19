@@ -3,14 +3,16 @@ package com.utvgo.handsome.diff;
 import android.content.Context;
 
 import com.utvgo.handsome.interfaces.CommonCallback;
+import com.utvgo.huya.BuildConfig;
 
 public abstract class IPurchase {
 
     public interface AuthCallback {
         void onFinished(String message);
+
     }
 
-    int orderStatus = -1;
+    int orderStatus = BuildConfig.orderStatus;
     public void setOrderStatus(int orderStatus) {
         this.orderStatus = orderStatus;
     }
@@ -38,4 +40,8 @@ public abstract class IPurchase {
      * 刷新鉴权
      */
     public abstract void refreshOrderStatus(final Context context, final AuthCallback callback);
+    /**
+     * 自己后台数据同步授权
+     * */
+    public abstract void syncUserAuthorization(final Context context,final String message);
 }

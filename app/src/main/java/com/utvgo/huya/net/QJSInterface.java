@@ -7,46 +7,26 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
-import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.diff.DiffConfig;
-import com.utvgo.handsome.diff.GZTVPurchase;
 import com.utvgo.handsome.diff.IPurchase;
 import com.utvgo.handsome.interfaces.CommonCallback;
-import com.utvgo.handsome.interfaces.JsonCallback;
 import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.HuyaApplication;
-import com.utvgo.huya.activity.ActivityActivity;
 import com.utvgo.huya.activity.BaseActivity;
-import com.utvgo.huya.activity.MediaAlbumActivity;
 import com.utvgo.huya.activity.MediaListActivity;
-import com.utvgo.huya.activity.PlayVideoActivity;
-import com.utvgo.huya.activity.QWebViewActivity;
-import com.utvgo.huya.activity.TopicActivity;
-import com.utvgo.huya.beans.BaseResponse;
 import com.utvgo.huya.beans.OpItem;
-import com.utvgo.huya.beans.ProgramContent;
-import com.utvgo.huya.beans.ProgramInfoBase;
-import com.utvgo.huya.constant.ConstantEnum;
-import com.utvgo.huya.utils.StringUtils;
 import com.utvgo.huya.utils.ToastUtil;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sh.lib.http.util.ReflectHeaderUtil.getType;
+import static com.utvgo.huya.constant.ConstantEnumHuya.ORDER;
 
 public class QJSInterface {
     private Context c;
@@ -66,7 +46,7 @@ public class QJSInterface {
         if (c instanceof BaseActivity) {
             BaseActivity activity = (BaseActivity) c;
             activity.playingTitle = "活动-"+s;
-            activity.stat("弹出订购-"+activity.playingTitle);
+            activity.stat("弹出订购-"+activity.playingTitle,"");
         }
         if(HuyaApplication.hadBuy()){
             ToastUtil.show(c, "你已经是虎牙TV的尊贵会员！");
@@ -78,16 +58,6 @@ public class QJSInterface {
                         Activity  backc=(Activity)context;
                         backc.finish();
                     }
-
-                    @Override
-                    public void onSuccess(Context context) {
-
-                    }
-
-                    @Override
-                    public void onFail(Context context) {
-
-                    }
                 });
                 return;
             }
@@ -97,33 +67,6 @@ public class QJSInterface {
 
                 if (!TextUtils.isEmpty(message)) {
                     ToastUtil.show(c, message);
-                }
-                if (!HuyaApplication.hadBuy()) {
-                    if (DiffConfig.CurrentPurchase instanceof GZTVPurchase) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                GZTVPurchase purchase = (GZTVPurchase) DiffConfig.CurrentPurchase;
-                               DiffConfig.CurrentPurchase.pay(c, new CommonCallback() {
-                                   @Override
-                                   public void onFinished(Context context) {
-                                       Activity  backc=(Activity)context;
-                                       backc.finish();
-                                   }
-
-                                   @Override
-                                   public void onSuccess(Context context) {
-
-                                   }
-
-                                   @Override
-                                   public void onFail(Context context) {
-
-                                   }
-                               });
-                            }
-                        }).start();
-                    }
                 }
             }
         });
@@ -201,27 +144,13 @@ public class QJSInterface {
         if (c instanceof BaseActivity) {
             BaseActivity activity = (BaseActivity) c;
             activity.playingTitle = "活动-"+s;
-            activity.stat("弹出订购-"+activity.playingTitle);
+            activity.stat("弹出订购-"+activity.playingTitle,ORDER);
         }
         DiffConfig.CurrentPurchase.pay(c, new CommonCallback() {
             @Override
             public void onFinished(Context context) {
             }
 
-            @Override
-            public int hashCode() {
-                return super.hashCode();
-            }
-
-            @Override
-            public void onSuccess(Context context) {
-
-            }
-
-            @Override
-            public void onFail(Context context) {
-
-            }
         });
 
         return DiffConfig.CurrentPurchase.isPurchased()?true:false;
@@ -242,7 +171,7 @@ public class QJSInterface {
         //XLog.toast(c, "stat " + pageName);
         if (c instanceof BaseActivity) {
             BaseActivity activity = (BaseActivity) c;
-            activity.stat(pageName);
+            activity.stat(pageName,"");
         }
     }
     @JavascriptInterface

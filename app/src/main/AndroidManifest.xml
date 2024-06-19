@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.utvgo.huya">
-    <!-- 内置SD卡读写权限4.0以上需要. -->
-    <permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
-    <permission android:name="android.permission.READ_MEDIA_STORAGE" />
 
     <!-- 外置SD卡读写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -19,25 +16,25 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <application
         android:name=".HuyaApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:screenOrientation="landscape"
         android:theme="@style/AppTheme"
-        android:largeHeap="true"
+        android:largeHeap="false"
         >
         <!--<meta-data-->
             <!--android:name="com.google.android.actions"-->
             <!--android:resource="@xml/actions" />-->
 
-        <activity android:name=".activity.LaunchActivity"
+        <activity android:name="com.utvgo.handsome.views.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="com.utvgo.huya.action.MAIN" />
+                <action android:name="com.utvgo.huya.show.details"/>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -49,6 +46,7 @@
         <activity android:name=".activity.NewHomeActivity" >
 
         </activity>
+        <activity android:name=".activity.HomeBaseActivity"></activity>
 
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.BuyActivity" />

@@ -1,5 +1,7 @@
 package com.utvgo.huya.activity;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.VIDEOLIST;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -102,6 +104,12 @@ public class AlbumListActivity extends BasePageActivity{
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        stat(this.typeId+"节目列表",VIDEOLIST);
+    }
+
     private void showContenData(List<OpItem> bean) {
         for (int i = 0;i < bean.size()&&i < contentImgArr.length;i++){
             loadImage((ImageView) findViewById(contentImgArr[i]), DiffConfig.generateImageUrl(bean.get(i).getImgUrl()));
@@ -137,6 +145,7 @@ public class AlbumListActivity extends BasePageActivity{
 
     @Override
     protected void onDestroy() {
+        clearCache();
         super.onDestroy();
        // releaseImageViewResouce();
 

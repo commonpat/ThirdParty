@@ -34,6 +34,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.VIDEOLIST;
 import static com.utvgo.huya.utils.ViewUtil.runText;
 
 /**
@@ -56,6 +57,8 @@ public class ProgramListActivity extends BasePageActivity{
     TextView programTitle;
     @BindView(R.id.smoothVoriztalScroll)
     SmoothVorizontalScrollView smoothVorizontalScrollView;
+    @BindView(R.id.image_loading)
+    ImageView imageLoading;
 
     private int packageId;
     private int channelId;
@@ -84,7 +87,7 @@ public class ProgramListActivity extends BasePageActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_program);
+        this.setContentView(R.layout.activity_program);
         ButterKnife.bind(this);
         createBorderView(this);
 
@@ -94,7 +97,8 @@ public class ProgramListActivity extends BasePageActivity{
         this.defaultSelectedLabelId = getIntent().getIntExtra("defaultSelectedLabelId",0);
          fetchLabels();
         programTitle.setText(channelName);
-        stat(channelName+"节目列表");
+        imageLoading.setVisibility(View.VISIBLE);
+        stat(channelName+"节目列表",VIDEOLIST);
     }
 
     private void fetchLabels() {
@@ -162,7 +166,7 @@ public class ProgramListActivity extends BasePageActivity{
                             checkId = v.getId();
                             updateLabelStatus(checkId);
                             defaultSelectedLabelIdIndex = checkId - 3000;
-                            programContent.removeAllViews();
+                            unbindDrawables(programContent);
                             fetchProgramListWithLabel(defaultSelectedLabelIdIndex);
                         }
 
@@ -175,7 +179,7 @@ public class ProgramListActivity extends BasePageActivity{
             textView.setText(data.getData().get(i).getName());
             FrameLayout.LayoutParams params =new FrameLayout.LayoutParams((int)getResources().getDimension(R.dimen.dp165),(int)getResources().getDimension(R.dimen.dp45));
             topMargin = 20+(int)getResources().getDimension(R.dimen.dp40)*i+(int)getResources().getDimension(R.dimen.dp20)*i;
-            Log.d(TAG, "updateLeftBar: topMargin"+topMargin);
+           // Log.d(TAG, "updateLeftBar: topMargin"+topMargin);
 
             params.topMargin=topMargin;
             leftBarLabels.addView(itemView,params);
@@ -186,12 +190,14 @@ public class ProgramListActivity extends BasePageActivity{
     private  void fetchProgramListWithLabel(int id){
           if(id>=0&&id<labelInfoList.size()) {
               LabelInfo labelInfo = labelInfoList.get(id);
-              NetworkService.defaultService().fetchProgramListWithLabel(this, this.channelId, labelInfo.getLabelId(), pageNo, 60, new JsonCallback<BaseResponse<ProgramListData>>() {
+              imageLoading.setVisibility(View.VISIBLE);
+              NetworkService.defaultService().fetchProgramListWithLabel(this, this.channelId, labelInfo.getLabelId(), pageNo, 30, new JsonCallback<BaseResponse<ProgramListData>>() {
                   @Override
                   public void onSuccess(Response<BaseResponse<ProgramListData>> response) {
                       BaseResponse<ProgramListData> programListDataBaseResponse=response.body();
                       programList = programListDataBaseResponse.getData().getPrograms();
                       updateContent(programList,pageNo);
+                      imageLoading.setVisibility(View.INVISIBLE);
                   }
               });
           }
@@ -212,7 +218,6 @@ public class ProgramListActivity extends BasePageActivity{
             ((ViewGroup)itemView).getChildAt(0).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "onClick: content");
                     int i=(v).getId();
                     programList.get(i-1000);
                     PlayVideoActivity.play(ProgramListActivity.this, (ArrayList<ProgramInfoBase>) programList,i-1000,false);
@@ -220,14 +225,10 @@ public class ProgramListActivity extends BasePageActivity{
             });
             ImageView imageView = itemView.findViewById(R.id.content_image);
             TextView textView = itemView.findViewById(R.id.content_name);
-//            Button button = itemView.findViewById(R.id.content_btn);
-//            button.setOnFocusChangeListener(this);
             loadImage(imageView,programList.get(i).getImageSmall());
             textView.setText(programList.get(i).getName());
             textView.setSingleLine();
-            Log.d(TAG, "updateContent: "+getResources().getDisplayMetrics().densityDpi);
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int)getResources().getDimension(R.dimen.dp250),(int)getResources().getDimension(R.dimen.dp200));
-            //FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(this,null);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             int pos1 = i/3;
             int pos2 = i%3;
 
@@ -239,19 +240,14 @@ public class ProgramListActivity extends BasePageActivity{
             allWidth = leftMargin+(int)getResources().getDimension(R.dimen.dp250);
             programContent.addView(itemView,params);
             if(pos2==0){
-
-                Log.d(TAG, leftBarLabels.getChildAt(defaultSelectedLabelIdIndex).getId()+defaultSelectedLabelIdIndex+"updateContent: "+i);
                 View g = ((ViewGroup) itemView).getChildAt(0);
                 g.setNextFocusLeftId(leftBarLabels.getChildAt(defaultSelectedLabelIdIndex).getId());
                 (((FrameLayout)itemView).getChildAt(0)).setNextFocusLeftId((leftViewList.get(defaultSelectedLabelIdIndex)).getId());
             }
         }
-//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(allHeight, allWidth);
-//        programContent.setLayoutParams(params);
         findViewById(R.id.program_content).setFocusable(false);
         findViewById(R.id.smoothVoriztalScroll).setFocusable(false);
         traversalView(this);
-        //showViewByHandler(leftBarLabels.getChildAt(defaultSelectedLabelIdIndex));
     }
 
 
@@ -262,17 +258,21 @@ public class ProgramListActivity extends BasePageActivity{
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        Log.d(TAG, "onFocusChange: "+v.getId());
-        if(v instanceof LinearLayout) {
-            if(((ViewGroup)v.getParent()).getId() == R.id.leftItem){
-                borderView.setBorderBitmapResId(0);
-            }else {
+       // Log.d(TAG, "onFocusChange: "+v.getId());
+        try {
+            if (v instanceof LinearLayout) {
+                if (((ViewGroup) v.getParent()).getId() == R.id.leftItem) {
+                    borderView.setBorderBitmapResId(0);
+                } else {
+                    borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default);
+                }
+                runText((ViewGroup) v, hasFocus);
+
+            } else {
                 borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default);
             }
-           runText((ViewGroup) v, hasFocus);
-
-        }else {
-            borderView.setBorderBitmapResId(R.mipmap.border_focus_style_default);
+        }catch (Exception e){
+            e.printStackTrace();
         }
         super.onFocusChange(v, hasFocus);
     }
@@ -302,11 +302,15 @@ public class ProgramListActivity extends BasePageActivity{
         oldLeftText.setTextColor(getResources().getColor(R.color.white));
     }
 
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         try {
+            if(getCurrentFocus().getParent() == null){
+                return false;
+            }
             View view = (ViewGroup) getCurrentFocus().getParent();
-            Log.d(TAG, getCurrentFocus().getId()+"onKeyDown: "+((labelInfoList.size() - 1)+3000));
+            //Log.d(TAG, getCurrentFocus().getId()+"onKeyDown: "+((labelInfoList.size() - 1)+3000));
             if(view.getId() == R.id.leftBar_labels) {
                 if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN && (getCurrentFocus().getId()) == ((labelInfoList.size() - 1)+3000)) {
                     return true;
@@ -326,4 +330,28 @@ public class ProgramListActivity extends BasePageActivity{
         return super.onKeyUp(keyCode, event);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbindDrawables(programContent);
+        clearCache();
+        super.onDestroy();
+
+    }
+    public void  unbindDrawables(View view){
+        if(view.getBackground() != null){
+            view.getBackground().setCallback(null);
+        }
+        if(view instanceof ViewGroup){
+            for (int i = 0;i < ((ViewGroup)view).getChildCount(); i++){
+                unbindDrawables(((ViewGroup)view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+        }
+    }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">虎牙TV</string>
+    <string name="app_name">广电虎牙电竞</string>
     <string name="nav_0">全部</string>
     <string name="nav_1">推荐</string>
     <string name="nav_2">王者荣耀</string>
@@ -17,7 +17,7 @@
     <string name="string_authServiceFailed">网络不给力,请稍后再试.</string>
     <string name="string_networdException">网络不给力,请稍后再试.</string>
 
-    <string name="placeOrder_abstruct">QQ音乐媲美CD音质的高保真流媒体音乐服务。</string>
+    <string name="placeOrder_abstruct">媲美CD音质的高保真流媒体音乐服务。</string>
 
     <string name="string_remind_ordertip">温馨提示：该产品订购后马上生效,次月到期自动续订,如需退订,请拨打 96868 咨询。</string>
 

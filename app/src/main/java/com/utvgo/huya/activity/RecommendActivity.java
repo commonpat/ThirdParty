@@ -75,6 +75,6 @@ public class RecommendActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        stat(TextUtils.equals("exit", recommendType) ? "退出推荐" : "启动推荐");
+        stat(TextUtils.equals("exit", recommendType) ? "退出推荐" : "启动推荐","");
     }
 }

@@ -80,21 +80,11 @@ public class ProgramContent extends ProgramInfoBase {
 
         if(!TextUtils.isEmpty(this.videoUrlHigh))
         {
-            if(this.videoUrlHigh.startsWith("http")){
-                return this.videoUrlHigh;
-            }else {
-                this.videoUrlHigh = DiffConfig.playHost+videoUrlHigh;
-                return this.videoUrlHigh;
-            }
+            return this.videoUrlHigh;
         }
         if(!TextUtils.isEmpty(this.videoUrlFluency))
         {
-            if(this.videoUrlFluency.startsWith("http")){
-                return this.videoUrlFluency;
-            }else {
-                this.videoUrlFluency = DiffConfig.playHost+videoUrlFluency;
-                return this.videoUrlFluency;
-            }
+            return this.videoUrlFluency;
         }
 
         return "";

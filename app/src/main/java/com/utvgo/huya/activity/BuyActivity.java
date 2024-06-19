@@ -18,6 +18,7 @@ import com.utvgo.huya.utils.HiFiDialogTools;
 import com.utvgo.huya.utils.ToastUtil;
 import java.util.UUID;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.ORDER;
 
 
 public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
@@ -29,50 +30,51 @@ public class BuyActivity extends PlayGuangDongActivity implements BuyInterface {
     private void sendUtvgoAuthReq(String vodId) {
         final Context context = this;
         try{
-            DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
-            @Override
-            public void onFinished(String message) {
-                final boolean isPurchased = HuyaApplication.hadBuy();
-                if(isPurchased)
-                {
-                    if (needShowHadBuy) {
-                        HiFiDialogTools.getInstance().showtips(BuyActivity.this, "你已订购过了", null);
+            if(needShowBuy)
+            {
+                //hahaPausePlay();
+                stat("播放进入订购页",ORDER);
+                DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
+                    @Override
+                    public void onFinished(Context context) {
+                        //  DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
                     }
+                });
 
-                    if (!TextUtils.isEmpty(authVodid)) {
-                        hahaPlayUrl(authVodid);
-                    } else {
-                        ToastUtil.show(context, "你已是虎牙TV的会员");
-                    }
-                } else {
-                    if(needShowBuy)
-                    {
-                        hahaPausePlay();
-                        stat("播放进入订购页");
-                        DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
-                            @Override
-                            public void onFinished(Context context) {
-                              //  DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
-                            }
-                            @Override
-                            public int hashCode() {
-                                return super.hashCode();
-                            }
-
-                            @Override
-                            public void onSuccess(Context context) {
-
-                            }
-
-                            @Override
-                            public void onFail(Context context) {
-
-                            }
-                        });
-                    }
-                }
             }
-        });
+
+
+//
+//            DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
+//            @Override
+//            public void onFinished(String message) {
+//                final boolean isPurchased = HuyaApplication.hadBuy();
+//                if(isPurchased)
+//                {
+//                    if (needShowHadBuy) {
+//                        HiFiDialogTools.getInstance().showtips(BuyActivity.this, "你已订购过了", null);
+//                    }
+//
+//                    if (!TextUtils.isEmpty(authVodid)) {
+//                        hahaPlayUrl(authVodid);
+//                    } else {
+//                        ToastUtil.show(context, "你已是虎牙TV的会员");
+//                    }
+//                } else {
+//                    if(needShowBuy)
+//                    {
+//                        hahaPausePlay();
+//                        stat("播放进入订购页",ORDER);
+//                        DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
+//                            @Override
+//                            public void onFinished(Context context) {
+//                              //  DiffConfig.CurrentPurchase.refreshOrderStatus(context, null);
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//        });
         }catch (Exception e){
             Log.d(TAG, "sendUtvgoAuthReq:订购授权报错 ");
         }

@@ -42,6 +42,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.VIDEOLIST;
 import static com.utvgo.huya.constant.MVAlbumTemplate.BACK;
 import static com.utvgo.huya.constant.MVAlbumTemplate.MORE;
 import static com.utvgo.huya.constant.MVAlbumTemplate.VIDEOFOCUS;
@@ -229,7 +230,7 @@ public class MediaAlbumActivityOld extends BuyActivity {
                             }
                         }
                 );
-                stat("视频播放-" + videoBean.getName());
+                stat("视频播放-" + videoBean.getName(),"");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -545,7 +546,7 @@ public class MediaAlbumActivityOld extends BuyActivity {
     *** Network
      */
     void loadData(){
-        NetworkService.defaultService().fetchProgramContent(this, this.albumId, this.multisetType + "", this.channelId,  new JsonCallback<BaseResponse<ProgramContent>>() {
+        NetworkService.defaultService().fetchProgramContent(this, this.albumId, this.multisetType + "", this.channelId, "",new JsonCallback<BaseResponse<ProgramContent>>() {
             @Override
             public void onSuccess(Response<BaseResponse<ProgramContent>> response) {
                 BaseResponse<ProgramContent> data = response.body();
@@ -553,7 +554,7 @@ public class MediaAlbumActivityOld extends BuyActivity {
                 {
                     layout(data.getData());
                     try{
-                    stat("专辑播放-" + data.getData().getName());
+                    stat("专辑播放-" + data.getData().getName(),VIDEOLIST);
                     }catch (Exception e){
                         HiFiDialogTools.getInstance().showtips(MediaAlbumActivityOld.this, "获取数据失败，请稍后重试", null);
 

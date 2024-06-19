@@ -85,5 +85,13 @@
         android:layout_marginLeft="766dp"
         android:layout_marginTop="660dp"
         android:src="@drawable/program_down"/>
+    <ImageView
+        android:id="@+id/image_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:visibility="invisible"
+        android:layout_gravity="center"
+        android:src="@drawable/anim_customer_loading"></ImageView>
 
 </FrameLayout>

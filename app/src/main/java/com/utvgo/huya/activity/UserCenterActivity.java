@@ -39,6 +39,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.ORDER;
+
 
 /**
  * Created by fute on 17/3/24.
@@ -114,40 +116,18 @@ public class UserCenterActivity extends BuyActivity {
             startActivity(intent);
 
         } else if (i == R.id.btn_order) {
-            stat("个人中心订购页");
-            DiffConfig.CurrentPurchase.auth(this, new IPurchase.AuthCallback() {
-                @Override
-                public void onFinished(String message) {
-                    if (HuyaApplication.hadBuy()) {
-                        ToastUtil.show(context, "您已经是 " + getResources().getString(R.string.app_name) + " 尊贵会员");
-                    } else {
-                        if (!TextUtils.isEmpty(message)) {
-                            ToastUtil.show(context, message);
-                        }
-                        DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
-                            @Override
-                            public void onFinished(Context context) {
+            stat("个人中心订购页",ORDER);
+            if (HuyaApplication.hadBuy()) {
+                ToastUtil.show(context, "您已经是 " + getResources().getString(R.string.app_name) + " 尊贵会员");
+            } else {
 
-                            }
+                DiffConfig.CurrentPurchase.pay(context, new CommonCallback() {
+                    @Override
+                    public void onFinished(Context context) {
 
-                            @Override
-                            public int hashCode() {
-                                return super.hashCode();
-                            }
-
-                            @Override
-                            public void onSuccess(Context context) {
-
-                            }
-
-                            @Override
-                            public void onFail(Context context) {
-
-                            }
-                        });
                     }
-                }
-            });
+                });
+            }
         } else if (i == R.id.btn_image_view_0) {
             clickRecItem(i);
         } else if (i == R.id.btn_image_view_1) {

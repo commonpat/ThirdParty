@@ -27,10 +27,14 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.lzy.okgo.model.Response;
 import com.utvgo.handsome.config.AppConfig;
 import com.utvgo.handsome.diff.DiffConfig;
+import com.utvgo.handsome.diff.TOPWAYBox;
 import com.utvgo.handsome.interfaces.JsonCallback;
+import com.utvgo.handsome.utils.TopWayBroacastUtils;
 import com.utvgo.huya.BuildConfig;
 import com.utvgo.huya.HuyaApplication;
 import com.utvgo.huya.R;
@@ -50,6 +54,9 @@ import com.utvgo.huya.views.FocusBorderView;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.utvgo.huya.constant.ConstantEnumHuya.Asset_Id;
+import static com.utvgo.huya.constant.ConstantEnumHuya.Category_Id;
+
 public class BaseActivity extends RooterActivity implements View.OnFocusChangeListener,
         AdapterView.OnItemSelectedListener,
         AdapterView.OnItemClickListener,
@@ -59,7 +66,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         ViewTreeObserver.OnPreDrawListener,        // 用于在屏幕上画 View 之前，要做什么额外的工作
         ViewTreeObserver.OnGlobalFocusChangeListener // 用于监听焦点的变化
 {
-    public String TAG = "huya";
+    public String TAG = "huyatest";
     public float scale = 1.0f;
     public View focusView = null;
     Handler handler = new Handler();
@@ -88,14 +95,15 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     protected void onCreate(Bundle savedInstanceState) {
         DensityUtil.init(this, 1280);
         super.onCreate(savedInstanceState);
-        registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        //registerReceiver(mHomeKeyEventReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
 
     }
 
     @Override
     protected void onDestroy() {
-         unregisterReceiver(mHomeKeyEventReceiver);
+
+       //  unregisterReceiver(mHomeKeyEventReceiver);
          //unregisterReceiver(orderBroadcastReceiver);
         borderView = null;
         hiFiDialogTools = null;
@@ -103,6 +111,8 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         topLayout = null;
         viewTip = null;
         super.onDestroy();
+
+
     }
 
     //对 专题 聚焦框进行另一种处理 （与showViewByHandler并行项目聚焦框）
@@ -148,7 +158,6 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
 
         if (topLayout != null) {
             topLayout.addView(borderView);
-
         }
     }
 
@@ -334,6 +343,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     HuyaApplication.beanActivity = null;
+                    TopWayBroacastUtils.getInstance().pressHomeKey(context);
                     clearCacheHomeKey();
                     //表示按了home键,程序到了后台
 //                    finish();
@@ -384,20 +394,23 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
 
     }
 
-    protected void stat(final String name, final String title) {
+    protected void stat(final String name, final String title,final String pageType) {
         try {
+            TopWayBroacastUtils.getInstance().pageEvent(this,pageType,name,Asset_Id,Category_Id);
             NetworkService.defaultService().statisticsVisit(this, "app-" + name, title, "");
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public void stat(final String name) {
-        stat(name, "");
+    public void stat(final String name,final String pageType) {
+        stat(name, "",pageType);
     }
 
     public void loadImage(final ImageView imageView, final String imageUrl) {
-        Glide.with(this).load(DiffConfig.generateImageUrl(imageUrl)).into(imageView);
+        Glide.with(this)
+                .load(DiffConfig.generateImageUrl(imageUrl))
+                .into(imageView);
     }
 
     public boolean actionOnOp(final OpItem opItem)
@@ -417,7 +430,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
                 {   if(!href.startsWith("http:")){
                         href=DiffConfig.WebUrlBase+href;
                      }
-                     if(BuildConfig.DEBUG){href="http://172.16.146.56/huyaTV/activityHalf.html";}
+
                     QWebViewActivity.navigateUrl(this, href);
                     break;
                 }
@@ -593,18 +606,34 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
     }
     public void jumpAppStore(){
         try{
-            Intent intent = new Intent();
-            ComponentName componentName = new ComponentName("com.huan.appstore","com.huan.appstore.ui.AppDetailActivity");
-            //ComponentName componentName = new ComponentName("com.utvgo.huya","com.utvgo.huya.activity.LaunchActivity");
-            Log.d("", "jumpAppStore: "+getApplicationContext().getPackageName());
-            intent.setComponent(componentName);
-            intent.putExtra("packagename",getApplicationContext().getPackageName());
-            intent.setComponent(componentName);
-            String category = "android.intent.category.DEFAULT";
-            intent.addCategory(category);
-            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            if(DiffConfig.CurrentTVBox instanceof TOPWAYBox){
+                Intent intent = new Intent();
+                ComponentName componentName = new ComponentName("com.topway.tvappstore","com.topway.tvappstore.AppDetailActivity");
+                //ComponentName compon entName = new ComponentName("com.utvgo.huya","com.utvgo.huya.activity.LaunchActivity");
+                Log.d("", "jumpAppStore: "+getApplicationContext().getPackageName());
+                intent.setComponent(componentName);
+                intent.putExtra("packageName",getApplicationContext().getPackageName());
+                intent.setComponent(componentName);
+//                Stri ng category = "android.intent.category.DEFAULT";
+//                intent.addCategory(category);
+                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }else {
+
+                Intent intent = new Intent();
+                ComponentName componentName = new ComponentName("com.huan.appstore", "com.huan.appstore.ui.AppDetailActivity");
+                //ComponentName componentName = new ComponentName("com.utvgo.huya","com.utvgo.huya.activity.LaunchActivity");
+                Log.d("", "jumpAppStore: " + getApplicationContext().getPackageName());
+                intent.setComponent(componentName);
+                intent.putExtra("packagename", getApplicationContext().getPackageName());
+                intent.setComponent(componentName);
+                String category = "android.intent.category.DEFAULT";
+                intent.addCategory(category);
+                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
         }catch (Exception e){
             e.printStackTrace();
             onBackPressed();
@@ -631,7 +660,7 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         }).start();
     }
     /** * 删除方法 这里只会删除某个文件夹下的文件，如果传入的directory是个文件，将不做处理 * * @param directory */
-    private static void deleteFilesByDirectory(File directory) {
+    public static void deleteFilesByDirectory(File directory) {
         if (directory != null && directory.exists() && directory.isDirectory()) {
             for (File item : directory.listFiles()) {
                 boolean ret = item.delete();
@@ -665,4 +694,21 @@ public class BaseActivity extends RooterActivity implements View.OnFocusChangeLi
         }).start();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");;
+    }
 }
