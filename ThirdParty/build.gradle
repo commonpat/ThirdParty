@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'com.kezong.fat-aar'
 }
+apply plugin: 'com.kezong.fat-aar'
 apply plugin: 'com.github.dcendents.android-maven'
 group ='com.github.zhibin35'
 android {
@@ -23,6 +23,15 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            android.libraryVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "blumic-"+defaultConfig.versionName+"-${variant.buildType.name}.aar"
+                }
+            }
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -33,7 +42,6 @@ android {
     fataar {
         transitive = true
     }
-    configurations.embed.transitive = true
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -49,5 +57,6 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    embed fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+  //  embed fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+    embed(name: 'HuyaSDK-1.1.6-164', ext: 'aar')
 }
