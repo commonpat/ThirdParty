@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.huya.huyasdk.data.HYNSUserInfo;
 import com.utvgo.handsome.diff.DiffConfig;
 import com.utvgo.handsome.diff.IPurchase;
 import com.utvgo.huya.HuyaApplication;

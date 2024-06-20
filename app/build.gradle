@@ -159,7 +159,7 @@ dependencies {
    //implementation files('libs/XiriFeedback.jar')
 
    // implementation 'com.google.zxing:core:3.3.2'
-    implementation 'com.github.zhibin35:ThirtyParty:1.0.0'
+    implementation 'com.github.zhibin35:ThirtyParty:+'
 
 
 }
